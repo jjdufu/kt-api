@@ -1,168 +1,145 @@
-name: Release (Linux, macOS, Windows)
+name: Release
+
+on:
+  # Called by release-please.yml after it creates the tag + GitHub Release.
+  # Do not add push/tags or workflow_dispatch: GITHUB_TOKEN tag/release events
+  # do not start other workflows, and manual dispatch is not a release path.
+  workflow_call:
+    inputs:
+      version:
+        description: "Release version (with or without v prefix); must match VERSION"
+        required: true
+        type: string
+
 permissions:
   contents: write
 
-on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'reason'
-        required: false
-  push:
-    tags:
-      - '*'
-      - '!*-alpha*'
+env:
+  IMAGE_NAME: dex2all/ktapi
+  ACR_REGISTRY: crpi-wtjtitem0hw3am2j.cn-shanghai.personal.cr.aliyuncs.com
+  ACR_IMAGE: crpi-wtjtitem0hw3am2j.cn-shanghai.personal.cr.aliyuncs.com/dex2all/ktapi
 
 jobs:
-  linux:
-    name: Linux Release
+  meta:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 0
-      - name: Determine Version
+
+      - name: Resolve version
+        id: ver
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          else
-            VERSION=$(git describe --tags --match 'v[0-9]*')
+          set -euo pipefail
+          V="${INPUT_VERSION#v}"
+          if [ -z "$V" ]; then
+            echo "version is empty" >&2
+            exit 1
           fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: '1.4.0'
-      - name: Build Frontend
-        env:
-          CI: ""
-        run: |
-          cd web
-          bun install --frozen-lockfile
-          DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$VERSION bun run build
-          cd ..
-      - name: Set up Go
-        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
-        with:
-          go-version: '>=1.26'
-      - name: Build Backend (amd64)
-        run: |
-          go mod download
-          go build -pgo="$(go list -m -f '{{.Dir}}' github.com/Calcium-Ion/moejs)/default.pgo" -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$VERSION' -extldflags '-static'" -o new-api-$VERSION
-      - name: Build Backend (arm64)
-        run: |
-          sudo apt-get update
-          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y gcc-aarch64-linux-gnu
-          CC=aarch64-linux-gnu-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -pgo="$(go list -m -f '{{.Dir}}' github.com/Calcium-Ion/moejs)/default.pgo" -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$VERSION' -extldflags '-static'" -o new-api-arm64-$VERSION
-      - name: Generate checksums
-        run: sha256sum new-api-* > checksums-linux.txt
+          FILE_V="$(awk '{print $1; exit}' VERSION)"
+          if [ "$FILE_V" != "$V" ]; then
+            echo "version mismatch: release=$V VERSION=$FILE_V" >&2
+            echo "update VERSION (via release-please) before releasing" >&2
+            exit 1
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "Release version: $V (matches VERSION)"
 
-      - name: Release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            new-api-*
-            checksums-linux.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  macos:
-    name: macOS Release
-    runs-on: macos-latest
+  publish:
+    needs: meta
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 0
-      - name: Determine Version
+
+      - name: Require Docker Hub secrets
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          else
-            VERSION=$(git describe --tags --match 'v[0-9]*')
+          set -euo pipefail
+          if [ -z "${DOCKERHUB_USERNAME}" ] || [ -z "${DOCKERHUB_TOKEN}" ]; then
+            echo "Release publish requires DOCKERHUB_USERNAME and DOCKERHUB_TOKEN" >&2
+            exit 1
           fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: '1.4.0'
-      - name: Build Frontend
-        env:
-          CI: ""
-          NODE_OPTIONS: "--max-old-space-size=4096"
-        run: |
-          cd web
-          bun install --frozen-lockfile
-          DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$VERSION bun run build
-          cd ..
-      - name: Set up Go
-        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
-        with:
-          go-version: '>=1.26'
-      - name: Build Backend
-        run: |
-          go mod download
-          go build -pgo="$(go list -m -f '{{.Dir}}' github.com/Calcium-Ion/moejs)/default.pgo" -ldflags "-X 'github.com/QuantumNous/new-api/common.Version=$VERSION'" -o new-api-macos-$VERSION
-      - name: Generate checksums
-        run: shasum -a 256 new-api-macos-* > checksums-macos.txt
 
-      - name: Release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            new-api-macos-*
-            checksums-macos.txt
+      - name: Require ACR secrets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  windows:
-    name: Windows Release
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 0
-      - name: Determine Version
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          else
-            VERSION=$(git describe --tags --match 'v[0-9]*')
+          set -euo pipefail
+          if [ -z "${ACR_USERNAME}" ] || [ -z "${ACR_PASSWORD}" ]; then
+            echo "Release publish requires ACR_USERNAME and ACR_PASSWORD" >&2
+            exit 1
           fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: '1.4.0'
-      - name: Build Frontend
-        env:
-          CI: ""
-        run: |
-          cd web
-          bun install --frozen-lockfile
-          DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$VERSION bun run build
-          cd ..
-      - name: Set up Go
-        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
-        with:
-          go-version: '>=1.26'
-      - name: Build Backend
-        run: |
-          go mod download
-          go build -pgo="$(go list -m -f '{{.Dir}}' github.com/Calcium-Ion/moejs)/default.pgo" -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$VERSION'" -o new-api-$VERSION.exe
-      - name: Generate checksums
-        run: sha256sum new-api-*.exe > checksums-windows.txt
 
-      - name: Release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
         with:
-          files: |
-            new-api-*.exe
-            checksums-windows.txt
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to Aliyun ACR
+        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: |
+            ${{ env.IMAGE_NAME }}
+            ${{ env.ACR_IMAGE }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ needs.meta.outputs.version }}
+
+      - name: Build and push
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          # Personal ACR rejects OCI manifests (unknown manifest class).
+          # Docker Schema 2 is accepted by both Hub and ACR; same image layers.
+          provenance: false
+          sbom: false
+          outputs: type=image,push=true,oci-mediatypes=false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update GitHub Release notes
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
+        with:
+          tag_name: v${{ needs.meta.outputs.version }}
+          name: v${{ needs.meta.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          draft: false
+          prerelease: ${{ contains(needs.meta.outputs.version, '-') }}
+          generate_release_notes: false
+          body: |
+            ```shell
+            docker pull ${{ env.IMAGE_NAME }}:${{ needs.meta.outputs.version }}
+            docker pull ${{ env.IMAGE_NAME }}:latest
+            ```
+
+            ```shell
+            docker pull ${{ env.ACR_IMAGE }}:${{ needs.meta.outputs.version }}
+            docker pull ${{ env.ACR_IMAGE }}:latest
+            ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
