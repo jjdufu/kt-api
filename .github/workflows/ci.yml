@@ -1,22 +1,25 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    types: [opened, synchronize, closed]
+  workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Checkout the event commit in both jobs. A PR merge ref can disappear while
-# queued runs start, and a base branch can advance after the merge event.
+env:
+  IMAGE_NAME: dex2all/ktapi
+
 jobs:
   backend:
     name: Backend vet, build, and test
-    if: github.event.action != 'closed' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -25,9 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: ${{ github.event.pull_request.base.repo.full_name }}
-          ref: ${{ github.sha }}
 
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
@@ -70,9 +70,9 @@ jobs:
 
   frontend:
     name: Frontend typecheck and test
-    if: github.event.action != 'closed' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # vitest takes ~10 min on a standard hosted runner; 10 was too tight.
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: web
@@ -80,9 +80,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: ${{ github.event.pull_request.base.repo.full_name }}
-          ref: ${{ github.sha }}
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
@@ -97,3 +94,68 @@ jobs:
 
       - name: Test
         run: bun run test
+
+  changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    outputs:
+      docker: ${{ steps.filter.outputs.docker }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
+        id: filter
+        with:
+          filters: |
+            docker:
+              - 'Dockerfile'
+              - '.dockerignore'
+              - 'VERSION'
+              - 'go.mod'
+              - 'go.sum'
+              - '**/*.go'
+              - 'relaykit/**'
+              - 'tokenkit/**'
+              - 'web/**'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/release.yml'
+
+  # Full image build: manual always; PR only when build-related paths change.
+  # Skip release-please bot PRs.
+  docker:
+    name: Docker image build (no push)
+    needs: [changes]
+    if: |
+      always() &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event_name == 'pull_request' &&
+          needs.changes.result == 'success' &&
+          needs.changes.outputs.docker == 'true' &&
+          !startsWith(github.head_ref, 'release-please--')
+        )
+      )
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: false
+          load: false
+          provenance: false
+          sbom: false
+          tags: ${{ env.IMAGE_NAME }}:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
