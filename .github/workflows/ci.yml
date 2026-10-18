@@ -71,7 +71,8 @@ jobs:
   frontend:
     name: Frontend typecheck and test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # vitest takes ~10 min on a standard hosted runner; 10 was too tight.
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: web
