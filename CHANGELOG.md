@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.7](https://github.com/jjdufu/kt-api/compare/v0.0.6...v0.0.7) (2026-10-19)
+
+
+### Features
+
+* require sign-in for the model square and announcements, remove rankings ([0675743](https://github.com/jjdufu/kt-api/commit/0675743ecb33414ebbf591d38893eb4e8989192f))
+* **web:** follow the browser language and remove the language switcher ([c1551fd](https://github.com/jjdufu/kt-api/commit/c1551fd2bb2c05d20024a29090f838b2bb75bc0f))
+
+
+### Bug Fixes
+
+* **asset:** ListAssets 越权修复；模型广场/公告登录可见；删除排行榜；语言跟随浏览器 ([b0dc7f5](https://github.com/jjdufu/kt-api/commit/b0dc7f5549e65bcbd53c3386987cc6e7a53d0df2))
+* **asset:** verify every ListAssets group id belongs to the caller ([32e6fbf](https://github.com/jjdufu/kt-api/commit/32e6fbf648d607683c229aa14cd1a91fac88156f))
+
 ## [0.0.6](https://github.com/jjdufu/kt-api/compare/v0.0.5...v0.0.6) (2026-10-19)
 
 
