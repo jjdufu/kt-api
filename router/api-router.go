@@ -387,6 +387,14 @@ func SetApiRouter(router *gin.Engine) {
 			taskRoute.GET("/self", middleware.UserAuth(), controller.GetUserTask)
 			taskRoute.GET("", middleware.AdminAuth(), controller.GetAllTask)
 			taskRoute.GET("/:task_id/artifacts", middleware.UserAuth(), controller.GetDashboardTaskArtifacts)
+			taskRoute.GET("/:task_id/callbacks", middleware.UserAuth(), controller.GetTaskCallbacks)
+		}
+
+		taskCallbackAdminRoute := apiRouter.Group("/admin/task-callbacks")
+		taskCallbackAdminRoute.Use(middleware.AdminAuth())
+		{
+			taskCallbackAdminRoute.GET("", controller.AdminListTaskCallbackEvents)
+			taskCallbackAdminRoute.POST("/:event_id/redeliver", controller.AdminRedeliverTaskCallbackEvent)
 		}
 
 		vendorRoute := apiRouter.Group("/vendors")

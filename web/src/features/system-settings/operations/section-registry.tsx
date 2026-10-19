@@ -23,8 +23,20 @@ import { WorkerSettingsSection } from '../integrations/worker-settings-section'
 import { LogSettingsSection } from '../maintenance/log-settings-section'
 import { PerformanceSection } from '../maintenance/performance-section'
 import { UpdateCheckerSection } from '../maintenance/update-checker-section'
+import { DEFAULT_TASK_CALLBACK_SETTINGS } from '../task-callbacks/constants'
+import { TaskCallbackSettingsSection } from '../task-callbacks/task-callback-settings-section'
 import type { OperationsSettings } from '../types'
 import { createSectionRegistry } from '../utils/section-registry'
+
+function pickTaskCallbackSettings(settings: OperationsSettings) {
+  const picked = { ...DEFAULT_TASK_CALLBACK_SETTINGS }
+  for (const key of Object.keys(picked) as Array<keyof typeof picked>) {
+    if (settings[key] !== undefined) {
+      Object.assign(picked, { [key]: settings[key] })
+    }
+  }
+  return picked
+}
 
 const OPERATIONS_SECTIONS = [
   {
@@ -131,6 +143,15 @@ const OPERATIONS_SECTIONS = [
           'performance_setting.monitor_disk_threshold':
             settings['performance_setting.monitor_disk_threshold'] ?? 95,
         }}
+      />
+    ),
+  },
+  {
+    id: 'task-callbacks',
+    titleKey: 'Task callbacks',
+    build: (settings: OperationsSettings) => (
+      <TaskCallbackSettingsSection
+        defaultValues={pickTaskCallbackSettings(settings)}
       />
     ),
   },

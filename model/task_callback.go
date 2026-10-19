@@ -471,3 +471,19 @@ func ListTaskCallbackEvents(query TaskCallbackEventQuery, offset, limit int) ([]
 	err := query.apply(DB.Model(&TaskCallbackEvent{})).Order("id DESC").Offset(offset).Limit(limit).Find(&events).Error
 	return events, total, err
 }
+
+// ListTaskCallbackSubscriptionsByIDs loads subscriptions keyed by id.
+func ListTaskCallbackSubscriptionsByIDs(ids []int64) (map[int64]*TaskCallbackSubscription, error) {
+	result := make(map[int64]*TaskCallbackSubscription, len(ids))
+	if len(ids) == 0 {
+		return result, nil
+	}
+	var subscriptions []*TaskCallbackSubscription
+	if err := DB.Where("id IN ?", ids).Find(&subscriptions).Error; err != nil {
+		return nil, err
+	}
+	for _, subscription := range subscriptions {
+		result[subscription.ID] = subscription
+	}
+	return result, nil
+}

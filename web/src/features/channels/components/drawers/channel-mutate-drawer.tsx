@@ -140,6 +140,7 @@ import {
   ADD_MODE_OPTIONS,
   CLAUDE_FIELD_PASSTHROUGH_TYPES,
   CHANNEL_STATUS_LABELS,
+  CHANNEL_TYPE_DOUBAO_VIDEO,
   CHANNEL_TYPE_NEW_API,
   CHANNEL_TYPE_OLLAMA,
   CHANNEL_TYPE_OPTIONS,
@@ -315,6 +316,7 @@ const SENSITIVE_FORM_FIELDS = [
   'claude_beta_query',
   'ollama_openai_chat',
   'disable_task_polling_sleep',
+  'upstream_task_callback_enabled',
   'upstream_model_update_check_enabled',
   'upstream_model_update_auto_sync_enabled',
   'upstream_model_update_ignored_models',
@@ -1936,6 +1938,33 @@ export function ChannelMutateDrawer({
             <FormDescription>
               {t(
                 'Do not wait one second between polling async tasks for this channel'
+              )}
+            </FormDescription>
+          </div>
+          <FormControl>
+            <Switch
+              disabled={sensitiveLocked}
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+
+  const upstreamTaskCallbackFields = currentType ===
+    CHANNEL_TYPE_DOUBAO_VIDEO && (
+    <FormField
+      control={form.control}
+      name='upstream_task_callback_enabled'
+      render={({ field }) => (
+        <FormItem className='flex items-center justify-between px-4 py-3'>
+          <div className='space-y-0.5'>
+            <FormLabel>{t('Upstream task callback fast path')}</FormLabel>
+            <FormDescription>
+              {t(
+                'Send the supplier a kt-api callback URL so task updates arrive without waiting for the next poll. Requires the upstream callback public base URL in task callback settings.'
               )}
             </FormDescription>
           </div>
@@ -4787,6 +4816,7 @@ export function ChannelMutateDrawer({
                 className='space-y-4 disabled:opacity-60'
               >
                 {taskPollingFields}
+                {upstreamTaskCallbackFields}
                 {proxyFields}
                 {httpProtocolFields}
                 {httpShardsFields}

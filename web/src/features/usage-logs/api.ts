@@ -1,3 +1,4 @@
+import type { TaskCallbackEvent } from '@/features/system-settings/task-callbacks/api'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -17,7 +18,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { api, getFreshAuthHeaders, type ApiRequestConfig } from '@/lib/api'
-import { createServerError } from '@/lib/server-error-message'
+import {
+  createServerError,
+  requireServerSuccess,
+} from '@/lib/server-error-message'
 
 import type { UsageLog } from './data/schema'
 import { buildQueryParams } from './lib/query-params'
@@ -180,4 +184,28 @@ export async function getTaskArtifacts(taskId: string) {
     taskArtifactRequestConfig
   )
   return parseTaskArtifactsResponse(response.data)
+}
+
+export type TaskCallbackDetails = {
+  task_id: string
+  enabled: boolean
+  subscription: {
+    callback_host: string
+    callback_url_hash: string
+    upstream_fast_path: boolean
+    last_status: string
+    created_at: number
+  } | null
+  events: TaskCallbackEvent[]
+}
+
+export async function getTaskCallbacks(
+  taskId: string
+): Promise<TaskCallbackDetails> {
+  const response = await api.get<{
+    success: boolean
+    message?: string
+    data: TaskCallbackDetails
+  }>(`/api/task/${encodeURIComponent(taskId)}/callbacks`)
+  return requireServerSuccess(response.data).data
 }
