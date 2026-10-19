@@ -424,3 +424,4 @@ kt-api 没有 `/metrics`，保持现有做法：**用 `sql_exporter` 从 outbox 
 | 2026-10-19 | Step 6 | 新增 task_callback_subscriptions / task_callback_events 表与模型、清理系统任务；SQLite 3.50、MySQL 5.7.44/8.0、MariaDB 11.8、PostgreSQL 9.6/17 迁移与并发认领验证通过 |
 | 2026-10-19 | Step 7 | 独立 callback_url 校验器（scheme/https-only/userinfo/端口/非规范数字 IP/私网/解析全部合法）与投递客户端（不走代理、不跟随重定向、拨号时逐 IP 校验防 DNS rebinding） |
 | 2026-10-19 | Step 8 | 别名路由在 Distribute/预扣费前读取并校验 callback_url（非字符串/不合法 → 400 插件错误信封），任务落库后建订阅；callback_url 不发往上游、不入任务 metadata |
+| 2026-10-19 | Step 9 | 抽出 RenderTaskPluginBody / RenderSeedanceTaskStatus，GET 直接写渲染字节；快照测试锁定 GET 字节且与回调渲染逐字节一致、不含上游 ID |
