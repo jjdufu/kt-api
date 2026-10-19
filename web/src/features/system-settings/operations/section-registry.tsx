@@ -22,7 +22,7 @@ import { MonitoringSettingsSection } from '../integrations/monitoring-settings-s
 import { WorkerSettingsSection } from '../integrations/worker-settings-section'
 import { LogSettingsSection } from '../maintenance/log-settings-section'
 import { PerformanceSection } from '../maintenance/performance-section'
-import { UpdateCheckerSection } from '../maintenance/update-checker-section'
+import { SystemStatusSection } from '../maintenance/system-status-section'
 import { DEFAULT_TASK_CALLBACK_SETTINGS } from '../task-callbacks/constants'
 import { TaskCallbackSettingsSection } from '../task-callbacks/task-callback-settings-section'
 import type { OperationsSettings } from '../types'
@@ -156,14 +156,14 @@ const OPERATIONS_SECTIONS = [
     ),
   },
   {
-    id: 'update-checker',
+    id: 'system-status',
     titleKey: 'System maintenance',
     build: (
       _settings: OperationsSettings,
       currentVersion?: string | null,
       startTime?: number | null
     ) => (
-      <UpdateCheckerSection
+      <SystemStatusSection
         currentVersion={currentVersion}
         startTime={startTime}
       />

@@ -18,18 +18,17 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
-import { SystemUpdateAction } from '@/features/system-update/system-update-action'
 import { useStatus } from '@/hooks/use-status'
 import { formatTimestamp } from '@/lib/format'
 
 import { SettingsSection } from '../components/settings-section'
 
-type UpdateCheckerSectionProps = {
+type SystemStatusSectionProps = {
   currentVersion?: string | null
   startTime?: number | null
 }
 
-export function UpdateCheckerSection(props: UpdateCheckerSectionProps) {
+export function SystemStatusSection(props: SystemStatusSectionProps) {
   const { t } = useTranslation()
   const { status } = useStatus()
   const uptime = props.startTime
@@ -39,8 +38,7 @@ export function UpdateCheckerSection(props: UpdateCheckerSectionProps) {
 
   return (
     <SettingsSection title={t('System maintenance')}>
-      <div className='space-y-6'>
-        <div className='grid gap-4 md:grid-cols-2'>
+      <div className='grid gap-4 md:grid-cols-2'>
           <div className='rounded-lg border p-4'>
             <div className='text-muted-foreground text-sm'>
               {t('Current version')}
@@ -53,8 +51,6 @@ export function UpdateCheckerSection(props: UpdateCheckerSectionProps) {
             </div>
             <div className='text-lg font-semibold'>{uptime}</div>
           </div>
-        </div>
-        <SystemUpdateAction compact={false} />
       </div>
     </SettingsSection>
   )
