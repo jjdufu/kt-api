@@ -625,6 +625,11 @@ func executeTaskSubmissionWith(
 	task.PrivateData.SubscriptionId = relayInfo.SubscriptionId
 	task.PrivateData.TokenId = relayInfo.TokenId
 	task.PrivateData.NodeName = common.NodeName
+	if expiresAfter, ok := c.Get(service.ContextKeySeedanceExecutionExpiresAfter); ok {
+		if seconds, valid := expiresAfter.(int64); valid {
+			task.PrivateData.ExecutionExpiresAfter = seconds
+		}
+	}
 	task.PrivateData.BillingContext = &model.TaskBillingContext{
 		ModelPrice:      relayInfo.PriceData.ModelPrice,
 		GroupRatio:      relayInfo.PriceData.GroupRatioInfo.GroupRatio,

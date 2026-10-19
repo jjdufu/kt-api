@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/constant"
@@ -179,4 +180,75 @@ func TestUpdateVideoSingleTaskArkFailedBodyKeepsUpstreamShape(t *testing.T) {
 	var persisted model.Task
 	require.NoError(t, model.DB.First(&persisted, task.ID).Error)
 	assert.JSONEq(t, upstream, string(persisted.Data))
+}
+
+func TestArkTaskDeadline(t *testing.T) {
+	task := &model.Task{SubmitTime: 1_000_000}
+	assert.Equal(t, int64(1_000_000+172800+1800), ArkTaskDeadline(task), "documented default")
+	task.PrivateData.ExecutionExpiresAfter = 3600
+	assert.Equal(t, int64(1_000_000+3600+1800), ArkTaskDeadline(task), "value recorded at submit")
+	task.PrivateData.ExecutionExpiresAfter = 0
+	task.Data = []byte(`{"execution_expires_after":7200}`)
+	assert.Equal(t, int64(1_000_000+7200+1800), ArkTaskDeadline(task), "value echoed upstream")
+	task.Data = []byte(`{"execution_expires_after":999999}`)
+	assert.Equal(t, int64(1_000_000+172800+1800), ArkTaskDeadline(task), "out of range falls back to default")
+	assert.Equal(t, int64(4350), arkMaxDeadlineMinutes())
+	assert.Zero(t, NormalizeArkExecutionExpiresAfter(3599))
+	assert.Zero(t, NormalizeArkExecutionExpiresAfter(259201))
+	assert.Equal(t, int64(259200), NormalizeArkExecutionExpiresAfter(259200))
+}
+
+func TestSweepHonorsArkExecutionExpiresAfter(t *testing.T) {
+	truncate(t)
+	const userID = 615
+	seedUser(t, userID, 10_000)
+	now := time.Now().Unix()
+
+	newArkTask := func(taskID string, submitted int64, expiresAfter int64) *model.Task {
+		task := makeTask(userID, 0, 100, 0, BillingSourceWallet, 0)
+		task.TaskID = taskID
+		task.SubmitTime = submitted
+		task.Data = []byte(`{"id":"up-` + taskID + `","status":"running"}`)
+		task.PrivateData.UpstreamTaskID = "up-" + taskID
+		task.PrivateData.ExecutionExpiresAfter = expiresAfter
+		markArkVideoTask(task)
+		require.NoError(t, model.DB.Create(task).Error)
+		return task
+	}
+	// Past TASK_TIMEOUT_MINUTES (1 minute) but inside the 48h default deadline.
+	young := newArkTask("task_ark_young", now-3*3600, 0)
+	// Short execution_expires_after (1h) already past deadline even though a
+	// long TASK_TIMEOUT_MINUTES would not cover it.
+	short := newArkTask("task_ark_short", now-3600-ArkExpiryGraceSeconds-60, 3600)
+	// Default deadline long passed.
+	old := newArkTask("task_ark_old", now-ArkDefaultExecutionExpiresAfter-ArkExpiryGraceSeconds-60, 0)
+
+	previousTimeout := constant.TaskTimeoutMinutes
+	t.Cleanup(func() { constant.TaskTimeoutMinutes = previousTimeout })
+
+	constant.TaskTimeoutMinutes = 1
+	sweepTimedOutTasks(context.Background())
+	status := func(task *model.Task) (model.TaskStatus, string) {
+		var reloaded model.Task
+		require.NoError(t, model.DB.First(&reloaded, task.ID).Error)
+		return reloaded.Status, decodeTaskDataObject(t, reloaded.Data)["status"].(string)
+	}
+	youngStatus, youngData := status(young)
+	assert.EqualValues(t, model.TaskStatusInProgress, youngStatus, "never timed out before its deadline")
+	assert.Equal(t, "running", youngData)
+	shortStatus, shortData := status(short)
+	assert.EqualValues(t, model.TaskStatusFailure, shortStatus)
+	assert.Equal(t, "expired", shortData)
+	oldStatus, oldData := status(old)
+	assert.EqualValues(t, model.TaskStatusFailure, oldStatus)
+	assert.Equal(t, "expired", oldData)
+
+	// A generous TASK_TIMEOUT_MINUTES still expires a task past its own deadline.
+	truncate(t)
+	short = newArkTask("task_ark_short_2", now-3600-ArkExpiryGraceSeconds-60, 3600)
+	constant.TaskTimeoutMinutes = 4350
+	sweepTimedOutTasks(context.Background())
+	shortStatus, shortData = status(short)
+	assert.EqualValues(t, model.TaskStatusFailure, shortStatus)
+	assert.Equal(t, "expired", shortData)
 }

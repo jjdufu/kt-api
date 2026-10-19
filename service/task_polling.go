@@ -67,60 +67,110 @@ var GetTaskAdaptorFunc func(platform constant.TaskPlatform) TaskPollingAdaptor
 // sweepTimedOutTasks 在主轮询之前独立清理超时任务。
 // 每次最多处理 100 条，剩余的下个周期继续处理。
 // 使用 per-task CAS (UpdateWithStatus) 防止覆盖被正常轮询已推进的任务。
+//
+// Seedance (Ark) video tasks carry their own deadline: created_at +
+// execution_expires_after (+ grace). They are never timed out before it, even
+// when TASK_TIMEOUT_MINUTES is shorter, and are timed out once it passes even
+// when TASK_TIMEOUT_MINUTES is longer.
 func sweepTimedOutTasks(ctx context.Context) {
 	if constant.TaskTimeoutMinutes <= 0 {
 		return
 	}
-	cutoff := time.Now().Unix() - int64(constant.TaskTimeoutMinutes)*60
-	tasks := model.GetTimedOutUnfinishedTasks(cutoff, 100)
-	if len(tasks) == 0 {
-		return
-	}
-
-	reason := "Task timed out"
-	legacyReason := "Task timed out (a task left by the old system is not refunded; contact the administrator)"
 	now := time.Now().Unix()
+	cutoff := now - int64(constant.TaskTimeoutMinutes)*60
 	timedOutCount := 0
-
-	for _, task := range tasks {
-		isLegacy := task.SubmitTime > 0 && task.SubmitTime < model.TaskRefundLegacyCutoff
-
-		oldStatus := task.Status
-		task.Status = model.TaskStatusFailure
-		task.Progress = "100%"
-		task.FinishTime = now
-		if isLegacy {
-			task.FailReason = legacyReason
-			// 旧系统任务明确不退款，随终态 CAS 一并清掉 quota，
-			// 避免留下可再次退款的计费状态。
-			task.Quota = 0
-		} else {
-			task.FailReason = reason
-		}
-		if IsArkVideoTask(task) {
-			// Keep GET and callbacks consistent with the local decision: a task
-			// kt-api times out is presented as expired (Ark semantics).
-			task.Data = arkTerminalTaskData(task, ArkTaskStatusExpired, arkErrorCodeTaskExpired, task.FailReason, now)
-		}
-
-		won, err := task.UpdateWithStatus(oldStatus)
-		if err != nil {
-			logger.LogError(ctx, common.LogText("sweepTimedOutTasks CAS update error for task %s: %v", task.TaskID, err))
+	deferredArk := 0
+	for _, task := range model.GetTimedOutUnfinishedTasks(cutoff, 100) {
+		if IsArkVideoTask(task) && now < ArkTaskDeadline(task) {
+			deferredArk++
 			continue
 		}
-		if !won {
-			logger.LogInfo(ctx, common.LogText("sweepTimedOutTasks: task %s already transitioned, skip", task.TaskID))
-			continue
-		}
-		timedOutCount++
-		if !isLegacy && task.Quota != 0 {
-			RefundTaskQuota(ctx, task, reason)
+		if timeOutTask(ctx, task, now) {
+			timedOutCount++
 		}
 	}
+	if deferredArk > 0 {
+		logger.LogWarn(ctx, common.LogText("sweepTimedOutTasks: %d Seedance tasks are past TASK_TIMEOUT_MINUTES but before their execution_expires_after deadline; raise TASK_TIMEOUT_MINUTES to at least %d", deferredArk, arkMaxDeadlineMinutes()))
+	}
+	timedOutCount += sweepExpiredArkTasks(ctx, now)
 
 	if timedOutCount > 0 {
 		logger.LogInfo(ctx, common.LogText("sweepTimedOutTasks: timed out %d tasks", timedOutCount))
 	}
+}
+
+const (
+	arkSweepPageSize = 200
+	arkSweepMaxPages = 5
+	arkSweepMaxTasks = 100
+)
+
+// sweepExpiredArkTasks times out Seedance video tasks whose own deadline has
+// passed. Candidates are pages of unfinished tasks old enough for the
+// shortest allowed execution_expires_after.
+func sweepExpiredArkTasks(ctx context.Context, now int64) int {
+	cutoff := now - ArkMinExecutionExpiresAfter - ArkExpiryGraceSeconds
+	timedOut := 0
+	afterID := int64(0)
+	for page := 0; page < arkSweepMaxPages && timedOut < arkSweepMaxTasks; page++ {
+		tasks := model.GetUnfinishedTasksSubmittedBefore(cutoff, afterID, arkSweepPageSize)
+		for _, task := range tasks {
+			afterID = task.ID
+			if !IsArkVideoTask(task) || now < ArkTaskDeadline(task) {
+				continue
+			}
+			if timeOutTask(ctx, task, now) {
+				timedOut++
+			}
+			if timedOut >= arkSweepMaxTasks {
+				break
+			}
+		}
+		if len(tasks) < arkSweepPageSize {
+			break
+		}
+	}
+	return timedOut
+}
+
+// timeOutTask fails one unfinished task as timed out (CAS) and refunds it
+// unless it predates timeout refunds. It reports whether this caller won.
+func timeOutTask(ctx context.Context, task *model.Task, now int64) bool {
+	reason := "Task timed out"
+	legacyReason := "Task timed out (a task left by the old system is not refunded; contact the administrator)"
+	isLegacy := task.SubmitTime > 0 && task.SubmitTime < model.TaskRefundLegacyCutoff
+
+	oldStatus := task.Status
+	task.Status = model.TaskStatusFailure
+	task.Progress = "100%"
+	task.FinishTime = now
+	if isLegacy {
+		task.FailReason = legacyReason
+		// 旧系统任务明确不退款，随终态 CAS 一并清掉 quota，
+		// 避免留下可再次退款的计费状态。
+		task.Quota = 0
+	} else {
+		task.FailReason = reason
+	}
+	if IsArkVideoTask(task) {
+		// Keep GET and callbacks consistent with the local decision: a task
+		// kt-api times out is presented as expired (Ark semantics).
+		task.Data = arkTerminalTaskData(task, ArkTaskStatusExpired, arkErrorCodeTaskExpired, task.FailReason, now)
+	}
+
+	won, err := task.UpdateWithStatus(oldStatus)
+	if err != nil {
+		logger.LogError(ctx, common.LogText("sweepTimedOutTasks CAS update error for task %s: %v", task.TaskID, err))
+		return false
+	}
+	if !won {
+		logger.LogInfo(ctx, common.LogText("sweepTimedOutTasks: task %s already transitioned, skip", task.TaskID))
+		return false
+	}
+	if !isLegacy && task.Quota != 0 {
+		RefundTaskQuota(ctx, task, reason)
+	}
+	return true
 }
 
 // TaskPollSummary is the result recorded on an async_task_poll system task row,

@@ -136,6 +136,10 @@ type TaskPrivateData struct {
 	// and every retrieval surface treats the task as not found. The zero
 	// value keeps historical rows retained and retrievable.
 	ResultDiscarded bool `json:"result_discarded,omitempty"`
+	// ExecutionExpiresAfter is the Seedance execution_expires_after (seconds)
+	// the client requested; kt-api never times the task out locally before
+	// created_at + this value (+ grace). Zero means the vendor default.
+	ExecutionExpiresAfter int64 `json:"execution_expires_after,omitempty"`
 }
 
 type TaskExecutionSnapshot struct {
@@ -214,7 +218,7 @@ func (p TaskPrivateData) Value() (driver.Value, error) {
 		p.Execution == nil && p.BillingSource == "" && p.SubscriptionId == 0 &&
 		p.TokenId == 0 && p.NodeName == "" && p.BillingContext == nil &&
 		!p.ResponsesBackground && len(p.PluginState) == 0 && p.PollFailures == 0 &&
-		!p.ResultDiscarded {
+		!p.ResultDiscarded && p.ExecutionExpiresAfter == 0 {
 		return nil, nil
 	}
 	// 同 Properties.Value:string 避免 PG simple protocol 的 bytea 编码。
@@ -369,6 +373,23 @@ func GetTimedOutUnfinishedTasks(cutoffUnix int64, limit int) []*Task {
 		Where("status NOT IN ?", []string{TaskStatusFailure, TaskStatusSuccess}).
 		Where("submit_time < ?", cutoffUnix).
 		Order("submit_time").
+		Limit(limit).
+		Find(&tasks).Error
+	if err != nil {
+		return nil
+	}
+	return tasks
+}
+
+// GetUnfinishedTasksSubmittedBefore pages through unfinished tasks submitted
+// before cutoffUnix in id order, starting after afterID.
+func GetUnfinishedTasksSubmittedBefore(cutoffUnix int64, afterID int64, limit int) []*Task {
+	var tasks []*Task
+	err := DB.Where("progress != ?", "100%").
+		Where("status NOT IN ?", []string{TaskStatusFailure, TaskStatusSuccess}).
+		Where("submit_time < ?", cutoffUnix).
+		Where("id > ?", afterID).
+		Order("id").
 		Limit(limit).
 		Find(&tasks).Error
 	if err != nil {

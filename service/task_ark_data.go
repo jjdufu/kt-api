@@ -130,3 +130,58 @@ func arkStatuslessFailureCode(body []byte) (string, bool) {
 	}
 	return arkErrorCodeTaskFailed, true
 }
+
+// Seedance execution_expires_after bounds (seconds), from the supplier and Ark
+// documents: default 172800 (48h), range [3600, 259200].
+const (
+	ArkDefaultExecutionExpiresAfter int64 = 172800
+	ArkMinExecutionExpiresAfter     int64 = 3600
+	ArkMaxExecutionExpiresAfter     int64 = 259200
+	// ArkExpiryGraceSeconds lets the upstream report expired itself before
+	// kt-api decides locally.
+	ArkExpiryGraceSeconds int64 = 1800
+)
+
+// NormalizeArkExecutionExpiresAfter returns the requested value when it is in
+// the documented range, otherwise zero (the vendor default applies).
+func NormalizeArkExecutionExpiresAfter(value int64) int64 {
+	if value < ArkMinExecutionExpiresAfter || value > ArkMaxExecutionExpiresAfter {
+		return 0
+	}
+	return value
+}
+
+// arkTaskExecutionExpiresAfter resolves the task's execution_expires_after:
+// the value recorded at submit, else the one echoed by the upstream snapshot,
+// else the documented default.
+func arkTaskExecutionExpiresAfter(task *model.Task) int64 {
+	if value := NormalizeArkExecutionExpiresAfter(task.PrivateData.ExecutionExpiresAfter); value > 0 {
+		return value
+	}
+	if number, ok := arkTaskDataObject(task)["execution_expires_after"].(float64); ok {
+		if value := NormalizeArkExecutionExpiresAfter(int64(number)); value > 0 {
+			return value
+		}
+	}
+	return ArkDefaultExecutionExpiresAfter
+}
+
+// ArkTaskDeadline is the Unix second after which kt-api may time the task out
+// locally: submit time + execution_expires_after + grace.
+func ArkTaskDeadline(task *model.Task) int64 {
+	start := task.SubmitTime
+	if start <= 0 {
+		start = task.CreatedAt
+	}
+	return start + arkTaskExecutionExpiresAfter(task) + ArkExpiryGraceSeconds
+}
+
+// arkMaxDeadlineMinutes is the smallest TASK_TIMEOUT_MINUTES that never
+// defers a Seedance task (maximum execution_expires_after + grace).
+func arkMaxDeadlineMinutes() int64 {
+	return (ArkMaxExecutionExpiresAfter + ArkExpiryGraceSeconds + 59) / 60
+}
+
+// ContextKeySeedanceExecutionExpiresAfter carries the validated
+// execution_expires_after of a Seedance create request to task persistence.
+const ContextKeySeedanceExecutionExpiresAfter = "seedance_execution_expires_after"
