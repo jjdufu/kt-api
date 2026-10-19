@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6](https://github.com/jjdufu/kt-api/compare/v0.0.5...v0.0.6) (2026-10-19)
+
+
+### Features
+
+* **web:** add API docs pages ([7ffcf60](https://github.com/jjdufu/kt-api/commit/7ffcf6092ebffa4c882eec3cf4001f963a341f27))
+* **web:** add API docs pages ([2956fc3](https://github.com/jjdufu/kt-api/commit/2956fc3af0e8c6ca68d6af4bd65b0ebdff560a77))
+
 ## [0.0.5](https://github.com/jjdufu/kt-api/compare/v0.0.4...v0.0.5) (2026-10-19)
 
 
