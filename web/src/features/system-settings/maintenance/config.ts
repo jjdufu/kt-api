@@ -25,7 +25,6 @@ export type HeaderNavModulesConfig = {
   home: boolean
   console: boolean
   pricing: HeaderNavAccessConfig
-  rankings: HeaderNavAccessConfig
   docs: boolean
   about: boolean
   [key: string]: boolean | HeaderNavAccessConfig
@@ -41,13 +40,10 @@ export type SidebarModulesAdminConfig = Record<string, SidebarSectionConfig>
 export const HEADER_NAV_DEFAULT: HeaderNavModulesConfig = {
   home: true,
   console: true,
+  // The model square is always login-only; the backend enforces it too.
   pricing: {
     enabled: true,
-    requireAuth: false,
-  },
-  rankings: {
-    enabled: true,
-    requireAuth: false,
+    requireAuth: true,
   },
   docs: true,
   about: true,
@@ -99,7 +95,6 @@ const toBoolean = (value: unknown, fallback: boolean): boolean => {
 const cloneHeaderNavDefault = (): HeaderNavModulesConfig => ({
   ...HEADER_NAV_DEFAULT,
   pricing: { ...HEADER_NAV_DEFAULT.pricing },
-  rankings: { ...HEADER_NAV_DEFAULT.rankings },
 })
 
 const parseAccessModule = (
@@ -147,16 +142,18 @@ export function parseHeaderNavModules(
     const result: HeaderNavModulesConfig = {
       ...base,
       pricing: { ...base.pricing },
-      rankings: { ...base.rankings },
     }
 
     Object.entries(parsed).forEach(([key, raw]) => {
       if (key === 'pricing') {
-        result.pricing = parseAccessModule(raw, base.pricing)
+        result.pricing = {
+          ...parseAccessModule(raw, base.pricing),
+          requireAuth: true,
+        }
         return
       }
       if (key === 'rankings') {
-        result.rankings = parseAccessModule(raw, base.rankings)
+        // Removed module; drop any legacy value.
         return
       }
 

@@ -44,10 +44,10 @@ var accessTokenRouteRules = map[string]accessTokenRouteRule{
 	// router/api-router.go: top level
 	"GET /api/models":                     accessTokenScopeRule("profile:read"),
 	"GET /api/status/test":                accessTokenScopeRule("log:read"),
+	"GET /api/notice":                     accessTokenAnyRule,
 	"GET /api/pricing":                    accessTokenAnyRule,
 	"GET /api/perf-metrics/summary":       accessTokenAnyRule,
 	"GET /api/perf-metrics":               accessTokenAnyRule,
-	"GET /api/rankings":                   accessTokenAnyRule,
 	"POST /api/oauth/state":               accessTokenSessionRule,
 	"POST /api/oauth/email/bind/start":    accessTokenScopeRule("account_security:write"),
 	"POST /api/oauth/email/bind/resend":   accessTokenScopeRule("account_security:write"),

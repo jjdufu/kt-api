@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -82,10 +83,28 @@ func performHeaderNavRequest(t *testing.T, handler gin.HandlerFunc, authenticate
 	return recorder
 }
 
-func TestHeaderNavModuleAuthAllowsDefaultPublicAccess(t *testing.T) {
+func TestHeaderNavModuleAuthRequiresLoginForPricingByDefault(t *testing.T) {
+	for _, raw := range []string{"", `{"pricing":true}`, `{"pricing":{"enabled":true,"requireAuth":false}}`} {
+		withHeaderNavModules(t, raw)
+
+		recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("pricing"), false)
+
+		require.Equal(t, http.StatusUnauthorized, recorder.Code, raw)
+	}
+}
+
+func TestHeaderNavModuleAuthAllowsLoggedInPricing(t *testing.T) {
+	withHeaderNavModules(t, `{"pricing":{"enabled":true,"requireAuth":false}}`)
+
+	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("pricing"), true)
+
+	require.Equal(t, http.StatusOK, recorder.Code)
+}
+
+func TestHeaderNavModuleAuthAllowsPublicAccessForOtherModules(t *testing.T) {
 	withHeaderNavModules(t, "")
 
-	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("pricing"), false)
+	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("docs"), false)
 
 	require.Equal(t, http.StatusOK, recorder.Code)
 }
@@ -117,7 +136,7 @@ func TestDisabledPricingRequiresRootAuthentication(t *testing.T) {
 		{name: "tampered root token", role: common.RoleRootUser, credential: "tampered", wantStatus: http.StatusUnauthorized},
 		{name: "revoked root session", role: common.RoleRootUser, credential: "revoked", wantStatus: http.StatusUnauthorized},
 		{name: "disabled root account", role: common.RoleRootUser, credential: "banned", wantStatus: http.StatusUnauthorized},
-		{name: "root cannot bypass disabled rankings", module: "rankings", options: `{"rankings":false}`, role: common.RoleRootUser, wantStatus: http.StatusForbidden},
+		{name: "root cannot bypass other disabled modules", module: "docs", options: `{"docs":false}`, role: common.RoleRootUser, wantStatus: http.StatusForbidden},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			setupDashboardAuthMiddlewareTest(t)
@@ -181,28 +200,36 @@ func TestHeaderNavModuleAuthRequiresLoginForPricing(t *testing.T) {
 	require.Equal(t, http.StatusUnauthorized, recorder.Code)
 }
 
-func TestHeaderNavModuleAuthRequiresLoginForRankings(t *testing.T) {
-	raw := `{"rankings":{"enabled":true,"requireAuth":true}}`
+func TestHeaderNavModuleAuthRequiresLoginWhenConfigured(t *testing.T) {
+	raw := `{"docs":{"enabled":true,"requireAuth":true}}`
 	withHeaderNavModules(t, raw)
 
-	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("rankings"), false)
+	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("docs"), false)
 
 	require.Equal(t, http.StatusUnauthorized, recorder.Code)
 }
 
 func TestHeaderNavModuleAuthRejectsLegacyDisabledModule(t *testing.T) {
-	raw := `{"rankings":false}`
+	raw := `{"docs":false}`
 	withHeaderNavModules(t, raw)
 
-	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("rankings"), false)
+	recorder := performHeaderNavRequest(t, HeaderNavModuleAuth("docs"), false)
 
 	require.Equal(t, http.StatusForbidden, recorder.Code)
 }
 
-func TestHeaderNavModulePublicOrUserAuthAllowsDefaultPublicAccess(t *testing.T) {
+func TestHeaderNavModulePublicOrUserAuthRequiresLoginForPricingByDefault(t *testing.T) {
 	withHeaderNavModules(t, "")
 
 	recorder := performHeaderNavRequest(t, HeaderNavModulePublicOrUserAuth("pricing"), false)
+
+	require.Equal(t, http.StatusUnauthorized, recorder.Code)
+}
+
+func TestHeaderNavModulePublicOrUserAuthAllowsLoggedInPricing(t *testing.T) {
+	withHeaderNavModules(t, "")
+
+	recorder := performHeaderNavRequest(t, HeaderNavModulePublicOrUserAuth("pricing"), true)
 
 	require.Equal(t, http.StatusOK, recorder.Code)
 }
@@ -262,4 +289,43 @@ func TestHeaderNavPublicRouteRejectsExpiredInternalAccessToken(t *testing.T) {
 
 	require.Equal(t, http.StatusUnauthorized, response.Code)
 	require.Contains(t, response.Body.String(), "AUTH_TOKEN_EXPIRED")
+}
+
+func TestTryUserAuthLenientTreatsInvalidCredentialsAsAnonymous(t *testing.T) {
+	setupDashboardAuthMiddlewareTest(t)
+	gin.SetMode(gin.TestMode)
+	user := model.User{
+		Username: "status-reader", Password: "unused-password-hash", Role: common.RoleCommonUser,
+		Status: common.UserStatusEnabled, Group: "default", AuthVersion: 1,
+	}
+	require.NoError(t, model.DB.Create(&user).Error)
+	bundle, err := service.CreateLoginSession(user.Id, "password", "127.0.0.1", "status-test")
+	require.NoError(t, err)
+
+	router := gin.New()
+	router.GET("/api/status", TryUserAuthLenient(), func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"id": c.GetInt("id")})
+	})
+
+	expired := issueExpiredDashboardAccessToken(t, service.AuthIdentity{
+		UserID: user.Id, SessionID: "expired-status-session", UserAuthVersion: 1, SessionVersion: 1,
+	})
+	for name, token := range map[string]string{
+		"garbage":  "not-a-token",
+		"expired":  expired,
+		"tampered": tamperDashboardToken(bundle.AccessToken),
+	} {
+		response := middlewareBearerRequest(router, "/api/status", token)
+		require.Equal(t, http.StatusOK, response.Code, name)
+		require.JSONEq(t, `{"id":0}`, response.Body.String(), name)
+	}
+
+	response := middlewareBearerRequest(router, "/api/status", bundle.AccessToken)
+	require.Equal(t, http.StatusOK, response.Code)
+	require.JSONEq(t, fmt.Sprintf(`{"id":%d}`, user.Id), response.Body.String())
+
+	require.NoError(t, model.DB.Model(&user).Update("status", common.UserStatusDisabled).Error)
+	response = middlewareBearerRequest(router, "/api/status", bundle.AccessToken)
+	require.Equal(t, http.StatusOK, response.Code)
+	require.JSONEq(t, `{"id":0}`, response.Body.String())
 }

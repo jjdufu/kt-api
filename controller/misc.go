@@ -133,7 +133,9 @@ func GetStatus(c *gin.Context) {
 	if cs.ApiInfoEnabled {
 		data["api_info"] = console_setting.GetApiInfo()
 	}
-	if cs.AnnouncementsEnabled {
+	// Announcements are for signed-in users only; /api/status itself stays
+	// public because the sign-in page depends on it.
+	if cs.AnnouncementsEnabled && c.GetInt("id") > 0 {
 		data["announcements"] = console_setting.GetAnnouncements()
 	}
 	if cs.FAQEnabled {

@@ -99,7 +99,7 @@ describe('shared status query deduplication', () => {
           STATUS_QUERY_KEY,
           {
             system_name: 'old',
-            HeaderNavModules: { pricing: false, rankings: false },
+            HeaderNavModules: { pricing: false },
           },
           { updatedAt: Date.now() - 600_000 }
         )
@@ -107,8 +107,7 @@ describe('shared status query deduplication', () => {
       const status = {
         system_name: 'shared',
         HeaderNavModules: {
-          pricing: { enabled: true, requireAuth: true },
-          rankings: { enabled: true, requireAuth: false },
+          pricing: { enabled: true, requireAuth: false },
         },
       }
       let resolveStatus!: (value: { data: unknown }) => void
@@ -122,7 +121,7 @@ describe('shared status query deduplication', () => {
       let guardsResolved = false
       const guards = Promise.all([
         getModuleAccessForGuard(queryClient, 'pricing'),
-        getModuleAccessForGuard(queryClient, 'rankings'),
+        getModuleAccessForGuard(queryClient, 'pricing'),
       ]).then((result) => {
         guardsResolved = true
         return result
@@ -133,9 +132,10 @@ describe('shared status query deduplication', () => {
       await waitFor(() => expect(statusRequests).toEqual(['/api/status']))
       expect(guardsResolved).toBe(false)
       resolveStatus({ data: { success: true, data: status } })
+      // Pricing is always login-only, whatever the stored option says.
       expect(await guards).toEqual([
         { enabled: true, requireAuth: true },
-        { enabled: true, requireAuth: false },
+        { enabled: true, requireAuth: true },
       ])
       await waitFor(() =>
         expect(hook.result.current.status?.system_name).toBe('shared')
@@ -184,23 +184,13 @@ describe('module guard status freshness', () => {
   test.each([
     {
       module: 'pricing',
-      before: { enabled: false, requireAuth: false },
-      after: { enabled: true, requireAuth: false },
-    },
-    {
-      module: 'rankings',
-      before: { enabled: true, requireAuth: false },
-      after: { enabled: false, requireAuth: false },
-    },
-    {
-      module: 'pricing',
-      before: { enabled: true, requireAuth: false },
+      before: { enabled: false, requireAuth: true },
       after: { enabled: true, requireAuth: true },
     },
     {
-      module: 'rankings',
+      module: 'pricing',
       before: { enabled: true, requireAuth: true },
-      after: { enabled: true, requireAuth: false },
+      after: { enabled: false, requireAuth: true },
     },
   ])('uses refreshed $module access: $before -> $after', async (scenario) => {
     const queryClient = createQueryClient()
@@ -231,13 +221,13 @@ describe('module guard status freshness', () => {
     stubStatusEndpoint('updated')
     expect(await getModuleAccessForGuard(queryClient, 'pricing')).toEqual({
       enabled: false,
-      requireAuth: false,
+      requireAuth: true,
     })
     expect(statusRequests).toHaveLength(0)
     await queryClient.invalidateQueries({ queryKey: STATUS_QUERY_KEY })
     expect(await getModuleAccessForGuard(queryClient, 'pricing')).toEqual({
       enabled: true,
-      requireAuth: false,
+      requireAuth: true,
     })
     expect(statusRequests).toHaveLength(1)
   })

@@ -14,7 +14,21 @@ type headerNavAccess struct {
 	RequireAuth bool
 }
 
+// loginOnlyHeaderNavModules are always served to signed-in users only,
+// whatever HeaderNavModules says about requireAuth.
+var loginOnlyHeaderNavModules = map[string]bool{
+	"pricing": true,
+}
+
 func getHeaderNavAccess(module string) headerNavAccess {
+	access := readHeaderNavAccess(module)
+	if loginOnlyHeaderNavModules[module] {
+		access.RequireAuth = true
+	}
+	return access
+}
+
+func readHeaderNavAccess(module string) headerNavAccess {
 	fallback := headerNavAccess{
 		Enabled:     true,
 		RequireAuth: false,

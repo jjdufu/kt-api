@@ -22,6 +22,7 @@ import { useState, useMemo } from 'react'
 import { useStatus } from '@/hooks/use-status'
 import { getNotice } from '@/lib/api'
 import { requireServerSuccess } from '@/lib/server-error-message'
+import { useAuthStore } from '@/stores/auth-store'
 import { useNotificationStore } from '@/stores/notification-store'
 
 function hashString(input: string): string {
@@ -64,6 +65,8 @@ function getAnnouncementKey(item: Record<string, unknown>): string {
  * Provides unread counts and read status management
  */
 export function useNotifications() {
+  // Notice and announcements are for signed-in users only.
+  const isAuthenticated = useAuthStore((s) => !!s.auth.user)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'notice' | 'announcements'>(
     'notice'
@@ -78,11 +81,13 @@ export function useNotifications() {
     queryKey: ['notice'],
     queryFn: async () => requireServerSuccess(await getNotice()),
     staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: isAuthenticated,
   })
 
   // Fetch Announcements from status
   const { status, loading: statusLoading } = useStatus()
-  const announcementsEnabled = status?.announcements_enabled ?? false
+  const announcementsEnabled =
+    isAuthenticated && (status?.announcements_enabled ?? false)
   const announcements = useMemo<Record<string, unknown>[]>(() => {
     if (!announcementsEnabled) return []
     return ((status?.announcements || []) as Record<string, unknown>[]).slice(
@@ -100,9 +105,10 @@ export function useNotifications() {
   } = useNotificationStore()
 
   // Extract notice content
-  const noticeContent = noticeResponse?.success
-    ? (noticeResponse.data || '').trim()
-    : ''
+  const noticeContent =
+    isAuthenticated && noticeResponse?.success
+      ? (noticeResponse.data || '').trim()
+      : ''
 
   // Calculate unread counts
   const unreadCounts = useMemo(() => {

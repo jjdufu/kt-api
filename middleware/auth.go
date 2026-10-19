@@ -96,6 +96,18 @@ func authHelper(c *gin.Context, minRole int) {
 }
 
 func TryUserAuth() func(c *gin.Context) {
+	return tryUserAuth(false)
+}
+
+// TryUserAuthLenient is TryUserAuth for anonymous-first endpoints such as
+// /api/status: a missing, expired, revoked or otherwise invalid credential
+// never fails the request, it just leaves it anonymous. Disabled accounts are
+// treated as anonymous too.
+func TryUserAuthLenient() func(c *gin.Context) {
+	return tryUserAuth(true)
+}
+
+func tryUserAuth(lenient bool) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		if _, started := c.Get(accessTokenAuditContextKey); !started {
 			defer finishAccessTokenAudit(c)
@@ -106,9 +118,15 @@ func TryUserAuth() func(c *gin.Context) {
 			// token is indistinguishable from any unknown value: anonymous.
 			credentialKind, err = dashboardCredentialUnmatched, nil
 		}
+		if err != nil && lenient {
+			credentialKind, err = dashboardCredentialUnmatched, nil
+		}
 		if err != nil {
 			writeDashboardAuthError(c, err)
 			return
+		}
+		if lenient && credentialKind != dashboardCredentialUnmatched && (user == nil || user.Status != common.UserStatusEnabled) {
+			credentialKind = dashboardCredentialUnmatched
 		}
 		// Optional authentication never elevates a token beyond its grant: a
 		// token the route would reject leaves the request anonymous.

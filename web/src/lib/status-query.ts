@@ -20,6 +20,7 @@ import { queryOptions, type QueryClient } from '@tanstack/react-query'
 
 import { getStatus } from '@/lib/api'
 import { DEFAULT_SYSTEM_NAME, DEFAULT_LOGO } from '@/lib/constants'
+import { useAuthStore } from '@/stores/auth-store'
 import {
   useSystemConfigStore,
   type CurrencyConfig,
@@ -31,10 +32,11 @@ import {
 /**
  * Single source of truth for `/api/status`.
  *
- * `/api/status` is entirely global on the backend: every field is read from
- * in-memory option maps under a read lock, with no user context and no auth
- * middleware on the route. That makes it safe to share one cache entry across
- * every consumer — branding, nav module gates, and the setup guard.
+ * `/api/status` is global on the backend except for `announcements`, which is
+ * only included for signed-in users. One cache entry is shared across every
+ * consumer — branding, nav module gates, and the setup guard — and
+ * {@link syncStatusWithAuth} refreshes it whenever the signed-in user changes.
+ * The localStorage snapshot never stores announcements.
  *
  * Anything that needs status must go through `statusQueryOptions` so React
  * Query can dedupe. Calling `getStatus()` directly re-introduces the duplicate
@@ -108,7 +110,12 @@ export function readCachedStatus(): StatusData | null {
   try {
     if (typeof window === 'undefined') return null
     const raw = window.localStorage.getItem(STATUS_STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as StatusData) : null
+    if (!raw) return null
+    // Snapshots written before announcements became user-only may carry them.
+    const { announcements: _announcements, ...status } = JSON.parse(
+      raw
+    ) as StatusData
+    return status
   } catch {
     return null
   }
@@ -118,7 +125,9 @@ export function readCachedStatus(): StatusData | null {
 function writeCachedStatus(status: StatusData | null): void {
   try {
     if (typeof window !== 'undefined' && status) {
-      window.localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(status))
+      // Announcements are user-only; keep them out of the shared snapshot.
+      const { announcements: _announcements, ...snapshot } = status
+      window.localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(snapshot))
     }
   } catch {
     /* Storage can be unavailable in private mode. */
@@ -182,5 +191,23 @@ export async function ensureStatus(
   return queryClient.ensureQueryData({
     ...statusQueryOptions,
     revalidateIfStale: true,
+  })
+}
+
+/**
+ * Refresh user-dependent queries whenever the signed-in user changes (sign-in,
+ * sign-out, account switch): `/api/status` only carries announcements for
+ * signed-in users, and `/api/notice` requires sign-in.
+ *
+ * Returns the unsubscribe function.
+ */
+export function syncStatusWithAuth(queryClient: QueryClient): () => void {
+  let currentUserId = useAuthStore.getState().auth.user?.id ?? null
+  return useAuthStore.subscribe((state) => {
+    const nextUserId = state.auth.user?.id ?? null
+    if (nextUserId === currentUserId) return
+    currentUserId = nextUserId
+    queryClient.removeQueries({ queryKey: ['notice'] })
+    void queryClient.invalidateQueries({ queryKey: STATUS_QUERY_KEY })
   })
 }
