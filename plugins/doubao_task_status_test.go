@@ -48,3 +48,37 @@ func TestDoubaoParseTaskResultSupplierFailedEnvelope(t *testing.T) {
 		assert.Equal(t, "FAILURE", parse(t, map[string]any{"status": "cancelled"}, 200)["status"])
 	})
 }
+
+func TestDoubaoVideoSubmitCallbackURL(t *testing.T) {
+	_, plugin := newDoubaoPlugin(t)
+	model := "doubao-seedance-2-0-260128"
+	submit := func(t *testing.T, extra map[string]any) map[string]any {
+		t.Helper()
+		driver := map[string]any{
+			"upstreamModel": model, "model": model, "action": "text_to_video", "baseUrl": "https://ark.example", "apiKey": "k",
+			"requestBody": map[string]any{
+				"model":  model,
+				"prompt": "a cat",
+				"metadata": map[string]any{
+					"content":      []any{map[string]any{"type": "text", "text": "a cat"}},
+					"callback_url": "https://customer.example/hook?secret=1",
+				},
+			},
+		}
+		for key, value := range extra {
+			driver[key] = value
+		}
+		value, err := plugin.Engine.Call(t.Context(), "buildSubmitRequest", driver)
+		require.NoError(t, err)
+		return alibabaObject(t, value)["body"].(map[string]any)
+	}
+
+	t.Run("customer callback_url never reaches upstream", func(t *testing.T) {
+		body := submit(t, nil)
+		assert.NotContains(t, body, "callback_url")
+	})
+	t.Run("fast path URL is sent when the host provides one", func(t *testing.T) {
+		body := submit(t, map[string]any{"upstreamCallbackUrl": "https://kt.example/api/task-callback/upstream/tok"})
+		assert.Equal(t, "https://kt.example/api/task-callback/upstream/tok", body["callback_url"])
+	})
+}

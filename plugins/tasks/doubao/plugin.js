@@ -845,6 +845,9 @@ export function buildSubmitRequest(ctx) {
   // in task_callback_subscriptions and delivers callbacks itself from the
   // polled state, so upstream never sees the customer URL.
   if (Object.prototype.hasOwnProperty.call(body, "callback_url")) delete body.callback_url;
+  // Optional fast path: kt-api's own per-task callback URL, only when the
+  // channel enables it; it merely triggers an immediate re-query.
+  if (typeof ctx.upstreamCallbackUrl === "string" && ctx.upstreamCallbackUrl) body.callback_url = ctx.upstreamCallbackUrl;
   return {
     url: apiRoot(ctx) + "/api/v3/contents/generations/tasks",
     method: "POST",

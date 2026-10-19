@@ -38,6 +38,10 @@ func SeedanceVideoTaskOptions() gin.HandlerFunc {
 		if !applySeedanceCallbackURL(c, options.CallbackURL) {
 			return
 		}
+		if err := service.PrepareTaskUpstreamCallback(c, service.SeedanceCallbackTargetFromContext(c) != nil); err != nil {
+			abortTaskPluginRouteErrorDetail(c, http.StatusInternalServerError, "failed to prepare task callback")
+			return
+		}
 		c.Next()
 	}
 }

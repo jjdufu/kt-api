@@ -1538,6 +1538,9 @@ func (a *TaskAdaptor) submitContext(c *gin.Context, info *relaycommon.RelayInfo)
 	ctx["upstreamModel"] = info.UpstreamModelName
 	ctx["baseUrl"] = info.ChannelBaseUrl
 	ctx["userSetting"] = info.UserSetting
+	if callbackURL := service.TaskUpstreamCallbackURLForChannel(c, info); callbackURL != "" {
+		ctx["upstreamCallbackUrl"] = callbackURL
+	}
 	if err := a.applyUpstreamCredentials(ctx, info.ChannelType, info.ApiKey, info.ChannelSetting.Proxy); err != nil {
 		ctx["authError"] = err.Error()
 	}

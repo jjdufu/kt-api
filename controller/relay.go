@@ -695,7 +695,7 @@ func executeTaskSubmissionWith(
 		return nil, taskErr
 	}
 	durable = true
-	service.RecordTaskCallbackSubscription(c, task, service.SeedanceCallbackTargetFromContext(c))
+	service.RecordTaskCallbackSubscription(c, task, service.SeedanceCallbackTargetFromContext(c), relayInfo)
 	stage = "settle"
 	diagnostics.durable(task)
 	diagnostics.settleStart(task, result.Quota)

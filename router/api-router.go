@@ -26,6 +26,10 @@ func SetApiRouter(router *gin.Engine) {
 		apiRouter.GET("/setup", controller.GetSetup)
 		apiRouter.POST("/setup", anonymousRequestBodyLimit, controller.PostSetup)
 		apiRouter.GET("/status", controller.GetStatus)
+		// Task callback fast path: upstream calls back with a per-task token
+		// (no user auth; the token is the credential and only triggers a
+		// re-query).
+		apiRouter.POST("/task-callback/upstream/:token", middleware.DisableCache(), controller.HandleTaskUpstreamCallback)
 		apiRouter.GET("/uptime/status", controller.GetUptimeKumaStatus)
 		apiRouter.GET("/models", middleware.UserAuth(), controller.DashboardListModels)
 		apiRouter.GET("/status/test", middleware.AdminAuth(), controller.TestStatus)
