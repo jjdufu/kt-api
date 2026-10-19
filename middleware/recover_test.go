@@ -64,3 +64,13 @@ func TestPanicRecoverAbortHandlerIsSilent(t *testing.T) {
 
 	require.Empty(t, recorder.Body.String())
 }
+
+func TestPanicLogFormatKeepsAlertTokenInAllLanguages(t *testing.T) {
+	t.Cleanup(func() { common.SetLogLanguage("en") })
+	for _, language := range []string{"en", "zh-CN"} {
+		common.SetLogLanguage(language)
+		line := common.LogText(panicLogFormat, "req-1", "GET", "/boom", "oops", "stack")
+		require.Contains(t, line, "panic detected", language)
+		require.Contains(t, line, "req-1", language)
+	}
+}

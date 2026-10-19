@@ -12,6 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// panicLogFormat keeps the literal "panic detected" in every log language so
+// the KTAPIPanic log alert keeps matching.
+const panicLogFormat = "panic detected: request_id=%s %s %s: %v\n%s"
+
 // PanicRecover recovers from panics in request handlers. The panic value and
 // stack trace are written to the server log only; the client receives a
 // generic 500 error that leaks no internal details.
@@ -28,7 +32,7 @@ func PanicRecover() gin.HandlerFunc {
 				c.Abort()
 				return
 			}
-			common.SysError(common.LogText("panic recovered: request_id=%s %s %s: %v\n%s",
+			common.SysError(common.LogText(panicLogFormat,
 				c.GetString(common.RequestIdKey), c.Request.Method, c.Request.URL.Path, err, debug.Stack()))
 			if c.Writer.Written() {
 				c.Abort()
