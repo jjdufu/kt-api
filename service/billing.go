@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/logger"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
 	"github.com/QuantumNous/new-api/relaykit/types"
@@ -47,30 +48,50 @@ func PreConsumeBilling(c *gin.Context, preConsumedQuota int, relayInfo *relaycom
 // SettleBilling — 后结算辅助函数
 // ---------------------------------------------------------------------------
 
+// taskSettlesOnCompletion reports whether a task submission's quota is only
+// a pre-deduction: unless the model is billed per request, the final amount is
+// settled from actual usage when the task completes (usage expression, adaptor
+// adjustment or token recount; see settleTaskBillingOnComplete).
+func taskSettlesOnCompletion(relayInfo *relaycommon.RelayInfo) bool {
+	if relayInfo == nil || relayInfo.TaskRelayInfo == nil {
+		return false
+	}
+	return !billedPerRequest(relayInfo)
+}
+
+func billedPerRequest(relayInfo *relaycommon.RelayInfo) bool {
+	return relayInfo.PriceData.UsePrice || common.StringsContains(constant.TaskPricePatches, relayInfo.OriginModelName)
+}
+
+// settleBillingLogLine describes a settlement in the log language, with
+// quotas formatted by the site's display setting (logger.LogQuota).
+func settleBillingLogLine(relayInfo *relaycommon.RelayInfo, actualQuota, preConsumed int) string {
+	delta := actualQuota - preConsumed
+	switch {
+	case delta > 0:
+		return common.LogText("charging the difference after pre-consume: %s (actual %s, pre-consumed %s)",
+			logger.LogQuota(delta), logger.LogQuota(actualQuota), logger.LogQuota(preConsumed))
+	case delta < 0:
+		return common.LogText("refunding the difference after pre-consume: %s (actual %s, pre-consumed %s)",
+			logger.LogQuota(-delta), logger.LogQuota(actualQuota), logger.LogQuota(preConsumed))
+	case taskSettlesOnCompletion(relayInfo):
+		return common.LogText("task pre-deducted %s, pending settlement: the final amount is settled from actual usage when the task completes",
+			logger.LogQuota(actualQuota))
+	case billedPerRequest(relayInfo):
+		return common.LogText("pre-consumed quota matches the actual quota, no adjustment: %s (per-request billing)",
+			logger.LogQuota(actualQuota))
+	default:
+		return common.LogText("pre-consumed quota matches the actual quota, no adjustment: %s",
+			logger.LogQuota(actualQuota))
+	}
+}
+
 // SettleBilling 执行计费结算。如果 RelayInfo 上有 BillingSession 则通过 session 结算，
 // 否则回退到旧的 PostConsumeQuota 路径（兼容按次计费等场景）。
 func SettleBilling(ctx *gin.Context, relayInfo *relaycommon.RelayInfo, actualQuota int) error {
 	if relayInfo.Billing != nil {
 		preConsumed := relayInfo.Billing.GetPreConsumedQuota()
-		delta := actualQuota - preConsumed
-
-		if delta > 0 {
-			logger.LogInfo(ctx, common.LogText("charging the difference after pre-consume: %s (actual %s, pre-consumed %s)",
-				logger.FormatQuota(delta),
-				logger.FormatQuota(actualQuota),
-				logger.FormatQuota(preConsumed),
-			))
-		} else if delta < 0 {
-			logger.LogInfo(ctx, common.LogText("refunding the difference after pre-consume: %s (actual %s, pre-consumed %s)",
-				logger.FormatQuota(-delta),
-				logger.FormatQuota(actualQuota),
-				logger.FormatQuota(preConsumed),
-			))
-		} else {
-			logger.LogInfo(ctx, common.LogText("pre-consumed quota matches the actual quota, no adjustment: %s (per-request billing)",
-				logger.FormatQuota(actualQuota),
-			))
-		}
+		logger.LogInfo(ctx, settleBillingLogLine(relayInfo, actualQuota, preConsumed))
 
 		if err := relayInfo.Billing.Settle(actualQuota); err != nil {
 			return err

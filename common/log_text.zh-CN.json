@@ -676,6 +676,7 @@
   "ping interval seconds: %d": "ping 间隔: %d 秒",
   "pinned task plugin does not support the requested protocol form": "选定的任务插件不支持本次请求的调用方式（流式、后台或同步）",
   "pprof enabled": "已启用 pprof",
+  "pre-consumed quota matches the actual quota, no adjustment: %s": "预扣费与实际消耗一致，无需调整：%s",
   "pre-consumed quota matches the actual quota, no adjustment: %s (per-request billing)": "预扣费与实际消耗一致，无需调整：%s（按次计费）",
   "quota saturation on consume log: op=%s kind=%s original=%g clamped=%d user=%d model=%s": "消费日志: 额度超出上限，已按上限记录: op=%s kind=%s original=%g clamped=%d user=%d model=%s",
   "rate limit check failed (key=%s): %v": "限流检查失败 (key=%s): %v",
@@ -779,6 +780,7 @@
   "task plugin route %s %s declares retainResult: false but returned an asynchronous result; retaining task %s": "任务插件路由 %s %s 声明了 retainResult: false，但返回的是异步结果，任务 %s 仍会保存",
   "task poll auth failure channel_id=%d http=%d": "任务轮询被上游拒绝（鉴权失败） channel_id=%d http=%d",
   "task poll auth failure channel_id=%d task=%s http=%d": "任务轮询被上游拒绝（鉴权失败） channel_id=%d task=%s http=%d",
+  "task pre-deducted %s, pending settlement: the final amount is settled from actual usage when the task completes": "任务已预扣 %s，待结算：任务完成后按实际用量结算最终金额",
   "task progress polling finished": "任务进度轮询完成",
   "task progress polling started": "任务进度轮询开始",
   "task protocol database observation failed": "任务协议: 读取任务状态失败",
@@ -848,6 +850,5 @@
   "zhipu_image_empty_b64": "智谱图片接口返回的 b64 为空",
   "zhipu_image_get_b64_failed: %s": "智谱图片转 b64 失败: %s",
   "zhipu_image_missing_url": "智谱图片接口没有返回 URL",
-  "¥%.6f quota": "¥%.6f 额度",
-  "＄%.6f quota": "＄%.6f 额度"
+  "¥%.6f quota": "¥%.6f 额度"
 }
