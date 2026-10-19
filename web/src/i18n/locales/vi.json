@@ -7336,6 +7336,7 @@
     "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.": "Dành cho nhà cung cấp tương thích New API: số dư = hạn mức còn lại của khóa (GET /api/usage/token/) chia cho giá trị này, theo đơn vị tiền tệ của nhà cung cấp. Mặc định của New API là {{value}}.",
     "Upstream quota per unit must be a positive number": "Hạn mức thượng nguồn mỗi đơn vị phải là số dương",
     "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}": "Theo đơn vị tiền tệ của nhà cung cấp: hạn mức thượng nguồn còn lại ÷ {{perUnit}}",
-    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "Truy vấn số dư cần thượng nguồn tương thích New API: GET /api/usage/token/ với khóa kênh thất bại ({{error}})"
+    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "Truy vấn số dư cần thượng nguồn tương thích New API: GET /api/usage/token/ với khóa kênh thất bại ({{error}})",
+    "On this page": "Trên trang này"
   }
 }

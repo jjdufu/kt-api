@@ -7336,6 +7336,7 @@
     "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.": "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.",
     "Upstream quota per unit must be a positive number": "Upstream quota per unit must be a positive number",
     "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}": "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}",
-    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})"
+    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})",
+    "On this page": "On this page"
   }
 }

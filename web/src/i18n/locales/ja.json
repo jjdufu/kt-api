@@ -7336,6 +7336,7 @@
     "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.": "New API 互換のサプライヤー向け：残高 = キーの残りクォータ（GET /api/usage/token/）÷ この値で、単位はサプライヤーの通貨単位です。New API の既定値は {{value}} です。",
     "Upstream quota per unit must be a positive number": "上流の単位あたりクォータは正の数である必要があります",
     "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}": "サプライヤーの通貨単位：上流の残りクォータ ÷ {{perUnit}}",
-    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "残高の取得には New API 互換の上流が必要です：チャネルキーでの GET /api/usage/token/ に失敗しました（{{error}}）"
+    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "残高の取得には New API 互換の上流が必要です：チャネルキーでの GET /api/usage/token/ に失敗しました（{{error}}）",
+    "On this page": "このページ"
   }
 }
