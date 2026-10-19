@@ -22,6 +22,10 @@ func BuildTaskPluginView(task *model.Task) (dto.TaskView, error) {
 		CreatedAt:  createdAt,
 		UpdatedAt:  task.UpdatedAt,
 		FinishedAt: task.FinishTime,
+		Model:      task.Properties.UpstreamModelName,
+	}
+	if view.Model == "" {
+		view.Model = task.Properties.OriginModelName
 	}
 	if len(task.Data) > 0 {
 		if err := common.Unmarshal(task.Data, &view.Data); err != nil {

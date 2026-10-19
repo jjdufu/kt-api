@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -322,6 +323,21 @@ func (e *callbackE2E) events(taskID string) []model.TaskCallbackEvent {
 	return events
 }
 
+// liveEvents drops the queued event a later status superseded before it was
+// delivered (every submit enqueues queued; the tests below often move the task
+// on before running the dispatcher).
+func (e *callbackE2E) liveEvents(taskID string) []model.TaskCallbackEvent {
+	var live []model.TaskCallbackEvent
+	for _, event := range e.events(taskID) {
+		if event.State == model.TaskCallbackStateSuperseded {
+			assert.Equal(e.t, "queued", event.Status, "only the submit-time queued event is superseded here")
+			continue
+		}
+		live = append(live, event)
+	}
+	return live
+}
+
 func (e *callbackE2E) quotaAndLogs() (int, int64) {
 	var user model.User
 	require.NoError(e.t, e.database.First(&user, callbackE2EUserID).Error)
@@ -371,19 +387,30 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		assert.Equal(t, callbackURL, subscription.CallbackURL)
 		assert.Nil(t, subscription.UpstreamTokenHash, "fast path is off by default")
 
-		var getBodies []string
-		step := func(status string, extra string) {
+		// Before the first poll GET already answers a documented queued body,
+		// and the submit itself enqueued the queued callback with those bytes.
+		task := env.task(taskID)
+		queuedGET := env.get(taskID)
+		assert.JSONEq(t, `{"id":"`+taskID+`","model":"`+callbackE2EModel+`","status":"queued","created_at":`+
+			strconv.FormatInt(task.CreatedAt, 10)+`,"updated_at":`+strconv.FormatInt(task.UpdatedAt, 10)+`}`, queuedGET)
+		getBodies := []string{queuedGET}
+		require.Equal(t, 1, env.deliver(), "the submit enqueues queued")
+
+		step := func(status string, extra string, deliveries int) {
 			env.supplier.script(upstreamID, http.StatusOK, arkBody(upstreamID, status, extra))
 			env.poll(taskID)
-			getBodies = append(getBodies, env.get(taskID))
-			require.Equal(t, 1, env.deliver(), "one delivery for %s", status)
+			if deliveries > 0 {
+				getBodies = append(getBodies, env.get(taskID))
+			}
+			require.Equal(t, deliveries, env.deliver(), "deliveries for %s", status)
 			// Repeating the same status does not deliver again.
 			env.poll(taskID)
 			assert.Zero(t, env.deliver())
 		}
-		step("queued", "")
-		step("running", "")
-		step("succeeded", `,"content":{"video_url":"https://cdn.example/v.mp4?a=1&b=2"},"usage":{"completion_tokens":1000,"total_tokens":1000}`)
+		// The supplier's own queued body does not resend queued.
+		step("queued", "", 0)
+		step("running", "", 1)
+		step("succeeded", `,"content":{"video_url":"https://cdn.example/v.mp4?a=1&b=2"},"usage":{"completion_tokens":1000,"total_tokens":1000}`, 1)
 
 		bodies, headers := env.receiver.snapshot()
 		require.Len(t, bodies, 3)
@@ -401,19 +428,50 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		assert.Contains(t, bodies[0], `"status":"queued"`)
 		assert.Contains(t, bodies[1], `"status":"running"`)
 		assert.Contains(t, bodies[2], `"status":"succeeded"`)
-		for _, event := range env.events(taskID) {
+		events := env.events(taskID)
+		require.Len(t, events, 3)
+		for index, event := range events {
+			assert.Equal(t, []string{"queued", "running", "succeeded"}[index], event.Status)
+			assert.Equal(t, index+1, event.Seq)
 			assert.Equal(t, model.TaskCallbackStateSucceeded, event.State)
 		}
+		enqueued, err := service.EnqueueInitialTaskCallback(taskID)
+		require.NoError(t, err)
+		assert.False(t, enqueued, "the initial enqueue never runs twice")
 
 		// Billing: callbacks (and a redelivery) change neither quota nor logs.
 		quota, logs := env.quotaAndLogs()
-		events := env.events(taskID)
 		require.NoError(t, env.database.Model(&model.TaskCallbackEvent{}).Where("id = ?", events[len(events)-1].ID).
 			Updates(map[string]any{"state": model.TaskCallbackStatePending, "attempts": 0}).Error)
 		require.Equal(t, 1, env.deliver())
 		gotQuota, gotLogs := env.quotaAndLogs()
 		assert.Equal(t, quota, gotQuota)
 		assert.Equal(t, logs, gotLogs)
+	})
+
+	t.Run("no queued after a later status was observed first", func(t *testing.T) {
+		env.receiver.reset()
+		taskID, recorder := env.submitTask(callbackURL)
+		require.Equal(t, http.StatusOK, recorder.Code, recorder.Body.String())
+		// Rewind to the moment before the submit-time enqueue, then let the
+		// poller observe running first.
+		require.NoError(t, env.database.Where("task_id = ?", taskID).Delete(&model.TaskCallbackEvent{}).Error)
+		require.NoError(t, env.database.Model(&model.TaskCallbackSubscription{}).Where("task_id = ?", taskID).
+			Updates(map[string]any{"last_status": "", "last_seq": 0}).Error)
+		upstreamID := env.task(taskID).PrivateData.UpstreamTaskID
+		env.supplier.script(upstreamID, http.StatusOK, arkBody(upstreamID, "running", ""))
+		env.poll(taskID)
+		enqueued, err := service.EnqueueInitialTaskCallback(taskID)
+		require.NoError(t, err)
+		assert.False(t, enqueued)
+		require.Equal(t, 1, env.deliver())
+		bodies, _ := env.receiver.snapshot()
+		require.Len(t, bodies, 1)
+		assert.Contains(t, bodies[0], `"status":"running"`)
+		assert.Equal(t, env.get(taskID), bodies[0])
+		events := env.events(taskID)
+		require.Len(t, events, 1)
+		assert.Equal(t, "running", events[0].Status)
 	})
 
 	t.Run("terminal retries: three 500s then 200 is four attempts", func(t *testing.T) {
@@ -440,7 +498,7 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 			assert.Equal(t, string(rune('1'+index)), headers[index].Get("X-KtApi-Delivery-Attempt"))
 		}
 		assert.Equal(t, headers[0].Get("X-KtApi-Event-Id"), headers[3].Get("X-KtApi-Event-Id"), "retries keep the event id")
-		events := env.events(taskID)
+		events := env.liveEvents(taskID)
 		require.Len(t, events, 1)
 		assert.Equal(t, model.TaskCallbackStateSucceeded, events[0].State)
 		assert.Equal(t, 4, events[0].Attempts)
@@ -456,7 +514,7 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 			env.deliver()
 			env.clock.Add(5)
 		}
-		events := env.events(taskID)
+		events := env.liveEvents(taskID)
 		require.Len(t, events, 1)
 		assert.Equal(t, "expired", events[0].Status)
 		assert.Equal(t, 1, events[0].MaxAttempts, "non-terminal (expired) events are sent once")
@@ -476,7 +534,7 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		require.Equal(t, 1, env.deliver())
 		env.clock.Add(5)
 		assert.Zero(t, env.deliver())
-		events := env.events(taskID)
+		events := env.liveEvents(taskID)
 		require.Len(t, events, 1)
 		assert.Equal(t, model.TaskCallbackStateFailed, events[0].State)
 		assert.True(t, strings.HasPrefix(events[0].LastError, "ssrf_blocked:"), events[0].LastError)
@@ -491,7 +549,7 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		upstreamID := env.task(taskID).PrivateData.UpstreamTaskID
 		env.supplier.script(upstreamID, http.StatusOK, arkBody(upstreamID, "succeeded", `,"content":{"video_url":"https://cdn.example/v.mp4"}`))
 		env.poll(taskID)
-		events := env.events(taskID)
+		events := env.liveEvents(taskID)
 		require.Len(t, events, 1)
 		// A dispatcher "crashed" mid-delivery and left an expired lease.
 		require.NoError(t, env.database.Model(&model.TaskCallbackEvent{}).Where("id = ?", events[0].ID).Updates(map[string]any{
@@ -519,7 +577,7 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		require.Len(t, bodies, 1)
 		assert.Equal(t, events[0].EventID, headers[0].Get("X-KtApi-Event-Id"), "event id is stable across the crash")
 		assert.Equal(t, "2", headers[0].Get("X-KtApi-Delivery-Attempt"))
-		assert.Equal(t, model.TaskCallbackStateSucceeded, env.events(taskID)[0].State)
+		assert.Equal(t, model.TaskCallbackStateSucceeded, env.liveEvents(taskID)[0].State)
 	})
 
 	t.Run("fast path re-queries the supplier and ignores the hint body", func(t *testing.T) {

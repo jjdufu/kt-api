@@ -303,7 +303,7 @@ export const meta = {
     en: "Volcengine Doubao Seedance video generation and Seedream image generation",
     zh: "火山引擎豆包 Seedance 视频生成与 Seedream 图片生成",
   },
-  version: "1.3.1",
+  version: "1.3.2",
   author: { name: "QuantumNous" },
   channelTypes: [54, 45], // VolcEngine-type channels serve Ark video models with the same wire format
   models: Object.keys(VIDEO_MODELS).concat(Object.keys(IMAGE_MODELS)),
@@ -784,10 +784,20 @@ export const native = {
     const data = task.data && typeof task.data === "object" && !Array.isArray(task.data) ? task.data : {};
     return Object.assign({}, data, { id: task.task_id });
   },
+  // Once polled, task.data is the supplier's own task object and is passed
+  // through. Before the first poll it is still the submit response ({id}),
+  // which carries no status: the body is then built from the task itself
+  // with only fields the supplier documents for a pending task (id, model,
+  // status, created_at, updated_at).
   taskStatus: function (ctx, task) {
-    if (task.data && typeof task.data === "object" && !Array.isArray(task.data)) return Object.assign({}, task.data, { id: task.task_id });
+    const data = task.data && typeof task.data === "object" && !Array.isArray(task.data) ? task.data : null;
+    if (data && typeof data.status === "string" && data.status) return Object.assign({}, data, { id: task.task_id });
     const statusMap = { NOT_START: "queued", SUBMITTED: "queued", QUEUED: "queued", IN_PROGRESS: "running", SUCCESS: "succeeded", FAILURE: "failed" };
-    const output = { id: task.task_id, status: statusMap[task.status] || "queued" };
+    const output = Object.assign({}, data || {}, { id: task.task_id, status: statusMap[task.status] || "queued" });
+    if (task.model && !output.model) output.model = task.model;
+    if (task.created_at && output.created_at === undefined) output.created_at = task.created_at;
+    const updatedAt = task.updated_at || task.created_at;
+    if (updatedAt && output.updated_at === undefined) output.updated_at = updatedAt;
     if (task.fail_reason) output.error = { message: task.fail_reason };
     return output;
   },
