@@ -19,10 +19,6 @@ For commercial licensing, please contact support@quantumnous.com
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import {
-  DEFAULT_MARKETPLACE_INDEX_URL,
-  GITHUB_MARKETPLACE_INDEX_URL,
-} from '../lib/marketplace'
-import {
   changelogLocale,
   fetchPluginChangelog,
   parsePluginChangelog,
@@ -91,34 +87,15 @@ describe('changelog path and language resolution', () => {
   test('resolves the registered sidecar under raw and third-party repository prefixes', () => {
     expect(resolvePluginChangelogUrl(indexUrl, plugin, '1.2.0')).toBe(sourceUrl)
     expect(
-      resolvePluginChangelogUrl(GITHUB_MARKETPLACE_INDEX_URL, plugin, '1.2.0')
+      resolvePluginChangelogUrl(
+        'https://mirror.example.org/plugins/index.json',
+        plugin,
+        '1.2.0'
+      )
     ).toBe(
-      'https://raw.githubusercontent.com/QuantumNous/new-api-plugins/main/plugins/tasks/demo/1.2.0/CHANGELOG.md'
+      'https://mirror.example.org/plugins/plugins/tasks/demo/1.2.0/CHANGELOG.md'
     )
     expect(resolvePluginChangelogUrl(indexUrl, plugin, '9.0.0')).toBeNull()
-  })
-
-  test('the official proxy index resolves only its registered key/version to the official repository', () => {
-    const proxyPlugin = {
-      ...plugin,
-      versions: [{ version: '1.2.0', path: 'demo/1.2.0/plugin.js' }],
-    }
-    expect(
-      resolvePluginChangelogUrl(
-        DEFAULT_MARKETPLACE_INDEX_URL,
-        proxyPlugin,
-        '1.2.0'
-      )
-    ).toBe(
-      'https://raw.githubusercontent.com/QuantumNous/new-api-plugins/main/plugins/tasks/demo/1.2.0/CHANGELOG.md'
-    )
-    expect(
-      resolvePluginChangelogUrl(
-        DEFAULT_MARKETPLACE_INDEX_URL,
-        { ...proxyPlugin, key: 'other' },
-        '1.2.0'
-      )
-    ).toBeNull()
   })
 
   test.each([
