@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.5](https://github.com/jjdufu/kt-api/compare/v0.0.4...v0.0.5) (2026-10-19)
+
+
+### Features
+
+* **channel:** read Seedance channel balance from New API compatible suppliers ([39d8ed6](https://github.com/jjdufu/kt-api/commit/39d8ed6e6eb928b014ffccfa9e9b0cb8fa373404))
+
+
+### Bug Fixes
+
+* **billing:** log task pre-deducts as pending settlement and stop assuming US dollars ([69875bc](https://github.com/jjdufu/kt-api/commit/69875bcaa22422e66358185c53c9439fa1353022))
+* **seedance:** render a queued body before the first poll and send a queued callback on submit ([05b417b](https://github.com/jjdufu/kt-api/commit/05b417bd2e617b3b81239e96a91389b6fc87240a))
+* **seedance:** 提交即返回 queued 并发送 queued 回调；任务预扣日志改为待结算；豆包视频渠道余额 ([247905a](https://github.com/jjdufu/kt-api/commit/247905a8fd8f6fdc9477a1ee59235cd78abe6052))
+
 ## [0.0.4](https://github.com/jjdufu/kt-api/compare/v0.0.3...v0.0.4) (2026-10-19)
 
 
