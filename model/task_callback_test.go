@@ -159,15 +159,17 @@ func TestTaskCallbackModelDatabaseMatrix(t *testing.T) {
 			require.Len(t, open, 1)
 			assert.Equal(t, "task_b", open[0].TaskID, "token-only and terminal subscriptions are not reconciled")
 
+			// Each newer insert superseded the still-pending older
+			// queued/running events.
+			var states []string
+			require.NoError(t, DB.Model(&TaskCallbackEvent{}).Where("task_id = ?", "task_a").Order("seq").Pluck("state", &states).Error)
+			assert.Equal(t, []string{TaskCallbackStateSuperseded, TaskCallbackStateSuperseded, TaskCallbackStatePending}, states)
 			hasEarlier, err := HasEarlierOpenTaskCallbackEvent("task_a", 3)
 			require.NoError(t, err)
-			assert.True(t, hasEarlier)
-			superseded, err := SupersedeTaskCallbackEvents("task_a", 3, []string{"queued", "running"})
-			require.NoError(t, err)
-			assert.EqualValues(t, 2, superseded)
-			hasEarlier, err = HasEarlierOpenTaskCallbackEvent("task_a", 3)
-			require.NoError(t, err)
 			assert.False(t, hasEarlier)
+			superseded, err := SupersedeTaskCallbackEvents("task_a", 3, TaskCallbackSupersedableStatuses)
+			require.NoError(t, err)
+			assert.EqualValues(t, 0, superseded)
 
 			// Claim is exclusive across concurrent callers.
 			now := common.GetTimestamp()

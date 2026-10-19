@@ -73,6 +73,10 @@ type TaskCallbackEvent struct {
 
 func (TaskCallbackEvent) TableName() string { return "task_callback_events" }
 
+// TaskCallbackSupersedableStatuses are the public statuses whose pending
+// events a newer event of the same task supersedes.
+var TaskCallbackSupersedableStatuses = []string{"queued", "running"}
+
 // TaskCallbackOpenStates are the states that still lead to a delivery.
 var TaskCallbackOpenStates = []string{TaskCallbackStatePending, TaskCallbackStateDelivering}
 
@@ -97,6 +101,11 @@ func GetTaskCallbackSubscriptionByTaskID(taskID string) (*TaskCallbackSubscripti
 
 func GetTaskCallbackSubscriptionByTaskIDTx(tx *gorm.DB, taskID string) (*TaskCallbackSubscription, bool, error) {
 	return getTaskCallbackSubscription(tx, "task_id = ?", taskID)
+}
+
+// GetTaskCallbackSubscriptionByID loads a subscription by primary key.
+func GetTaskCallbackSubscriptionByID(id int64) (*TaskCallbackSubscription, bool, error) {
+	return getTaskCallbackSubscription(DB, "id = ?", id)
 }
 
 func GetTaskCallbackSubscriptionByUpstreamTokenHash(tokenHash string) (*TaskCallbackSubscription, bool, error) {
@@ -192,6 +201,12 @@ func InsertTaskCallbackEventTx(tx *gorm.DB, subscription *TaskCallbackSubscripti
 	if update.Error != nil {
 		return false, update.Error
 	}
+	// A newer status makes undelivered queued/running events stale: they
+	// are superseded instead of being sent late. Terminal statuses are
+	// never superseded.
+	if _, err := supersedeTaskCallbackEvents(tx, event.TaskID, event.Seq, TaskCallbackSupersedableStatuses); err != nil {
+		return false, err
+	}
 	subscription.LastStatus = event.Status
 	subscription.LastSeq = event.Seq
 	return true, nil
@@ -206,7 +221,11 @@ func taskCallbackEventExists(tx *gorm.DB, taskID, status string) (bool, error) {
 // SupersedeTaskCallbackEvents marks still-pending events of the task with a
 // smaller seq and one of the given (non-terminal) statuses as superseded.
 func SupersedeTaskCallbackEvents(taskID string, beforeSeq int, statuses []string) (int64, error) {
-	result := DB.Model(&TaskCallbackEvent{}).
+	return supersedeTaskCallbackEvents(DB, taskID, beforeSeq, statuses)
+}
+
+func supersedeTaskCallbackEvents(db *gorm.DB, taskID string, beforeSeq int, statuses []string) (int64, error) {
+	result := db.Model(&TaskCallbackEvent{}).
 		Where("task_id = ? AND seq < ? AND state = ? AND status IN ?", taskID, beforeSeq, TaskCallbackStatePending, statuses).
 		Updates(map[string]any{"state": TaskCallbackStateSuperseded, "updated_at": common.GetTimestamp()})
 	return result.RowsAffected, result.Error
@@ -264,6 +283,8 @@ type TaskCallbackAttemptResult struct {
 	Error         string
 	LatencyMs     int
 	DeliveredAt   int64
+	// MaxAttempts, when positive, raises the attempt budget (extended retry).
+	MaxAttempts int
 }
 
 // FinishTaskCallbackAttempt records an attempt result if the caller still
@@ -286,6 +307,9 @@ func FinishTaskCallbackAttempt(id int64, owner string, result TaskCallbackAttemp
 	}
 	if result.DeliveredAt > 0 {
 		updates["delivered_at"] = result.DeliveredAt
+	}
+	if result.MaxAttempts > 0 {
+		updates["max_attempts"] = result.MaxAttempts
 	}
 	write := DB.Model(&TaskCallbackEvent{}).
 		Where("id = ? AND lease_owner = ? AND state = ?", id, owner, TaskCallbackStateDelivering).

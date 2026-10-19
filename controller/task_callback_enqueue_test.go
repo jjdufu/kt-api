@@ -103,12 +103,15 @@ func TestTaskCallbackEnqueueOnStatusTransitions(t *testing.T) {
 	assert.Equal(t, []int{1, 1, 4}, []int{events[0].MaxAttempts, events[1].MaxAttempts, events[2].MaxAttempts})
 	for index, event := range events {
 		assert.Equal(t, index+1, event.Seq)
-		assert.Equal(t, model.TaskCallbackStatePending, event.State)
 		assert.NotContains(t, event.Payload, "cgt-task_cb_flow")
 		assert.Contains(t, event.Payload, `"id":"task_cb_flow"`)
 		assert.Len(t, event.PayloadSHA256, 64)
 		assert.Regexp(t, `^evt_[0-9a-f]{32}$`, event.EventID)
 	}
+
+	// Undelivered queued/running events are superseded by the newer status.
+	assert.Equal(t, []string{model.TaskCallbackStateSuperseded, model.TaskCallbackStateSuperseded, model.TaskCallbackStatePending},
+		[]string{events[0].State, events[1].State, events[2].State})
 
 	// The snapshot is byte-identical to GET at that moment.
 	var stored model.Task
