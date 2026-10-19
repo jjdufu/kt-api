@@ -18,32 +18,59 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { describe, expect, test } from 'vitest'
 
-import { convertDetectedLanguage } from './languages'
+import { detectInterfaceLanguage, mapBrowserLanguage } from './languages'
 
-describe('convertDetectedLanguage', () => {
-  test('maps browser BCP-47 Chinese tags onto interface codes', () => {
-    expect(convertDetectedLanguage('zh-TW')).toBe('zhTW')
-    expect(convertDetectedLanguage('zh-HK')).toBe('zhTW')
-    expect(convertDetectedLanguage('zh-MO')).toBe('zhTW')
-    expect(convertDetectedLanguage('zh-Hant-TW')).toBe('zhTW')
-    expect(convertDetectedLanguage('zh')).toBe('zhCN')
-    expect(convertDetectedLanguage('zh-CN')).toBe('zhCN')
-    expect(convertDetectedLanguage('zh-Hans')).toBe('zhCN')
+describe('mapBrowserLanguage', () => {
+  test('maps Chinese tags by script first, then region', () => {
+    for (const tag of [
+      'zh-TW',
+      'zh-HK',
+      'zh-MO',
+      'zh-Hant',
+      'zh-Hant-TW',
+      'zh-hant-cn',
+      'zh_TW',
+    ]) {
+      expect(mapBrowserLanguage(tag)).toBe('zhTW')
+    }
+    for (const tag of [
+      'zh',
+      'zh-CN',
+      'zh-SG',
+      'zh-Hans',
+      'zh-Hans-HK',
+      'zh-hans-tw',
+      'zh_CN',
+    ]) {
+      expect(mapBrowserLanguage(tag)).toBe('zhCN')
+    }
   })
 
-  test('keeps already-normalized interface codes stable (localStorage round-trip)', () => {
-    // i18next caches `zhTW`/`zhCN` (the supportedLngs codes) to localStorage,
-    // and the detector runs this converter on the cached value at every page
-    // load — if `zhTW` does not survive the round-trip, a user who picked
-    // Traditional Chinese is flipped to Simplified on the next load and the
-    // cache is overwritten, making the flip permanent.
-    expect(convertDetectedLanguage('zhTW')).toBe('zhTW')
-    expect(convertDetectedLanguage('zhCN')).toBe('zhCN')
+  test('maps other supported languages by primary subtag', () => {
+    expect(mapBrowserLanguage('en-US')).toBe('en')
+    expect(mapBrowserLanguage('fr-FR')).toBe('fr')
+    expect(mapBrowserLanguage('ru')).toBe('ru')
+    expect(mapBrowserLanguage('ja-JP')).toBe('ja')
+    expect(mapBrowserLanguage('vi-VN')).toBe('vi')
   })
 
-  test('passes non-Chinese values through unchanged', () => {
-    expect(convertDetectedLanguage('en')).toBe('en')
-    expect(convertDetectedLanguage('fr-FR')).toBe('fr-FR')
-    expect(convertDetectedLanguage('ja')).toBe('ja')
+  test('rejects unsupported languages', () => {
+    expect(mapBrowserLanguage('de-DE')).toBe(undefined)
+    expect(mapBrowserLanguage('zhCN')).toBe(undefined)
+    expect(mapBrowserLanguage('')).toBe(undefined)
+  })
+})
+
+describe('detectInterfaceLanguage', () => {
+  test('uses only the primary browser language', () => {
+    expect(detectInterfaceLanguage(['zh-CN', 'en'])).toBe('zhCN')
+    expect(detectInterfaceLanguage(['ja', 'zh-CN'])).toBe('ja')
+    // An unsupported primary language falls back to English, not to zh-CN.
+    expect(detectInterfaceLanguage(['de-DE', 'zh-CN'])).toBe('en')
+  })
+
+  test('falls back to English without a preference', () => {
+    expect(detectInterfaceLanguage([])).toBe('en')
+    expect(detectInterfaceLanguage(undefined)).toBe('en')
   })
 })
