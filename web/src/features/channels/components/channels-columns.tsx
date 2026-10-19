@@ -63,6 +63,7 @@ import { truncateText } from '@/lib/utils'
 import { getCodexUsage, updateChannelBalance } from '../api'
 import {
   CHANNEL_STATUS_CONFIG,
+  CHANNEL_TYPE_DOUBAO_VIDEO,
   CHANNEL_TYPE_TASK_PLUGIN,
   CHANNEL_TYPE_VLLM,
   CHANNEL_TYPE_SGLANG,
@@ -86,6 +87,7 @@ import {
   isTagAggregateRow,
   type TagRow,
 } from '../lib'
+import { getUpstreamQuotaPerUnit } from '../lib/upstream-quota-per-unit'
 import { parseUpstreamUpdateMeta } from '../lib/upstream-update-utils'
 import type { Channel } from '../types'
 import { ChannelRowActionsLayoutContext } from './channel-row-actions-context'
@@ -566,6 +568,14 @@ export function BalanceCell({ channel }: { channel: Channel }) {
           />
           <TooltipContent>
             <p>{remainingTooltipLabel}</p>
+            {channel.type === CHANNEL_TYPE_DOUBAO_VIDEO && sensitiveVisible && (
+              <p>
+                {t(
+                  "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}",
+                  { perUnit: getUpstreamQuotaPerUnit(channel.settings) }
+                )}
+              </p>
+            )}
             {channel.type !== 57 && !isInferenceChannel && (
               <p>{t('Click to update balance')}</p>
             )}

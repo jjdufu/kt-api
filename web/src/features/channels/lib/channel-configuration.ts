@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import type { FieldErrors, FieldPath } from 'react-hook-form'
 
 import {
+  CHANNEL_TYPE_DOUBAO_VIDEO,
   CHANNEL_TYPE_OLLAMA,
   CLAUDE_FIELD_PASSTHROUGH_TYPES,
   MODEL_FETCHABLE_TYPES,
@@ -27,6 +28,7 @@ import {
 import { CHANNEL_TYPE_ADVANCED_CUSTOM } from './advanced-custom'
 import { channelFormSchema, type ChannelFormValues } from './channel-form'
 import { supportsResponsesWebSocket } from './responses-websocket'
+import { DEFAULT_UPSTREAM_QUOTA_PER_UNIT } from './upstream-quota-per-unit'
 
 export type ChannelProviderTarget =
   | { kind: 'builtin'; type: number }
@@ -87,6 +89,7 @@ const CONFIGURATION_BLOCKS = {
       'tls_insecure_skip_verify',
       'disable_task_polling_sleep',
       'upstream_task_callback_enabled',
+      'upstream_quota_per_unit',
     ],
   },
   upstreamModelDetection: {
@@ -179,7 +182,10 @@ export function getChannelConfigurationState(
       (values.http2_connection_shards ?? 1) > 1 ||
       values.tls_insecure_skip_verify ||
       values.disable_task_polling_sleep ||
-      values.upstream_task_callback_enabled
+      values.upstream_task_callback_enabled ||
+      (values.type === CHANNEL_TYPE_DOUBAO_VIDEO &&
+        values.upstream_quota_per_unit !== undefined &&
+        values.upstream_quota_per_unit !== DEFAULT_UPSTREAM_QUOTA_PER_UNIT)
     ),
     upstreamModelDetection:
       MODEL_FETCHABLE_TYPES.has(values.type) &&
