@@ -77,6 +77,15 @@ func NewTaskCallbackDispatcher() *TaskCallbackDispatcher {
 	return newTaskCallbackDispatcher(newTaskCallbackHTTPClient(nil, nil, nil), time.Now, system_setting.GetTaskCallbackSetting)
 }
 
+// WithClock replaces the dispatcher's clock (used by end-to-end tests to
+// step through retry intervals without sleeping).
+func (d *TaskCallbackDispatcher) WithClock(now func() time.Time) *TaskCallbackDispatcher {
+	if now != nil {
+		d.now = now
+	}
+	return d
+}
+
 func newTaskCallbackDispatcher(client *http.Client, now func() time.Time, getSetting func() *system_setting.TaskCallbackSetting) *TaskCallbackDispatcher {
 	return &TaskCallbackDispatcher{
 		owner:      newTaskCallbackLeaseOwner(),
