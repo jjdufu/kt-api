@@ -22,11 +22,10 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { MarketplacePanel } from '../components/marketplace-panel'
-import {
-  DEFAULT_MARKETPLACE_INDEX_URL,
-  GITHUB_MARKETPLACE_INDEX_URL,
-} from '../lib/marketplace'
 import type { MarketplaceIndex, MarketplaceSource } from '../types'
+
+const DEFAULT_MARKETPLACE_INDEX_URL = 'https://plugins.example.com/index.json'
+const GITHUB_MARKETPLACE_INDEX_URL = 'https://mirror.example.org/index.json'
 
 vi.mock('../components/marketplace-install-dialog', () => ({
   MarketplaceInstallDialog: () => null,
@@ -60,16 +59,15 @@ const githubIndex: MarketplaceIndex = {
 
 const queryClients: QueryClient[] = []
 
-function renderPanel(): QueryClient {
+function renderPanel(
+  sources: MarketplaceSource[] = [officialSource, githubSource]
+): QueryClient {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false, staleTime: Number.POSITIVE_INFINITY },
     },
   })
-  queryClient.setQueryData(
-    ['task-plugin-marketplace-sources'],
-    [officialSource, githubSource]
-  )
+  queryClient.setQueryData(['task-plugin-marketplace-sources'], sources)
   queryClient.setQueryData(['task-plugins'], [])
   queryClients.push(queryClient)
 
@@ -106,7 +104,18 @@ afterEach(() => {
 })
 
 describe('MarketplacePanel source switch', () => {
-  test('selects only the official source by default and hides both URLs', async () => {
+  test('fetches nothing and shows the empty state when no source is configured', async () => {
+    const fetchMock = installIndexFetchMock()
+    renderPanel([])
+
+    expect(
+      await screen.findByText('No marketplace sources configured.')
+    ).toBeInTheDocument()
+    expect(screen.queryByText('Could not load this source')).toBeNull()
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  test('selects only the first source by default and hides both URLs', async () => {
     const fetchMock = installIndexFetchMock()
     renderPanel()
 
@@ -125,7 +134,7 @@ describe('MarketplacePanel source switch', () => {
     expect(requestedUrls(fetchMock)).not.toContain(GITHUB_MARKETPLACE_INDEX_URL)
   })
 
-  test('loads GitHub only after the administrator switches to it', async () => {
+  test('loads the second source only after the administrator switches to it', async () => {
     const fetchMock = installIndexFetchMock()
     const user = userEvent.setup()
     renderPanel()
@@ -148,7 +157,7 @@ describe('MarketplacePanel source switch', () => {
     expect(requestedUrls(fetchMock)).toContain(GITHUB_MARKETPLACE_INDEX_URL)
   })
 
-  test('does not request GitHub automatically when the official source fails', async () => {
+  test('does not request the second source automatically when the first fails', async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input)
       if (url === DEFAULT_MARKETPLACE_INDEX_URL) {

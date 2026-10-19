@@ -37,7 +37,6 @@ import { listMarketplaceSources, listTaskPlugins } from '../api'
 import {
   deriveInstallState,
   indexHasIntegrityHashes,
-  isDefaultMarketplaceSource,
   parseMarketplaceIndex,
 } from '../lib/marketplace'
 import type { MarketplaceIndex, MarketplaceSource } from '../types'
@@ -203,7 +202,6 @@ type MarketplaceSourceSectionProps = {
 
 function MarketplaceSourceSection(props: MarketplaceSourceSectionProps) {
   const { t } = useTranslation()
-  const isOfficial = isDefaultMarketplaceSource(props.source.index_url)
   const missingHashes = props.index
     ? !indexHasIntegrityHashes(props.index)
     : false
@@ -214,13 +212,9 @@ function MarketplaceSourceSection(props: MarketplaceSourceSectionProps) {
         <h3 className='text-sm font-semibold'>
           {props.index?.name || props.source.name}
         </h3>
-        {isOfficial ? (
-          <Badge variant='secondary'>{t('Official')}</Badge>
-        ) : (
-          <Badge variant='destructive'>
-            {t('Third-party — use at your own risk')}
-          </Badge>
-        )}
+        <Badge variant='destructive'>
+          {t('Third-party — use at your own risk')}
+        </Badge>
         {missingHashes && (
           <Badge variant='destructive'>
             <TriangleAlert aria-hidden='true' />

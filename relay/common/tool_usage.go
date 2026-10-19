@@ -28,8 +28,7 @@ var reservedBillableToolNames = map[string]struct{}{
 }
 
 // MaxBillableToolCallCount bounds every tool count at settlement, whatever its
-// source, before it becomes a surcharge multiplier (see
-// .agents/rules/billing.md).
+// source, before it becomes a surcharge multiplier.
 const MaxBillableToolCallCount = 10_000
 
 // CountBillableToolCall is the single entry point for per-call tool billing counts.

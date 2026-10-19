@@ -1159,7 +1159,7 @@ func setupTaskPluginMarketplaceSourcesTest(t *testing.T) {
 	})
 }
 
-func TestGetTaskPluginMarketplaceSourcesDefaultWhenUnset(t *testing.T) {
+func TestGetTaskPluginMarketplaceSourcesEmptyWhenUnset(t *testing.T) {
 	setupTaskPluginMarketplaceSourcesTest(t)
 	recorder := httptest.NewRecorder()
 	context, _ := gin.CreateTestContext(recorder)
@@ -1173,10 +1173,7 @@ func TestGetTaskPluginMarketplaceSourcesDefaultWhenUnset(t *testing.T) {
 	}
 	require.NoError(t, common.Unmarshal(recorder.Body.Bytes(), &response))
 	require.True(t, response.Success)
-	require.Equal(t, []setting.TaskPluginMarketplaceSource{
-		{Name: "Official", IndexURL: "https://www.newapi.ai/api/v1/plugins/index.json"},
-		{Name: "GitHub", IndexURL: "https://raw.githubusercontent.com/QuantumNous/new-api-plugins/main/index.json"},
-	}, response.Data)
+	require.Empty(t, response.Data)
 	var count int64
 	require.NoError(t, model.DB.Model(&model.Option{}).Where("key = ?", setting.TaskPluginMarketplaceSourcesKey).Count(&count).Error)
 	assert.Zero(t, count)
@@ -1186,7 +1183,7 @@ func TestUpdateTaskPluginMarketplaceSourcesRoundTrip(t *testing.T) {
 	setupTaskPluginMarketplaceSourcesTest(t)
 	payload := []setting.TaskPluginMarketplaceSource{
 		{Name: "Mirror", IndexURL: "https://example.com/plugins/index.json"},
-		{Name: "Official", IndexURL: "https://www.newapi.ai/api/v1/plugins/index.json"},
+		{Name: "Backup", IndexURL: "https://mirror.example.com/plugins/index.json"},
 	}
 	body, err := common.Marshal(payload)
 	require.NoError(t, err)

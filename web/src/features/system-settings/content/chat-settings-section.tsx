@@ -178,9 +178,7 @@ export function ChatSettingsSection({
                         name={field.name}
                         onBlur={field.onBlur}
                         textareaRef={field.ref}
-                        placeholder={t(
-                          '[{"ChatGPT":"https://chat.openai.com"},{"Lobe Chat":"https://chat-preview.lobehub.com/?settings={...}"}]'
-                        )}
+                        placeholder='[{"Web Chat":"https://chat.example.com/?key={key}&url={address}"}]'
                         heightClassName='h-72 min-h-72 max-h-72'
                         aria-invalid={Boolean(form.formState.errors.Chats)}
                       />
