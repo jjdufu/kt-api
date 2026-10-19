@@ -174,9 +174,9 @@
 
 - [x] 本计划全部 checkbox 勾选
 - [x] `go build` / `go vet` / 相关测试在 box 通过（前端交 Actions，防 OOM）
-- [ ] Push `feat/seedance-assets`；开 PR → 等 CI → 必要时 approve Actions → merge
-- [ ] merge 后等 release-please 开版本 PR（`feat:` 提交触发）→ approve smoke → merge
-- [ ] 确认 Docker Hub `dex2all/ktapi:<ver>`（当前 main 为 `0.0.1`，期望 bump 到 `0.0.2` 或按 release-please 规则）
+- [x] Push `feat/seedance-assets`；开 PR → 等 CI → 必要时 approve Actions → merge
+- [x] merge 后等 release-please 开版本 PR（`feat:` 提交触发）→ approve smoke → merge
+- [x] 确认 Docker Hub `dex2all/ktapi:<ver>`（当前 main 为 `0.0.1`，期望 bump 到 `0.0.2` 或按 release-please 规则）
 
 **验收**：报告 PR 号、CI 状态、镜像 tag 或仍打开的 release PR URL。
 
@@ -208,3 +208,4 @@
 | 2026-10-19 | Step 2–4 | 原生 asset relay：路由/中间件/转发/所有权/计费 |
 | 2026-10-19 | Step 5 | 视频别名 + asset:// pin + 剥离 callback_url |
 | 2026-10-19 | Step 6 | httptest/单元测试通过 |
+| 2026-10-19 | Step 7 | PR #10 合并；release PR #11 合并；发布 v0.0.2；Docker Hub `dex2all/ktapi:0.0.2` 已存在。计划完成 |
