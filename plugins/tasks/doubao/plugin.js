@@ -924,7 +924,22 @@ export function buildQueryRequest(ctx) {
   };
 }
 
-export function parseTaskResult(ctx, body) {
+// The supplier answers a query for a failed task with HTTP 400 and a bare
+// {"error":{...}} envelope that carries no status; that body is the failure.
+function supplierFailedTaskError(body, resp) {
+  if (!resp || resp.status !== 400) return null;
+  if (!body || typeof body !== "object" || Array.isArray(body) || body.status !== undefined) return null;
+  const error = body.error;
+  if (!error || typeof error !== "object" || Array.isArray(error)) return null;
+  return error;
+}
+
+export function parseTaskResult(ctx, body, resp) {
+  const supplierError = supplierFailedTaskError(body, resp);
+  if (supplierError) {
+    const reason = trimmed(supplierError.message) || trimmed(supplierError.code) || "failed";
+    return { status: "FAILURE", progress: "100%", reason: reason };
+  }
   if (body.status === "pending" || body.status === "queued") return { status: "QUEUED", progress: "10%" };
   if (body.status === "processing" || body.status === "running") return { status: "IN_PROGRESS", progress: "50%" };
   if (body.status === "succeeded") {

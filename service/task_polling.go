@@ -554,7 +554,17 @@ func updateVideoSingleTask(ctx context.Context, adaptor TaskPollingAdaptor, ch *
 		return recordPollFailure(ctx, adaptor, task, snap.Status, pollClassUnrecognized, resp.StatusCode, unrecognizedPollDetail(taskResult.Reason, responseBody))
 	}
 
+	previousData := task.Data
 	task.Data = redactVideoResponseBody(responseBody)
+	if parsedStatus == model.TaskStatusFailure && IsArkVideoTask(task) {
+		if code, ok := arkStatuslessFailureCode(responseBody); ok {
+			// The supplier reports a failed task as HTTP 400 with a bare error
+			// envelope; persist the Ark shape (status "failed" + error) so GET
+			// and callbacks present a task object instead of the envelope.
+			task.Data = previousData
+			task.Data = arkTerminalTaskData(task, ArkTaskStatusFailed, code, taskResult.Reason, time.Now().Unix())
+		}
+	}
 	if len(taskResult.PluginState) > 0 {
 		task.PrivateData.PluginState = taskResult.PluginState
 	}

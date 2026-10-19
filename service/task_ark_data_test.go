@@ -8,6 +8,7 @@ import (
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/model"
+	relaycommon "github.com/QuantumNous/new-api/relay/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -124,4 +125,58 @@ func TestFailTaskFromPollArkTaskPresentsFailed(t *testing.T) {
 	data := decodeTaskDataObject(t, persisted.Data)
 	assert.Equal(t, "failed", data["status"])
 	assert.Equal(t, map[string]any{"code": "upstream_task_not_found", "message": "Upstream task not found"}, data["error"])
+}
+
+func TestUpdateVideoSingleTaskSupplierFailedEnvelopePersistsArkShape(t *testing.T) {
+	truncate(t)
+	const userID, channelID = 613, 613
+	seedUser(t, userID, 10_000)
+	ch := &model.Channel{Id: channelID, Type: constant.ChannelTypeDoubaoVideo, Name: "ark", Key: "sk-test", Status: common.ChannelStatusEnabled}
+
+	task := makeTask(userID, channelID, 1_000, 0, BillingSourceWallet, 0)
+	task.TaskID = "task_ark_supplier_failed"
+	task.Data = []byte(`{"id":"cgt-failed","model":"doubao-seedance-2-0-260128","status":"running","created_at":1786015617}`)
+	task.PrivateData.UpstreamTaskID = "cgt-failed"
+	markArkVideoTask(task)
+	require.NoError(t, model.DB.Create(task).Error)
+
+	adaptor := &scriptedPollingAdaptor{
+		statusCode: http.StatusBadRequest,
+		body:       []byte(`{"error":{"code":"task_not_exist","message":"task_not_exist","type":"yisu_api_error","request_id":"r"}}`),
+		parse:      &relaycommon.TaskInfo{Status: model.TaskStatusFailure, Reason: "task_not_exist", Progress: "100%"},
+	}
+	require.NoError(t, updateVideoSingleTask(context.Background(), adaptor, ch, "cgt-failed", map[string]*model.Task{"cgt-failed": task}))
+
+	var persisted model.Task
+	require.NoError(t, model.DB.First(&persisted, task.ID).Error)
+	assert.EqualValues(t, model.TaskStatusFailure, persisted.Status)
+	assert.Equal(t, "task_not_exist", persisted.FailReason)
+	assert.Zero(t, persisted.PrivateData.PollFailures)
+	data := decodeTaskDataObject(t, persisted.Data)
+	assert.Equal(t, "failed", data["status"])
+	assert.Equal(t, "cgt-failed", data["id"])
+	assert.Equal(t, "doubao-seedance-2-0-260128", data["model"])
+	assert.Equal(t, map[string]any{"code": "task_not_exist", "message": "task_not_exist"}, data["error"])
+	assert.Equal(t, 10_000+1_000, getUserQuota(t, userID), "failed task is refunded once")
+}
+
+func TestUpdateVideoSingleTaskArkFailedBodyKeepsUpstreamShape(t *testing.T) {
+	truncate(t)
+	const userID, channelID = 614, 614
+	seedUser(t, userID, 10_000)
+	ch := &model.Channel{Id: channelID, Type: constant.ChannelTypeDoubaoVideo, Name: "ark", Key: "sk-test", Status: common.ChannelStatusEnabled}
+
+	task := makeTask(userID, channelID, 1_000, 0, BillingSourceWallet, 0)
+	task.TaskID = "task_ark_failed_body"
+	task.PrivateData.UpstreamTaskID = "cgt-body"
+	markArkVideoTask(task)
+	require.NoError(t, model.DB.Create(task).Error)
+
+	upstream := `{"id":"cgt-body","status":"failed","error":{"code":"InternalServiceError","message":"boom"}}`
+	adaptor := &scriptedPollingAdaptor{body: []byte(upstream), parse: &relaycommon.TaskInfo{Status: model.TaskStatusFailure, Reason: "boom"}}
+	require.NoError(t, updateVideoSingleTask(context.Background(), adaptor, ch, "cgt-body", map[string]*model.Task{"cgt-body": task}))
+
+	var persisted model.Task
+	require.NoError(t, model.DB.First(&persisted, task.ID).Error)
+	assert.JSONEq(t, upstream, string(persisted.Data))
 }

@@ -107,3 +107,26 @@ func arkLocalFailureCode(reason string) string {
 		return arkErrorCodeTaskFailed
 	}
 }
+
+// arkStatuslessFailureCode inspects a failed poll response: when the body is a
+// JSON object without a status field it returns the vendor error code (or a
+// generic one) so the caller can persist an Ark-shaped failed task body.
+func arkStatuslessFailureCode(body []byte) (string, bool) {
+	var decoded any
+	if err := common.Unmarshal(body, &decoded); err != nil {
+		return arkErrorCodeTaskFailed, true
+	}
+	object, ok := decoded.(map[string]any)
+	if !ok {
+		return arkErrorCodeTaskFailed, true
+	}
+	if _, hasStatus := object["status"]; hasStatus {
+		return "", false
+	}
+	if vendorError, ok := object["error"].(map[string]any); ok {
+		if code, _ := vendorError["code"].(string); code != "" {
+			return code, true
+		}
+	}
+	return arkErrorCodeTaskFailed, true
+}
