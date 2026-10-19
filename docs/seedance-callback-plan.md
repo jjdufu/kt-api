@@ -427,3 +427,4 @@ kt-api 没有 `/metrics`，保持现有做法：**用 `sql_exporter` 从 outbox 
 | 2026-10-19 | Step 9 | 抽出 RenderTaskPluginBody / RenderSeedanceTaskStatus，GET 直接写渲染字节；快照测试锁定 GET 字节且与回调渲染逐字节一致、不含上游 ID |
 | 2026-10-19 | Step 10 | UpdateWithStatus 在 CAS 赢家事务内（savepoint）调用观察者入队，失败不阻塞任务写；cancelled 只记 last_status；每分钟对账系统任务（有未终结订阅时才运行）补入队；渠道缺失批量失败改写 Ark failed data |
 | 2026-10-19 | Step 11 | 每实例 dispatcher：1 秒轮询 + 入队唤醒、条件 UPDATE 领取 + 30 秒租约、同任务串行、新事件入队时 supersede 未投递的 queued/running、终态 4 次（间隔 5 秒）/ 非终态 1 次、ssrf_blocked 与 3xx 不跟随、可选扩展退避、启动与每分钟回收租约、停机释放租约、结构化日志 |
+| 2026-10-19 | Step 12 | 可选 HMAC 签名（默认关）：用户密钥 = HMAC(主密钥, 用户 ID) 派生，不落库；X-KtApi-Timestamp + X-KtApi-Signature: v1=…；GET /api/user/task_callback/signing 返回本人密钥 |

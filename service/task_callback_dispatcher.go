@@ -397,6 +397,7 @@ func (d *TaskCallbackDispatcher) send(parent context.Context, event *model.TaskC
 		request.Header.Set("X-KtApi-Task-Id", event.TaskID)
 	}
 	started := d.now()
+	signTaskCallbackRequest(request, setting, event.UserID, event.EventID, []byte(event.Payload), started.Unix())
 	response, err := d.client.Do(request)
 	if err != nil {
 		return taskCallbackAttempt{result: classifyTaskCallbackError(err), err: err, latency: d.now().Sub(started)}
