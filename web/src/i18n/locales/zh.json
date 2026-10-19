@@ -7336,6 +7336,7 @@
     "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.": "适用于兼容 New API 的供应商：余额 = 该密钥剩余额度（GET /api/usage/token/）÷ 此值，单位为供应商的货币单位。New API 默认 {{value}}。",
     "Upstream quota per unit must be a positive number": "上游每单位额度必须为正数",
     "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}": "单位为供应商的货币单位：上游剩余额度 ÷ {{perUnit}}",
-    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "查询余额需要兼容 New API 的上游：使用渠道密钥请求 GET /api/usage/token/ 失败（{{error}}）"
+    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "查询余额需要兼容 New API 的上游：使用渠道密钥请求 GET /api/usage/token/ 失败（{{error}}）",
+    "On this page": "本页目录"
   }
 }
