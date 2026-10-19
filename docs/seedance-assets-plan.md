@@ -112,10 +112,10 @@
 
 ### Step 1 — 数据模型 + AutoMigrate + 所有权 helper 单测
 
-- [ ] `AssetGroup` / `Asset` / `VisualValidateSession` 模型与索引（user_id + 上游 ID 唯一）
-- [ ] AutoMigrate 注册；SQLite 起库两次证明幂等
-- [ ] Helper：按 user 查组/素材、登记、删除、List 用 ID 列表、token hash/过期/单次使用
-- [ ] 单测覆盖跨用户 miss、过期 token、重复消费拒绝
+- [x] `AssetGroup` / `Asset` / `VisualValidateSession` 模型与索引（user_id + 上游 ID 唯一）
+- [x] AutoMigrate 注册；SQLite 起库两次证明幂等
+- [x] Helper：按 user 查组/素材、登记、删除、List 用 ID 列表、token hash/过期/单次使用
+- [x] 单测覆盖跨用户 miss、过期 token、重复消费拒绝
 
 **验收**：`go test ./model/ -count=1 -run Asset`（或等价）通过；`go build ./...` 通过。
 
@@ -204,3 +204,4 @@
 | 日期（Asia/Shanghai） | 步骤 | 说明 |
 |----------------------|------|------|
 | 2026-10-19 | Step 0 | 创建本计划并单独提交 |
+| 2026-10-19 | Step 1 | 模型 + AutoMigrate + 所有权单测通过 |
