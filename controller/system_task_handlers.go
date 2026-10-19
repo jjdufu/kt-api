@@ -21,6 +21,7 @@ func RegisterScheduledSystemTasks() {
 	service.RegisterSystemTaskHandler(modelUpdateHandler{})
 	service.RegisterSystemTaskHandler(midjourneyPollHandler{})
 	service.RegisterSystemTaskHandler(asyncTaskPollHandler{})
+	service.RegisterSystemTaskHandler(taskCallbackCleanupHandler{})
 }
 
 // channelTestHandler runs the scheduled "test all channels" job. Enablement and
@@ -148,6 +149,27 @@ func (asyncTaskPollHandler) NewPayload() any { return nil }
 
 func (asyncTaskPollHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
 	summary := service.RunTaskPollingOnce(ctx, service.NewSystemTaskProgressReporter(task, runnerID))
+	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
+}
+
+// taskCallbackCleanupHandler deletes finished task callback events and stale
+// subscriptions past task_callback_setting.retention_days once an hour.
+type taskCallbackCleanupHandler struct{}
+
+func (taskCallbackCleanupHandler) Type() string { return model.SystemTaskTypeTaskCallbackCleanup }
+
+func (taskCallbackCleanupHandler) Enabled() bool { return true }
+
+func (taskCallbackCleanupHandler) Interval() time.Duration { return time.Hour }
+
+func (taskCallbackCleanupHandler) NewPayload() any { return nil }
+
+func (taskCallbackCleanupHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
+	summary, err := service.CleanupTaskCallbacks(ctx)
+	if err != nil {
+		finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusFailed, summary, err)
+		return
+	}
 	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
 }
 

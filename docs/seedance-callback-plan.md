@@ -417,3 +417,8 @@ kt-api 没有 `/metrics`，保持现有做法：**用 `sql_exporter` 从 outbox 
 | 日期（Asia/Shanghai） | 步骤 | 说明 |
 |---|---|---|
 | 2026-10-19 | Step 1 | 计划评审通过，记录决策并提交 |
+| 2026-10-19 | Step 2 | 本地裁定的终态（超时/查询失败/未找到）写入 Ark 形态 data（status+error），GET 与回调同源 |
+| 2026-10-19 | Step 3 | doubao 插件将供应商 HTTP 400 失败任务裸 error 体识别为 FAILURE，持久化为 Ark failed 形态 |
+| 2026-10-19 | Step 4 | 支持 execution_expires_after（3600–259200，默认 172800，+1800 宽限），独立分页超时扫描，超时报 expired |
+| 2026-10-19 | Step 5 | 新增 task_callback_setting 配置组（默认关闭 fast path、http 允许、X-KtApi-* 头开启） |
+| 2026-10-19 | Step 6 | 新增 task_callback_subscriptions / task_callback_events 表与模型、清理系统任务；SQLite 3.50、MySQL 5.7.44/8.0、MariaDB 11.8、PostgreSQL 9.6/17 迁移与并发认领验证通过 |
