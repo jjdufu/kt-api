@@ -303,7 +303,7 @@ export const meta = {
     en: "Volcengine Doubao Seedance video generation and Seedream image generation",
     zh: "火山引擎豆包 Seedance 视频生成与 Seedream 图片生成",
   },
-  version: "1.3.0",
+  version: "1.3.1",
   author: { name: "QuantumNous" },
   channelTypes: [54, 45], // VolcEngine-type channels serve Ark video models with the same wire format
   models: Object.keys(VIDEO_MODELS).concat(Object.keys(IMAGE_MODELS)),
@@ -343,6 +343,27 @@ function objectValue(value, name) {
   if (value === undefined || value === null) return {};
   if (typeof value !== "object" || Array.isArray(value)) throw new Error(name + " must be an object");
   return value;
+}
+
+
+function assetIdsFromContent(content) {
+  const ids = [];
+  const seen = Object.create(null);
+  if (!Array.isArray(content)) return ids;
+  for (const item of content) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    let url = "";
+    if (item.type === "image_url" && item.image_url) url = typeof item.image_url === "string" ? item.image_url : item.image_url.url;
+    else if (item.type === "video_url" && item.video_url) url = typeof item.video_url === "string" ? item.video_url : item.video_url.url;
+    else if (item.type === "audio_url" && item.audio_url) url = typeof item.audio_url === "string" ? item.audio_url : item.audio_url.url;
+    url = trimmed(url);
+    if (!url.startsWith("asset://")) continue;
+    const id = trimmed(url.slice("asset://".length));
+    if (!id || seen[id]) continue;
+    seen[id] = true;
+    ids.push(id);
+  }
+  return ids;
 }
 
 function draftTaskIds(content) {
@@ -755,6 +776,8 @@ export const native = {
     const intent = { kind: "submit", model: model, action: hasReference ? "image_to_video" : "text_to_video", requestBody: requestBody };
     const originTaskIds = draftTaskIds(content);
     if (originTaskIds.length) intent.originTaskIds = originTaskIds;
+    const assetIds = assetIdsFromContent(content);
+    if (assetIds.length) intent.assetIds = assetIds;
     return intent;
   },
   taskCreated: function (ctx, task) {
@@ -818,6 +841,9 @@ export function buildSubmitRequest(ctx) {
   const seconds = Number.parseInt(req.seconds || "", 10);
   if (seconds > 0 || seconds === -1) body.duration = seconds;
   body.model = ctx.upstreamModel || body.model;
+  // Strip customer callback_url: kt-api polls and settles; upstream callbacks
+  // would bypass gateway ownership and billing invariants.
+  if (Object.prototype.hasOwnProperty.call(body, "callback_url")) delete body.callback_url;
   return {
     url: apiRoot(ctx) + "/api/v3/contents/generations/tasks",
     method: "POST",
@@ -1028,6 +1054,8 @@ export const protocols = {
       const intent = { kind: "submit", model: model, action: images.length ? "image_to_video" : "text_to_video", requestBody: requestBody };
       const originTaskIds = draftTaskIds(metadata.content);
       if (originTaskIds.length) intent.originTaskIds = originTaskIds;
+      const assetIds = assetIdsFromContent(metadata.content);
+      if (assetIds.length) intent.assetIds = assetIds;
       return intent;
     },
     renderEvents: function (ctx, task, previousState) {

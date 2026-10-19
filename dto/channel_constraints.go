@@ -5,11 +5,13 @@ type ChannelPinSource string
 const (
 	PinSourceToken      ChannelPinSource = "token"       // Rank 0, highest
 	PinSourceOriginTask ChannelPinSource = "origin_task" // Rank 10
+	PinSourceAsset      ChannelPinSource = "asset"       // Rank 10, same priority as origin task
 )
 
 const (
 	PinRankToken      = 0
 	PinRankOriginTask = 10
+	PinRankAsset      = 10
 )
 
 type PinRetryMode int
@@ -31,6 +33,9 @@ type ChannelPin struct {
 	Source    ChannelPinSource
 	Rank      int
 	RetryMode PinRetryMode
+	// KeyIndex, when non-nil, forces the multi-key channel to use this key index
+	// (Seedance assets must stay on the credential that created the group).
+	KeyIndex *int
 }
 
 type ChannelFilterKind string

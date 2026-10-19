@@ -40,6 +40,10 @@ const (
 	ContextKeyChannelMultiKeyIndex     ContextKey = "channel_multi_key_index"
 	ContextKeyChannelKey               ContextKey = "channel_key"
 
+	ContextKeyAssetAction       ContextKey = "asset_action"
+	ContextKeyAssetVersion      ContextKey = "asset_version"
+	ContextKeyAssetBillingModel ContextKey = "asset_billing_model"
+
 	// ContextKeyUpstreamRequestOrigin is the scheme and host of the last upstream
 	// request, which differs from the base URL for absolute Advanced Custom routes
 	// and for adaptors that build official endpoints themselves.

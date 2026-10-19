@@ -70,6 +70,12 @@ var accessTokenExemptRoutes = []string{
 	// API key authentication (TokenAuthReadOnly).
 	"GET /api/usage/token/",
 	"GET /api/log/token",
+
+	// Seedance vendor-compatible relay aliases (TokenAuth, not dashboard PAT).
+	"POST /api/v3/contents/generations/tasks",
+	"GET /api/v3/contents/generations/tasks/:task_id",
+	"POST /api/assets/",
+	"POST /api/assets",
 }
 
 // accessTokenHelperRoutes are declared through handlePermissionRoute outside
@@ -90,6 +96,7 @@ func newAccessTokenScopeTestEngine(t *testing.T) *gin.Engine {
 		SetRelayRouter(engine)
 		SetTaskPluginProtocolRouter(engine)
 		SetVideoRouter(engine)
+		SetAssetRouter(engine)
 		SetTaskRouter(engine)
 	})
 	return engine

@@ -444,6 +444,17 @@ func getModelRequest(c *gin.Context) (*ModelRequest, bool, error) {
 		}
 		modelRequest.Model = req.Model
 	}
+	if strings.HasPrefix(c.Request.URL.Path, "/api/assets") {
+		billingModel := common.GetContextKeyString(c, constant.ContextKeyAssetBillingModel)
+		if billingModel == "" {
+			billingModel = common.GetContextKeyString(c, constant.ContextKeyOriginalModel)
+		}
+		if billingModel == "" {
+			return nil, false, fmt.Errorf("asset billing model is required")
+		}
+		modelRequest.Model = billingModel
+		return &modelRequest, true, nil
+	}
 	if strings.HasPrefix(c.Request.URL.Path, "/v1/realtime") {
 		//wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01
 		modelRequest.Model = c.Query("model")
@@ -622,6 +633,15 @@ func SetupContextForSelectedChannel(c *gin.Context, channel *model.Channel, mode
 	key, index, newAPIError := channel.GetNextEnabledKey()
 	if newAPIError != nil {
 		return newAPIError
+	}
+	if pin, found, _ := service.GetChannelConstraints(c).ResolvedPin(); found && pin.KeyIndex != nil {
+		forced := *pin.KeyIndex
+		keys := channel.GetKeys()
+		if forced < 0 || forced >= len(keys) || strings.TrimSpace(keys[forced]) == "" {
+			return types.NewError(fmt.Errorf("pinned channel key index is unavailable"), types.ErrorCodeChannelNoAvailableKey)
+		}
+		key = keys[forced]
+		index = forced
 	}
 	if channel.ChannelInfo.IsMultiKey {
 		common.SetContextKey(c, constant.ContextKeyChannelIsMultiKey, true)

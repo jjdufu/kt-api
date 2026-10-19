@@ -30,4 +30,25 @@ func SetVideoRouter(router *gin.Engine) {
 		videoV1Router.GET("/video/generations/:task_id", controller.RelayTaskFetch)
 		videoV1Router.POST("/videos/:video_id/remix", controller.RelayTask)
 	}
+
+	// Vendor-compatible Seedance paths (alias onto Doubao plugin routes).
+	seedanceAlias := router.Group("/api/v3/contents/generations")
+	seedanceAlias.Use(middleware.RouteTag("relay"))
+	seedanceAlias.Use(middleware.TokenAuth())
+	seedanceAlias.Use(middleware.SystemPerformanceCheck())
+	{
+		seedanceAlias.POST(
+			"/tasks",
+			middleware.PinSeedanceVideoAlias(),
+			middleware.ModelRequestRateLimit(),
+			middleware.PrepareTaskPluginRoute(),
+			middleware.Distribute(),
+			controller.RelayTask,
+		)
+		seedanceAlias.GET(
+			"/tasks/:task_id",
+			middleware.PinSeedanceVideoAlias(),
+			middleware.PrepareTaskPluginRoute(),
+		)
+	}
 }
