@@ -20,6 +20,14 @@ env:
 jobs:
   backend:
     name: Backend vet, build, and test
+    # Skip duplicate test runs on release-please PRs (only VERSION/CHANGELOG/
+    # manifest change) and on the push to main that merges such a PR (the
+    # code was already tested on the feature PR that preceded it).
+    if: >-
+      !startsWith(github.head_ref, 'release-please--') &&
+      !(github.event_name == 'push' &&
+        (startsWith(github.event.head_commit.message, 'chore(main): release') ||
+         contains(github.event.head_commit.message, 'release-please--branches--')))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -70,6 +78,14 @@ jobs:
 
   frontend:
     name: Frontend typecheck and test
+    # Skip duplicate test runs on release-please PRs (only VERSION/CHANGELOG/
+    # manifest change) and on the push to main that merges such a PR (the
+    # code was already tested on the feature PR that preceded it).
+    if: >-
+      !startsWith(github.head_ref, 'release-please--') &&
+      !(github.event_name == 'push' &&
+        (startsWith(github.event.head_commit.message, 'chore(main): release') ||
+         contains(github.event.head_commit.message, 'release-please--branches--')))
     runs-on: ubuntu-latest
     # vitest takes ~10 min on a standard hosted runner; 10 was too tight.
     timeout-minutes: 30
@@ -94,6 +110,38 @@ jobs:
 
       - name: Test
         run: bun run test
+
+  # Seconds-long sanity check of release metadata; the only test job that
+  # runs on release-please PRs.
+  smoke:
+    name: Release metadata smoke check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Check VERSION, manifest, and CHANGELOG
+        run: |
+          set -euo pipefail
+          version="$(sed -e 's/#.*$//' VERSION | tr -d '[:space:]')"
+          echo "VERSION: '${version}'"
+          semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+          if ! [[ "${version}" =~ ${semver} ]]; then
+            echo "::error file=VERSION::'${version}' is not valid semver"
+            exit 1
+          fi
+          manifest="$(jq -r '."."' .release-please-manifest.json)"
+          echo "manifest: '${manifest}'"
+          if [ "${manifest}" != "${version}" ]; then
+            echo "::error file=.release-please-manifest.json::manifest version '${manifest}' != VERSION '${version}'"
+            exit 1
+          fi
+          if [ ! -s CHANGELOG.md ]; then
+            echo "::error::CHANGELOG.md is missing or empty"
+            exit 1
+          fi
+          echo "Release metadata OK (${version})"
 
   changes:
     if: github.event_name == 'pull_request'
