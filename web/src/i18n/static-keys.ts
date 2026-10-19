@@ -19,6 +19,10 @@ For commercial licensing, please contact support@quantumnous.com
 // Static translation keys that don't get picked up by the t('...') regex.
 // These cover dynamic labels (e.g. constants, configs) that are passed into t at runtime.
 export const STATIC_I18N_KEYS = [
+  // Backend message key: Doubao video balance on a non-New-API upstream.
+  'Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})',
+  // Channel form validation message (ERROR_MESSAGES).
+  'Upstream quota per unit must be a positive number',
   'Task usage metadata is unavailable. Pricing details cannot be displayed.',
   'This expression cannot be expanded into a price table. View the original expression below.',
   'This operation is only supported for vLLM or SGLang channels',

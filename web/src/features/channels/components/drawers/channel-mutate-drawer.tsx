@@ -206,6 +206,7 @@ import {
   assessBaseUrlTrust,
   nextTaskPluginBaseUrl,
 } from '../../lib/task-plugin-base-url'
+import { DEFAULT_UPSTREAM_QUOTA_PER_UNIT } from '../../lib/upstream-quota-per-unit'
 import type { Channel } from '../../types'
 import { ChannelPluginExtensions } from '../channel-plugin-extensions'
 import { ChannelQuickOptions } from '../channel-quick-options'
@@ -317,6 +318,7 @@ const SENSITIVE_FORM_FIELDS = [
   'ollama_openai_chat',
   'disable_task_polling_sleep',
   'upstream_task_callback_enabled',
+  'upstream_quota_per_unit',
   'upstream_model_update_check_enabled',
   'upstream_model_update_auto_sync_enabled',
   'upstream_model_update_ignored_models',
@@ -1975,6 +1977,45 @@ export function ChannelMutateDrawer({
               onCheckedChange={field.onChange}
             />
           </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+
+  const upstreamQuotaPerUnitFields = currentType ===
+    CHANNEL_TYPE_DOUBAO_VIDEO && (
+    <FormField
+      control={form.control}
+      name='upstream_quota_per_unit'
+      render={({ field }) => (
+        <FormItem className='px-4 py-3'>
+          <FormLabel>{t('Upstream quota per unit')}</FormLabel>
+          <FormControl>
+            <Input
+              type='number'
+              min={1}
+              step='any'
+              inputMode='decimal'
+              placeholder={String(DEFAULT_UPSTREAM_QUOTA_PER_UNIT)}
+              disabled={sensitiveLocked}
+              name={field.name}
+              ref={field.ref}
+              onBlur={field.onBlur}
+              value={field.value ?? ''}
+              onChange={(e) =>
+                field.onChange(
+                  e.target.value === '' ? undefined : Number(e.target.value)
+                )
+              }
+            />
+          </FormControl>
+          <FormDescription>
+            {t(
+              "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.",
+              { value: DEFAULT_UPSTREAM_QUOTA_PER_UNIT }
+            )}
+          </FormDescription>
+          <FormMessage />
         </FormItem>
       )}
     />
@@ -4817,6 +4858,7 @@ export function ChannelMutateDrawer({
               >
                 {taskPollingFields}
                 {upstreamTaskCallbackFields}
+                {upstreamQuotaPerUnitFields}
                 {proxyFields}
                 {httpProtocolFields}
                 {httpShardsFields}

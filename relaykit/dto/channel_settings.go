@@ -140,6 +140,10 @@ type ChannelOtherSettings struct {
 	// rejection. Empty follows the default allow policy. Accepted values:
 	// "", "allow", "safe", "strict".
 	ToolLossPolicy string `json:"tool_loss_policy,omitempty"`
+	// UpstreamQuotaPerUnit converts a New API compatible upstream's quota
+	// points into its currency unit for the Doubao video channel balance.
+	// Zero means New API's default of 500000.
+	UpstreamQuotaPerUnit float64 `json:"upstream_quota_per_unit,omitempty"`
 }
 
 func (s *ChannelOtherSettings) IsOpenRouterEnterprise() bool {

@@ -476,39 +476,12 @@ func updateChannelNewAPIBalance(channel *model.Channel) (float64, error) {
 	if baseURL == "" {
 		return 0, errors.New("New API channel is missing base_url")
 	}
-	body, err := GetResponseBody("GET", baseURL+"/api/usage/token/", channel, GetAuthHeader(channel.Key))
+	remaining, err := fetchNewAPITokenRemainingQuota(channel, baseURL)
 	if err != nil {
 		return 0, err
 	}
-	var usage struct {
-		Code    bool   `json:"code"`
-		Message string `json:"message"`
-		Data    struct {
-			TotalAvailable float64 `json:"total_available"`
-			UnlimitedQuota bool    `json:"unlimited_quota"`
-			UserQuota      *struct {
-				TotalAvailable float64 `json:"total_available"`
-			} `json:"user_quota"`
-		} `json:"data"`
-	}
-	if err := common.Unmarshal(body, &usage); err != nil {
-		return 0, err
-	}
-	if !usage.Code {
-		return 0, fmt.Errorf("New API usage query failed: %s", usage.Message)
-	}
-	remaining := usage.Data.TotalAvailable
-	if usage.Data.UnlimitedQuota {
-		remaining = math.Inf(1)
-	}
-	if userQuota := usage.Data.UserQuota; userQuota != nil {
-		remaining = min(remaining, userQuota.TotalAvailable)
-	}
-	if math.IsInf(remaining, 1) {
-		return 0, common.NewMessage(`The upstream key has unlimited quota. Turn on "Allow querying user quota" for this key on the upstream to see the real balance.`)
-	}
 
-	body, err = GetResponseBody("GET", baseURL+"/api/status", channel, nil)
+	body, err := GetResponseBody("GET", baseURL+"/api/status", channel, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -526,6 +499,89 @@ func updateChannelNewAPIBalance(channel *model.Channel) (float64, error) {
 	balance := remaining / status.Data.QuotaPerUnit
 	channel.UpdateBalance(balance)
 	return balance, nil
+}
+
+// defaultUpstreamQuotaPerUnit is New API's default quota points per currency
+// unit, used when a Doubao video channel does not configure its own.
+const defaultUpstreamQuotaPerUnit = 500000.0
+
+const doubaoVideoBalanceUnsupportedMessage = "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})"
+
+// upstreamQuotaPerUnit is the channel's configured conversion of upstream
+// quota points into the upstream currency unit.
+func upstreamQuotaPerUnit(channel *model.Channel) float64 {
+	perUnit := channel.GetOtherSettings().UpstreamQuotaPerUnit
+	if perUnit <= 0 || math.IsNaN(perUnit) || math.IsInf(perUnit, 0) {
+		return defaultUpstreamQuotaPerUnit
+	}
+	return perUnit
+}
+
+// updateChannelDoubaoVideoBalance supports Seedance suppliers that run New
+// API: the key's remaining quota (GET /api/usage/token/ total_available, or
+// the owner's quota when smaller) divided by the channel's "upstream quota
+// per unit" is stored as the balance, in the supplier's currency unit. The
+// official Ark endpoint has no such API; that and any other non-New-API
+// upstream returns an error and leaves the channel and its balance alone.
+func updateChannelDoubaoVideoBalance(channel *model.Channel) (float64, error) {
+	baseURL := strings.TrimRight(channel.GetBaseURL(), "/")
+	if baseURL == "" {
+		return 0, errors.New("Doubao video channel is missing base_url")
+	}
+	remaining, err := fetchNewAPITokenRemainingQuota(channel, baseURL)
+	if err != nil {
+		var message *common.Message
+		if errors.As(err, &message) {
+			return 0, err
+		}
+		return 0, common.NewMessage(doubaoVideoBalanceUnsupportedMessage, map[string]any{"error": err.Error()})
+	}
+	balance := remaining / upstreamQuotaPerUnit(channel)
+	channel.UpdateBalance(balance)
+	return balance, nil
+}
+
+// fetchNewAPITokenRemainingQuota returns the quota points the channel key can
+// still spend on a New API compatible upstream. The key is only sent in the
+// Authorization header and never appears in errors.
+func fetchNewAPITokenRemainingQuota(channel *model.Channel, baseURL string) (float64, error) {
+	body, err := GetResponseBody("GET", baseURL+"/api/usage/token/", channel, GetAuthHeader(channel.Key))
+	if err != nil {
+		return 0, err
+	}
+	var usage struct {
+		Code    bool   `json:"code"`
+		Message string `json:"message"`
+		Data    *struct {
+			TotalAvailable *float64 `json:"total_available"`
+			UnlimitedQuota bool     `json:"unlimited_quota"`
+			UserQuota      *struct {
+				TotalAvailable float64 `json:"total_available"`
+			} `json:"user_quota"`
+		} `json:"data"`
+	}
+	if err := common.Unmarshal(body, &usage); err != nil {
+		return 0, errors.New("/api/usage/token/ did not return New API usage JSON")
+	}
+	if !usage.Code {
+		return 0, fmt.Errorf("New API usage query failed: %s", usage.Message)
+	}
+	// A missing amount must not read as an empty balance: a zero balance
+	// disables the channel during the automatic balance update.
+	if usage.Data == nil || (usage.Data.TotalAvailable == nil && !usage.Data.UnlimitedQuota) {
+		return 0, errors.New("/api/usage/token/ response is missing data.total_available")
+	}
+	remaining := math.Inf(1)
+	if !usage.Data.UnlimitedQuota {
+		remaining = *usage.Data.TotalAvailable
+	}
+	if userQuota := usage.Data.UserQuota; userQuota != nil {
+		remaining = min(remaining, userQuota.TotalAvailable)
+	}
+	if math.IsInf(remaining, 1) {
+		return 0, common.NewMessage(`The upstream key has unlimited quota. Turn on "Allow querying user quota" for this key on the upstream to see the real balance.`)
+	}
+	return remaining, nil
 }
 
 func fetchAdvancedCustomBalance(channel *model.Channel) (channelBalanceResult, error) {
@@ -656,6 +712,8 @@ func updateStandardChannelBalance(channel *model.Channel) (float64, error) {
 		return updateChannelSub2APIBalance(channel)
 	case constant.ChannelTypeNewAPI:
 		return updateChannelNewAPIBalance(channel)
+	case constant.ChannelTypeDoubaoVideo:
+		return updateChannelDoubaoVideoBalance(channel)
 	default:
 		return 0, common.NewMessage("Not implemented yet")
 	}

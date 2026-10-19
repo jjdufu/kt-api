@@ -121,7 +121,9 @@ func logHelper(ctx context.Context, level string, msg string) {
 	}
 }
 
-// LogQuota formats a quota for a server log line.
+// LogQuota formats a quota for a server log line. A site that configured a
+// currency display (CNY or a custom symbol) gets that currency; otherwise the
+// raw quota points are printed instead of assuming US dollars.
 func LogQuota(quota int) string {
 	// 新逻辑：根据额度展示类型输出
 	q := float64(quota)
@@ -142,10 +144,8 @@ func LogQuota(quota int) string {
 		}
 		v := usd * rate
 		return common.LogText("%s%.6f quota", symbol, v)
-	case operation_setting.QuotaDisplayTypeTokens:
+	default: // tokens, or the default USD display: no currency is assumed
 		return common.LogText("%d quota points", quota)
-	default: // USD
-		return common.LogText("＄%.6f quota", q/common.QuotaPerUnit)
 	}
 }
 

@@ -17,9 +17,12 @@ type TaskView struct {
 	Data       any    `json:"data,omitempty"`
 	FailReason string `json:"fail_reason"`
 	FinishedAt int64  `json:"finished_at,omitempty"`
-	Platform   string `json:"platform"`
-	Progress   string `json:"progress"`
-	Status     string `json:"status"`
-	TaskID     string `json:"task_id"`
-	UpdatedAt  int64  `json:"updated_at,omitempty"`
+	// Model is the model name sent upstream (after channel mapping), the
+	// name the supplier reports back in its own task object.
+	Model     string `json:"model,omitempty"`
+	Platform  string `json:"platform"`
+	Progress  string `json:"progress"`
+	Status    string `json:"status"`
+	TaskID    string `json:"task_id"`
+	UpdatedAt int64  `json:"updated_at,omitempty"`
 }

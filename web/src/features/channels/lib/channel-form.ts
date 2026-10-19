@@ -43,6 +43,11 @@ import {
 } from './advanced-custom'
 import { readTaskExtendPluginKeys } from './channel-plugin-extensions'
 import { supportsResponsesWebSocket } from './responses-websocket'
+import {
+  DEFAULT_UPSTREAM_QUOTA_PER_UNIT,
+  getUpstreamQuotaPerUnit,
+  isValidUpstreamQuotaPerUnit,
+} from './upstream-quota-per-unit'
 
 // ============================================================================
 // Form Validation Schema
@@ -293,6 +298,7 @@ export const channelFormSchema = z
     ollama_openai_chat: z.boolean().optional(), // Ollama: OpenAI-compatible /v1/chat/completions instead of native /api/chat
     disable_task_polling_sleep: z.boolean().optional(),
     upstream_task_callback_enabled: z.boolean().optional(), // Doubao video: send kt-api's own task callback URL upstream
+    upstream_quota_per_unit: z.number().optional(), // Doubao video: New API upstream quota points per currency unit (balance)
     // Upstream model update settings (stored in settings JSON)
     upstream_model_update_check_enabled: z.boolean().optional(),
     upstream_model_update_auto_sync_enabled: z.boolean().optional(),
@@ -407,6 +413,18 @@ export const channelFormSchema = z
       )
     }
 
+    if (
+      data.type === CHANNEL_TYPE_DOUBAO_VIDEO &&
+      data.upstream_quota_per_unit !== undefined &&
+      !isValidUpstreamQuotaPerUnit(data.upstream_quota_per_unit)
+    ) {
+      addRequiredIssue(
+        ctx,
+        'upstream_quota_per_unit',
+        ERROR_MESSAGES.INVALID_UPSTREAM_QUOTA_PER_UNIT
+      )
+    }
+
     const protocol = normalizeHttpProtocol(data.http_protocol)
     const shards = data.http2_connection_shards ?? 1
     if (shards < 1 || shards > MAX_HTTP2_CONNECTION_SHARDS) {
@@ -488,6 +506,7 @@ export const CHANNEL_FORM_DEFAULT_VALUES: ChannelFormValues = {
   ollama_openai_chat: false,
   disable_task_polling_sleep: false,
   upstream_task_callback_enabled: false,
+  upstream_quota_per_unit: DEFAULT_UPSTREAM_QUOTA_PER_UNIT,
   upstream_model_update_check_enabled: false,
   upstream_model_update_auto_sync_enabled: false,
   upstream_model_update_ignored_models: '',
@@ -565,6 +584,7 @@ export function transformChannelToFormDefaults(
   let ollamaOpenAIChat = false
   let disableTaskPollingSleep = false
   let upstreamTaskCallbackEnabled = false
+  let upstreamQuotaPerUnit = DEFAULT_UPSTREAM_QUOTA_PER_UNIT
   let upstreamModelUpdateCheckEnabled = false
   let upstreamModelUpdateAutoSyncEnabled = false
   let upstreamModelUpdateIgnoredModels = ''
@@ -590,6 +610,7 @@ export function transformChannelToFormDefaults(
       disableTaskPollingSleep = parsed.disable_task_polling_sleep === true
       upstreamTaskCallbackEnabled =
         parsed.upstream_task_callback_enabled === true
+      upstreamQuotaPerUnit = getUpstreamQuotaPerUnit(parsed)
       upstreamModelUpdateCheckEnabled =
         parsed.upstream_model_update_check_enabled === true
       upstreamModelUpdateAutoSyncEnabled =
@@ -652,6 +673,7 @@ export function transformChannelToFormDefaults(
     ollama_openai_chat: ollamaOpenAIChat,
     disable_task_polling_sleep: disableTaskPollingSleep,
     upstream_task_callback_enabled: upstreamTaskCallbackEnabled,
+    upstream_quota_per_unit: upstreamQuotaPerUnit,
     allow_safety_identifier: allowSafetyIdentifier,
     upstream_model_update_check_enabled: upstreamModelUpdateCheckEnabled,
     upstream_model_update_auto_sync_enabled: upstreamModelUpdateAutoSyncEnabled,
@@ -827,6 +849,18 @@ function buildSettingsJSON(formData: ChannelFormValues): string {
     settingsObj.upstream_task_callback_enabled = true
   } else if ('upstream_task_callback_enabled' in settingsObj) {
     delete settingsObj.upstream_task_callback_enabled
+  }
+
+  // Only Doubao video channels convert a New API upstream's quota into a
+  // balance; the default (or an empty field) is not stored.
+  if (
+    formData.type === CHANNEL_TYPE_DOUBAO_VIDEO &&
+    isValidUpstreamQuotaPerUnit(formData.upstream_quota_per_unit) &&
+    formData.upstream_quota_per_unit !== DEFAULT_UPSTREAM_QUOTA_PER_UNIT
+  ) {
+    settingsObj.upstream_quota_per_unit = formData.upstream_quota_per_unit
+  } else if ('upstream_quota_per_unit' in settingsObj) {
+    delete settingsObj.upstream_quota_per_unit
   }
 
   // Upstream model update settings (for model-fetchable channel types)

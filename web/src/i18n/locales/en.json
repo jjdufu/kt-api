@@ -7331,6 +7331,11 @@
     "Wait between the documented retries.": "Wait between the documented retries.",
     "We could not load task callbacks.": "We could not load task callbacks.",
     "When to send the fast-path URL to the supplier": "When to send the fast-path URL to the supplier",
-    "Write-only. Leave empty to keep the current secret. Each user gets a secret derived from it.": "Write-only. Leave empty to keep the current secret. Each user gets a secret derived from it."
+    "Write-only. Leave empty to keep the current secret. Each user gets a secret derived from it.": "Write-only. Leave empty to keep the current secret. Each user gets a secret derived from it.",
+    "Upstream quota per unit": "Upstream quota per unit",
+    "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.": "For a New API compatible supplier: the balance is the key's remaining quota (GET /api/usage/token/) divided by this value, in the supplier's currency unit. New API defaults to {{value}}.",
+    "Upstream quota per unit must be a positive number": "Upstream quota per unit must be a positive number",
+    "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}": "In the supplier's currency unit: remaining upstream quota ÷ {{perUnit}}",
+    "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})": "Balance needs a New API compatible upstream: GET /api/usage/token/ with the channel key failed ({{error}})"
   }
 }

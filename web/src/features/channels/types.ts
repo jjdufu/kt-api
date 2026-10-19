@@ -111,6 +111,7 @@ export interface ChannelOtherSettings {
   ollama_openai_chat?: boolean
   disable_task_polling_sleep?: boolean
   upstream_task_callback_enabled?: boolean
+  upstream_quota_per_unit?: number
   upstream_model_update_check_enabled?: boolean
   upstream_model_update_auto_sync_enabled?: boolean
   upstream_model_update_ignored_models?: string[]

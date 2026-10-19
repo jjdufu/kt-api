@@ -82,3 +82,39 @@ func TestDoubaoVideoSubmitCallbackURL(t *testing.T) {
 		assert.Equal(t, "https://kt.example/api/task-callback/upstream/tok", body["callback_url"])
 	})
 }
+
+func TestDoubaoTaskStatusRender(t *testing.T) {
+	_, plugin := newDoubaoPlugin(t)
+	render := func(t *testing.T, view map[string]any) string {
+		t.Helper()
+		value, err := plugin.Engine.CallPath(t.Context(), "native", []string{"taskStatus"}, map[string]any{"path": "/api/v3/contents/generations/tasks/task_pub", "method": "GET"}, view)
+		require.NoError(t, err)
+		encoded, err := common.Marshal(value)
+		require.NoError(t, err)
+		return string(encoded)
+	}
+	const model = "doubao-seedance-2-0-mini-260615"
+
+	t.Run("before the first poll the submit response renders a documented queued body", func(t *testing.T) {
+		body := render(t, map[string]any{
+			"task_id": "task_pub", "status": "SUBMITTED", "model": model, "created_at": 1792392305, "updated_at": 1792392306,
+			"data": map[string]any{"id": "task_pub"},
+		})
+		assert.JSONEq(t, `{"id":"task_pub","model":"`+model+`","status":"queued","created_at":1792392305,"updated_at":1792392306}`, body)
+	})
+	t.Run("updated_at falls back to created_at and an empty data renders the same shape", func(t *testing.T) {
+		body := render(t, map[string]any{"task_id": "task_pub", "status": "NOT_START", "model": model, "created_at": 1792392305})
+		assert.JSONEq(t, `{"id":"task_pub","model":"`+model+`","status":"queued","created_at":1792392305,"updated_at":1792392305}`, body)
+	})
+	t.Run("a supplier task object passes through with the public id", func(t *testing.T) {
+		body := render(t, map[string]any{
+			"task_id": "task_pub", "status": "IN_PROGRESS", "model": model, "created_at": 1,
+			"data": map[string]any{"id": "task_pub", "model": "upstream-model", "status": "running", "created_at": 1792392305, "updated_at": 1792392305, "draft": false},
+		})
+		assert.JSONEq(t, `{"id":"task_pub","model":"upstream-model","status":"running","created_at":1792392305,"updated_at":1792392305,"draft":false}`, body)
+	})
+	t.Run("a host-decided failure without supplier data keeps the error", func(t *testing.T) {
+		body := render(t, map[string]any{"task_id": "task_pub", "status": "FAILURE", "fail_reason": "boom", "model": model, "created_at": 5, "updated_at": 6})
+		assert.JSONEq(t, `{"id":"task_pub","model":"`+model+`","status":"failed","created_at":5,"updated_at":6,"error":{"message":"boom"}}`, body)
+	})
+}

@@ -86,17 +86,22 @@ func TestTaskCallbackEnqueueOnStatusTransitions(t *testing.T) {
 	database := setupTaskCallbackEnqueueDB(t)
 	task := newSeedanceCallbackTask(t, database, "task_cb_flow", true)
 
-	// Status missing before the first poll: nothing is enqueued.
+	// Before the first poll the data is still the submit response; GET (and
+	// so the snapshot) renders it as queued, which is enqueued once.
 	require.True(t, transitionSeedanceTask(t, task, model.TaskStatusSubmitted, `{"id":"cgt-task_cb_flow","model":"m"}`) || true)
-	assert.Empty(t, taskCallbackEvents(t, database, task.TaskID))
+	events := taskCallbackEvents(t, database, task.TaskID)
+	require.Len(t, events, 1)
+	assert.Equal(t, "queued", events[0].Status)
 
+	// The supplier's own queued object is the same public status: no new event.
 	require.True(t, transitionSeedanceTask(t, task, model.TaskStatusQueued, `{"id":"cgt-task_cb_flow","model":"m","status":"queued"}`))
+	require.Len(t, taskCallbackEvents(t, database, task.TaskID), 1)
 	require.True(t, transitionSeedanceTask(t, task, model.TaskStatusInProgress, `{"id":"cgt-task_cb_flow","model":"m","status":"running"}`))
 	// Same public status with changed data: no new event.
 	require.True(t, transitionSeedanceTask(t, task, model.TaskStatusInProgress, `{"id":"cgt-task_cb_flow","model":"m","status":"running","seed":1}`))
 	require.True(t, transitionSeedanceTask(t, task, model.TaskStatusSuccess, `{"id":"cgt-task_cb_flow","model":"m","status":"succeeded","content":{"video_url":"https://cdn.example/v.mp4?a=1&b=2"}}`))
 
-	events := taskCallbackEvents(t, database, task.TaskID)
+	events = taskCallbackEvents(t, database, task.TaskID)
 	require.Len(t, events, 3)
 	statuses := []string{events[0].Status, events[1].Status, events[2].Status}
 	assert.Equal(t, []string{"queued", "running", "succeeded"}, statuses)

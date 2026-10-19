@@ -132,6 +132,7 @@ func TestUpdateChannelNewAPIBalanceUsesTheSmallerRemainingQuota(t *testing.T) {
 		{name: "key quota alone without user quota", usage: `{"code":true,"data":{"total_available":1500000,"unlimited_quota":false}}`, want: 1.5},
 		{name: "unlimited key without user quota", usage: `{"code":true,"data":{"total_available":0,"unlimited_quota":true}}`, wantErr: "Allow querying user quota"},
 		{name: "upstream rejects the key", usage: `{"success":false,"message":"invalid token"}`, wantErr: "invalid token"},
+		{name: "usage without an amount is not an empty balance", usage: `{"code":true,"data":{}}`, wantErr: "missing data.total_available"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			setupSub2APIBalanceTest(t)
