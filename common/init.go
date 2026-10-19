@@ -23,10 +23,8 @@ var (
 )
 
 func printHelp() {
-	fmt.Println("NewAPI(Based OneAPI) " + Version + " - The next-generation LLM gateway and AI asset management system supports multiple languages.")
-	fmt.Println("Original Project: OneAPI by JustSong - https://github.com/songquanpeng/one-api")
-	fmt.Println("Maintainer: QuantumNous - https://github.com/QuantumNous/new-api")
-	fmt.Println("Usage: newapi [--port <port>] [--log-dir <log directory>] [--version] [--help]")
+	fmt.Println("kt-api " + Version + " - AI API relay gateway, based on New API and One API (AGPL-3.0).")
+	fmt.Println("Usage: new-api [--port <port>] [--log-dir <log directory>] [--version] [--help]")
 }
 
 func InitEnv() {
