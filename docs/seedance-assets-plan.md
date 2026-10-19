@@ -121,38 +121,38 @@
 
 ### Step 2 — 路由 + PrepareAssetRoute + controller/handler 骨架
 
-- [ ] `POST /api/assets/` 注册（TokenAuth + rate limit + Prepare + Distribute + handler）
-- [ ] Action/Version 白名单；非法 Action → 火山信封错误
-- [ ] Handler 能把请求转发到渠道 BaseURL（无业务侧写库亦可先通）
+- [x] `POST /api/assets/` 注册（TokenAuth + rate limit + Prepare + Distribute + handler）
+- [x] Action/Version 白名单；非法 Action → 火山信封错误
+- [x] Handler 能把请求转发到渠道 BaseURL（无业务侧写库亦可先通）
 
 **验收**：本地用 mock 上游打通 CreateAssetGroup 往返；`go vet` 干净。
 
 ### Step 3 — 12 Action 的所有权 / pin / multipart
 
-- [ ] 写操作成功后落本地行；读/改/删前校验归属
-- [ ] ListAssetGroups 注入 GroupIds
-- [ ] CreateAsset / GetAsset multipart 兼容
-- [ ] 删除：上游失败保留本地；删组级联本地 assets
-- [ ] GetVisualValidateResult 成功 → 登记 LivenessFace 组并删会话
-- [ ] pin：`ChannelPin` + 多 key fingerprint
+- [x] 写操作成功后落本地行；读/改/删前校验归属
+- [x] ListAssetGroups 注入 GroupIds
+- [x] CreateAsset / GetAsset multipart 兼容
+- [x] 删除：上游失败保留本地；删组级联本地 assets
+- [x] GetVisualValidateResult 成功 → 登记 LivenessFace 组并删会话
+- [x] pin：`ChannelPin` + 多 key fingerprint
 
 **验收**：跨用户 ID 返回 record not found / 等价；同用户 pin 到创建渠道。
 
 ### Step 4 — 虚拟模型计费 + 消费日志
 
-- [ ] 默认价：`seedance-asset`=0，`seedance-visual-validate`=按次（可配置），`seedance-visual-validate-result`=0
-- [ ] 全路径 `NewBillingSession` → 成功 Settle / 失败 Refund
-- [ ] 零价仍 `RecordConsumeLog`
-- [ ] 遵守 `.agents/rules/billing.md`（无负向扣费、预扣后结算）
+- [x] 默认价：`seedance-asset`=0，`seedance-visual-validate`=按次（可配置），`seedance-visual-validate-result`=0
+- [x] 全路径 `NewBillingSession` → 成功 Settle / 失败 Refund
+- [x] 零价仍 `RecordConsumeLog`
+- [x] 遵守 `.agents/rules/billing.md`（无负向扣费、预扣后结算）
 
 **验收**：测试断言 settle/refund 与日志 model 名；真人认证仅在 create session 扣费。
 
 ### Step 5 — 视频别名 + plugin `asset://` intent + callback_url
 
-- [ ] 别名路由挂到与 Doubao 插件等价的 submit/query
-- [ ] plugin 从 `content[].*url` 收集 `asset://` → intent → middleware pin（同渠道/key）
-- [ ] `callback_url`：剥离供应商回调或改为 kt-api 中转后再通知客户（二选一，实现时选更安全且少改插件协议的方案并在 commit 说明）
-- [ ] 错误信封尽量与供应商文档对齐（`error.code/type/request_id`）
+- [x] 别名路由挂到与 Doubao 插件等价的 submit/query
+- [x] plugin 从 `content[].*url` 收集 `asset://` → intent → middleware pin（同渠道/key）
+- [x] `callback_url`：剥离供应商回调或改为 kt-api 中转后再通知客户（二选一，实现时选更安全且少改插件协议的方案并在 commit 说明）
+- [x] 错误信封尽量与供应商文档对齐（`error.code/type/request_id`）
 
 **验收**：带 `asset://` 的提交命中 pin；别名路径可编译并由测试覆盖路由存在。
 
@@ -160,20 +160,20 @@
 
 集中测试文件，覆盖：
 
-- [ ] 跨用户 deny
-- [ ] pin 同渠道（及 key fingerprint）
-- [ ] billing settle / refund
-- [ ] BytedToken hash / 过期 / 单次
-- [ ] ListAssetGroups 注入
-- [ ] multipart CreateAsset
-- [ ] 视频别名路由
+- [x] 跨用户 deny
+- [x] pin 同渠道（及 key fingerprint）
+- [x] billing settle / refund
+- [x] BytedToken hash / 过期 / 单次
+- [x] ListAssetGroups 注入
+- [x] multipart CreateAsset
+- [x] 视频别名路由
 
 **验收**：`go test` 目标包通过；不引入脆弱的随机/sleep 压测。
 
 ### Step 7 — 收尾：文档进度、PR、CI、release-please
 
-- [ ] 本计划全部 checkbox 勾选
-- [ ] `go build` / `go vet` / 相关测试在 box 通过（前端交 Actions，防 OOM）
+- [x] 本计划全部 checkbox 勾选
+- [x] `go build` / `go vet` / 相关测试在 box 通过（前端交 Actions，防 OOM）
 - [ ] Push `feat/seedance-assets`；开 PR → 等 CI → 必要时 approve Actions → merge
 - [ ] merge 后等 release-please 开版本 PR（`feat:` 提交触发）→ approve smoke → merge
 - [ ] 确认 Docker Hub `dex2all/ktapi:<ver>`（当前 main 为 `0.0.1`，期望 bump 到 `0.0.2` 或按 release-please 规则）
@@ -205,3 +205,6 @@
 |----------------------|------|------|
 | 2026-10-19 | Step 0 | 创建本计划并单独提交 |
 | 2026-10-19 | Step 1 | 模型 + AutoMigrate + 所有权单测通过 |
+| 2026-10-19 | Step 2–4 | 原生 asset relay：路由/中间件/转发/所有权/计费 |
+| 2026-10-19 | Step 5 | 视频别名 + asset:// pin + 剥离 callback_url |
+| 2026-10-19 | Step 6 | httptest/单元测试通过 |
