@@ -17,6 +17,11 @@ import (
 	"github.com/QuantumNous/new-api/setting/system_setting"
 )
 
+// ContextKeySeedanceCallbackTarget carries the validated customer
+// callback_url (*TaskCallbackTarget) from the submit middleware to the
+// submit handler.
+const ContextKeySeedanceCallbackTarget = "seedance_callback_target"
+
 // taskCallbackResolveTimeout bounds the submit-time DNS check of a customer
 // callback_url host.
 const taskCallbackResolveTimeout = 2 * time.Second

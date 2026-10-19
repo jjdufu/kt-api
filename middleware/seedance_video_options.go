@@ -2,9 +2,12 @@ package middleware
 
 import (
 	"encoding/json"
+	"net/http"
+	"strings"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/service"
+	"github.com/QuantumNous/new-api/setting/system_setting"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +16,7 @@ import (
 // on itself (the request body is still relayed by the Doubao plugin).
 type seedanceVideoTaskOptions struct {
 	ExecutionExpiresAfter json.RawMessage `json:"execution_expires_after"`
+	CallbackURL           json.RawMessage `json:"callback_url"`
 }
 
 // SeedanceVideoTaskOptions reads gateway-side options from the Seedance create
@@ -31,8 +35,41 @@ func SeedanceVideoTaskOptions() gin.HandlerFunc {
 				c.Set(service.ContextKeySeedanceExecutionExpiresAfter, normalized)
 			}
 		}
+		if !applySeedanceCallbackURL(c, options.CallbackURL) {
+			return
+		}
 		c.Next()
 	}
+}
+
+// applySeedanceCallbackURL validates the optional customer callback_url
+// before any billing happens and stores the target for the submit handler,
+// which records the subscription once the task is durable. The URL itself is
+// never forwarded upstream (the Doubao plugin strips it). When task
+// callbacks are disabled the field is ignored, as before.
+func applySeedanceCallbackURL(c *gin.Context, raw json.RawMessage) bool {
+	if len(raw) == 0 || string(raw) == "null" {
+		return true
+	}
+	if !system_setting.GetTaskCallbackSetting().Enabled {
+		return true
+	}
+	var value string
+	if raw[0] != '"' || common.Unmarshal(raw, &value) != nil {
+		abortTaskPluginRouteErrorDetail(c, http.StatusBadRequest, "callback_url must be a string")
+		return false
+	}
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return true
+	}
+	target, err := service.ValidateTaskCallbackURL(c.Request.Context(), value)
+	if err != nil {
+		abortTaskPluginRouteErrorDetail(c, http.StatusBadRequest, err.Error())
+		return false
+	}
+	c.Set(service.ContextKeySeedanceCallbackTarget, target)
+	return true
 }
 
 // seedanceIntegerField decodes an optional JSON integer; anything else is

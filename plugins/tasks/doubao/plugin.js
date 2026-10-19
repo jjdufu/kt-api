@@ -841,8 +841,9 @@ export function buildSubmitRequest(ctx) {
   const seconds = Number.parseInt(req.seconds || "", 10);
   if (seconds > 0 || seconds === -1) body.duration = seconds;
   body.model = ctx.upstreamModel || body.model;
-  // Strip customer callback_url: kt-api polls and settles; upstream callbacks
-  // would bypass gateway ownership and billing invariants.
+  // Strip customer callback_url: the host validates it on submit, stores it
+  // in task_callback_subscriptions and delivers callbacks itself from the
+  // polled state, so upstream never sees the customer URL.
   if (Object.prototype.hasOwnProperty.call(body, "callback_url")) delete body.callback_url;
   return {
     url: apiRoot(ctx) + "/api/v3/contents/generations/tasks",
