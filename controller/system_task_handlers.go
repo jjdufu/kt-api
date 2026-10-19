@@ -9,6 +9,7 @@ import (
 	"github.com/QuantumNous/new-api/model"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/setting/operation_setting"
+	"github.com/QuantumNous/new-api/setting/system_setting"
 )
 
 // RegisterScheduledSystemTasks wires the periodic channel test, upstream model
@@ -21,6 +22,8 @@ func RegisterScheduledSystemTasks() {
 	service.RegisterSystemTaskHandler(modelUpdateHandler{})
 	service.RegisterSystemTaskHandler(midjourneyPollHandler{})
 	service.RegisterSystemTaskHandler(asyncTaskPollHandler{})
+	service.RegisterSystemTaskHandler(taskCallbackCleanupHandler{})
+	service.RegisterSystemTaskHandler(taskCallbackReconcileHandler{})
 }
 
 // channelTestHandler runs the scheduled "test all channels" job. Enablement and
@@ -148,6 +151,50 @@ func (asyncTaskPollHandler) NewPayload() any { return nil }
 
 func (asyncTaskPollHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
 	summary := service.RunTaskPollingOnce(ctx, service.NewSystemTaskProgressReporter(task, runnerID))
+	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
+}
+
+// taskCallbackCleanupHandler deletes finished task callback events and stale
+// subscriptions past task_callback_setting.retention_days once an hour.
+type taskCallbackCleanupHandler struct{}
+
+func (taskCallbackCleanupHandler) Type() string { return model.SystemTaskTypeTaskCallbackCleanup }
+
+func (taskCallbackCleanupHandler) Enabled() bool { return true }
+
+func (taskCallbackCleanupHandler) Interval() time.Duration { return time.Hour }
+
+func (taskCallbackCleanupHandler) NewPayload() any { return nil }
+
+func (taskCallbackCleanupHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
+	summary, err := service.CleanupTaskCallbacks(ctx)
+	if err != nil {
+		finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusFailed, summary, err)
+		return
+	}
+	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
+}
+
+// taskCallbackReconcileHandler enqueues callback events for open
+// subscriptions whose task status changed outside the transactional path.
+type taskCallbackReconcileHandler struct{}
+
+func (taskCallbackReconcileHandler) Type() string { return model.SystemTaskTypeTaskCallbackReconcile }
+
+func (taskCallbackReconcileHandler) Enabled() bool {
+	return system_setting.GetTaskCallbackSetting().Enabled && service.HasOpenTaskCallbackSubscriptions()
+}
+
+func (taskCallbackReconcileHandler) Interval() time.Duration { return time.Minute }
+
+func (taskCallbackReconcileHandler) NewPayload() any { return nil }
+
+func (taskCallbackReconcileHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
+	summary, err := service.ReconcileTaskCallbacks(ctx)
+	if err != nil {
+		finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusFailed, summary, err)
+		return
+	}
 	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
 }
 

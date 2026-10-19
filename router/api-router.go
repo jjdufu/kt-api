@@ -26,6 +26,10 @@ func SetApiRouter(router *gin.Engine) {
 		apiRouter.GET("/setup", controller.GetSetup)
 		apiRouter.POST("/setup", anonymousRequestBodyLimit, controller.PostSetup)
 		apiRouter.GET("/status", controller.GetStatus)
+		// Task callback fast path: upstream calls back with a per-task token
+		// (no user auth; the token is the credential and only triggers a
+		// re-query).
+		apiRouter.POST("/task-callback/upstream/:token", middleware.DisableCache(), controller.HandleTaskUpstreamCallback)
 		apiRouter.GET("/uptime/status", controller.GetUptimeKumaStatus)
 		apiRouter.GET("/models", middleware.UserAuth(), controller.DashboardListModels)
 		apiRouter.GET("/status/test", middleware.AdminAuth(), controller.TestStatus)
@@ -119,6 +123,7 @@ func SetApiRouter(router *gin.Engine) {
 				selfRoute.POST("/passkey/verify/finish", middleware.UserCriticalRateLimit("security-verification"), middleware.DisableCache(), controller.PasskeyVerifyFinish)
 				selfRoute.DELETE("/passkey", middleware.DisableCache(), controller.PasskeyDelete)
 				selfRoute.GET("/aff", controller.GetAffCode)
+				selfRoute.GET("/task_callback/signing", middleware.DisableCache(), controller.GetSelfTaskCallbackSigning)
 				selfRoute.GET("/topup/info", controller.GetTopUpInfo)
 				selfRoute.GET("/topup/self", controller.GetUserTopUps)
 				selfRoute.POST("/topup", middleware.CriticalRateLimit(), controller.TopUp)
@@ -382,6 +387,14 @@ func SetApiRouter(router *gin.Engine) {
 			taskRoute.GET("/self", middleware.UserAuth(), controller.GetUserTask)
 			taskRoute.GET("", middleware.AdminAuth(), controller.GetAllTask)
 			taskRoute.GET("/:task_id/artifacts", middleware.UserAuth(), controller.GetDashboardTaskArtifacts)
+			taskRoute.GET("/:task_id/callbacks", middleware.UserAuth(), controller.GetTaskCallbacks)
+		}
+
+		taskCallbackAdminRoute := apiRouter.Group("/admin/task-callbacks")
+		taskCallbackAdminRoute.Use(middleware.AdminAuth())
+		{
+			taskCallbackAdminRoute.GET("", controller.AdminListTaskCallbackEvents)
+			taskCallbackAdminRoute.POST("/:event_id/redeliver", controller.AdminRedeliverTaskCallbackEvent)
 		}
 
 		vendorRoute := apiRouter.Group("/vendors")

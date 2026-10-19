@@ -81,6 +81,7 @@ var accessTokenRouteRules = map[string]accessTokenRouteRule{
 	"POST /api/user/passkey/verify/finish":         accessTokenAnyRule,
 	"DELETE /api/user/passkey":                     accessTokenScopeRule("account_security:write"),
 	"GET /api/user/aff":                            accessTokenScopeRule("wallet:read"),
+	"GET /api/user/task_callback/signing":          accessTokenScopeRule("account_security:read"),
 	"GET /api/user/topup/info":                     accessTokenScopeRule("wallet:read"),
 	"GET /api/user/topup/self":                     accessTokenScopeRule("wallet:read"),
 	"POST /api/user/topup":                         accessTokenScopeRule("wallet:write"),
@@ -262,6 +263,10 @@ var accessTokenRouteRules = map[string]accessTokenRouteRule{
 	"GET /api/task/self":               accessTokenScopeRule("usage:read"),
 	"GET /api/task":                    accessTokenScopeRule("log:read"),
 	"GET /api/task/:task_id/artifacts": accessTokenScopeRule("usage:read"),
+	"GET /api/task/:task_id/callbacks": accessTokenScopeRule("usage:read"),
+	// router/api-router.go: /api/admin/task-callbacks
+	"GET /api/admin/task-callbacks":                      accessTokenScopeRule("ops:read"),
+	"POST /api/admin/task-callbacks/:event_id/redeliver": accessTokenScopeRule("ops:write"),
 
 	// router/api-router.go: /api/vendors, /api/models (admin)
 	"POST /api/vendors/operations/preview":  accessTokenScopeRule("model:read"),

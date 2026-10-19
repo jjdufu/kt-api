@@ -841,9 +841,13 @@ export function buildSubmitRequest(ctx) {
   const seconds = Number.parseInt(req.seconds || "", 10);
   if (seconds > 0 || seconds === -1) body.duration = seconds;
   body.model = ctx.upstreamModel || body.model;
-  // Strip customer callback_url: kt-api polls and settles; upstream callbacks
-  // would bypass gateway ownership and billing invariants.
+  // Strip customer callback_url: the host validates it on submit, stores it
+  // in task_callback_subscriptions and delivers callbacks itself from the
+  // polled state, so upstream never sees the customer URL.
   if (Object.prototype.hasOwnProperty.call(body, "callback_url")) delete body.callback_url;
+  // Optional fast path: kt-api's own per-task callback URL, only when the
+  // channel enables it; it merely triggers an immediate re-query.
+  if (typeof ctx.upstreamCallbackUrl === "string" && ctx.upstreamCallbackUrl) body.callback_url = ctx.upstreamCallbackUrl;
   return {
     url: apiRoot(ctx) + "/api/v3/contents/generations/tasks",
     method: "POST",
@@ -924,7 +928,22 @@ export function buildQueryRequest(ctx) {
   };
 }
 
-export function parseTaskResult(ctx, body) {
+// The supplier answers a query for a failed task with HTTP 400 and a bare
+// {"error":{...}} envelope that carries no status; that body is the failure.
+function supplierFailedTaskError(body, resp) {
+  if (!resp || resp.status !== 400) return null;
+  if (!body || typeof body !== "object" || Array.isArray(body) || body.status !== undefined) return null;
+  const error = body.error;
+  if (!error || typeof error !== "object" || Array.isArray(error)) return null;
+  return error;
+}
+
+export function parseTaskResult(ctx, body, resp) {
+  const supplierError = supplierFailedTaskError(body, resp);
+  if (supplierError) {
+    const reason = trimmed(supplierError.message) || trimmed(supplierError.code) || "failed";
+    return { status: "FAILURE", progress: "100%", reason: reason };
+  }
   if (body.status === "pending" || body.status === "queued") return { status: "QUEUED", progress: "10%" };
   if (body.status === "processing" || body.status === "running") return { status: "IN_PROGRESS", progress: "50%" };
   if (body.status === "succeeded") {

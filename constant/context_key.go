@@ -23,13 +23,17 @@ const (
 	ContextKeyTokenAutoGroups        ContextKey = "token_auto_groups"
 
 	/* channel related keys */
-	ContextKeyChannelId                ContextKey = "channel_id"
-	ContextKeyChannelName              ContextKey = "channel_name"
-	ContextKeyChannelCreateTime        ContextKey = "channel_create_time"
-	ContextKeyChannelBaseUrl           ContextKey = "base_url"
-	ContextKeyChannelType              ContextKey = "channel_type"
-	ContextKeyChannelSetting           ContextKey = "channel_setting"
-	ContextKeyChannelOtherSetting      ContextKey = "channel_other_setting"
+	ContextKeyChannelId           ContextKey = "channel_id"
+	ContextKeyChannelName         ContextKey = "channel_name"
+	ContextKeyChannelCreateTime   ContextKey = "channel_create_time"
+	ContextKeyChannelBaseUrl      ContextKey = "base_url"
+	ContextKeyChannelType         ContextKey = "channel_type"
+	ContextKeyChannelSetting      ContextKey = "channel_setting"
+	ContextKeyChannelOtherSetting ContextKey = "channel_other_setting"
+	// ContextKeyTaskUpstreamCallbackURL is kt-api's own per-task upstream
+	// callback URL (task callback fast path), injected by task plugins into
+	// the upstream submit request when the channel enables it.
+	ContextKeyTaskUpstreamCallbackURL  ContextKey = "task_upstream_callback_url"
 	ContextKeyChannelParamOverride     ContextKey = "param_override"
 	ContextKeyChannelHeaderOverride    ContextKey = "header_override"
 	ContextKeyChannelOrganization      ContextKey = "channel_organization"

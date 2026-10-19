@@ -31,6 +31,7 @@ import { taskActionMapper, taskStatusMapper } from '../../lib/mappers'
 import { resolveTaskDetailAccess } from '../../lib/task-details'
 import type { TaskLog } from '../../types'
 import { PluginAuthorLink } from '../plugin-author-link'
+import { TaskCallbacksSection } from '../task-callbacks-section'
 
 function DetailRow(props: {
   label: React.ReactNode
@@ -163,6 +164,13 @@ export function TaskDetailsDialog(props: TaskDetailsDialogProps) {
             />
           ) : null}
         </DetailSection>
+
+        {props.open ? (
+          <TaskCallbacksSection
+            taskId={props.log.task_id}
+            isAdmin={props.isAdmin}
+          />
+        ) : null}
 
         {props.isAdmin ? (
           <DetailSection

@@ -86,6 +86,7 @@ const CONFIGURATION_BLOCKS = {
       'http2_connection_shards',
       'tls_insecure_skip_verify',
       'disable_task_polling_sleep',
+      'upstream_task_callback_enabled',
     ],
   },
   upstreamModelDetection: {
@@ -177,7 +178,8 @@ export function getChannelConfigurationState(
       (values.http_protocol && values.http_protocol !== 'auto') ||
       (values.http2_connection_shards ?? 1) > 1 ||
       values.tls_insecure_skip_verify ||
-      values.disable_task_polling_sleep
+      values.disable_task_polling_sleep ||
+      values.upstream_task_callback_enabled
     ),
     upstreamModelDetection:
       MODEL_FETCHABLE_TYPES.has(values.type) &&

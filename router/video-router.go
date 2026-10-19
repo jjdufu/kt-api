@@ -42,6 +42,7 @@ func SetVideoRouter(router *gin.Engine) {
 			middleware.PinSeedanceVideoAlias(),
 			middleware.ModelRequestRateLimit(),
 			middleware.PrepareTaskPluginRoute(),
+			middleware.SeedanceVideoTaskOptions(),
 			middleware.Distribute(),
 			controller.RelayTask,
 		)

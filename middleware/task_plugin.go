@@ -1230,13 +1230,8 @@ func renderTaskPluginQuery(
 	if !multiple {
 		rendererInput = views[0]
 	}
-	encoded, err := common.Marshal(rendererInput)
-	if err != nil {
-		abortTaskPluginRouteError(c, http.StatusInternalServerError)
-		return
-	}
 	renderStarted := time.Now()
-	result, err := pinned.Plugin.Engine.CallPath(c.Request.Context(), "native", []string{renderer}, requestContext.JSValue(), pluginruntime.RawJSON(encoded))
+	body, err := service.RenderTaskPluginBody(c.Request.Context(), pinned.Plugin, renderer, requestContext.JSValue(), rendererInput)
 	if err != nil {
 		logger.LogDebug(
 			c,
@@ -1259,7 +1254,8 @@ func renderTaskPluginQuery(
 		time.Since(renderStarted).Milliseconds(),
 	)
 	c.Abort()
-	c.JSON(http.StatusOK, result)
+	// Same bytes as c.JSON would write; task callbacks reuse this renderer.
+	c.Data(http.StatusOK, "application/json; charset=utf-8", body)
 }
 
 // RespondTaskPluginError gives a pinned plugin a sanitized error DTO and writes

@@ -379,6 +379,8 @@ func migrateDB() error {
 		&AssetGroup{},
 		&Asset{},
 		&VisualValidateSession{},
+		&TaskCallbackSubscription{},
+		&TaskCallbackEvent{},
 	)
 	if err != nil {
 		return err

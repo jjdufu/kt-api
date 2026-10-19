@@ -21,6 +21,12 @@ const (
 	SystemTaskTypeModelUpdate    = "model_update"
 	SystemTaskTypeMidjourneyPoll = "midjourney_poll"
 	SystemTaskTypeAsyncTaskPoll  = "async_task_poll"
+	// SystemTaskTypeTaskCallbackCleanup deletes finished task callback
+	// events and stale subscriptions past the retention period.
+	SystemTaskTypeTaskCallbackCleanup = "task_callback_cleanup"
+	// SystemTaskTypeTaskCallbackReconcile enqueues task callback events
+	// missed by the transactional path.
+	SystemTaskTypeTaskCallbackReconcile = "task_callback_reconcile"
 )
 
 var ErrSystemTaskLockLost = errors.New("system task lock lost")

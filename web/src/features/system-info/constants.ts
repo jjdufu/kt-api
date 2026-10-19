@@ -24,4 +24,6 @@ export const SYSTEM_TASK_TYPE_LABEL: Record<string, string> = {
   model_update: 'Batch upstream model update',
   midjourney_poll: 'Drawing task polling',
   async_task_poll: 'Async task polling',
+  task_callback_cleanup: 'Task callback cleanup',
+  task_callback_reconcile: 'Task callback reconcile',
 }
