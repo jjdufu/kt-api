@@ -128,7 +128,7 @@
       "get": {
         "summary": "获取系统状态",
         "deprecated": false,
-        "description": "🔓 无需鉴权",
+        "description": "🔓 无需鉴权（可选登录；announcements 仅对已登录用户返回）",
         "tags": [
           "系统"
         ],
@@ -203,7 +203,7 @@
       "get": {
         "summary": "获取公告",
         "deprecated": false,
-        "description": "🔓 无需鉴权",
+        "description": "🔐 需要登录（User权限）",
         "tags": [
           "系统"
         ],
@@ -328,7 +328,7 @@
       "get": {
         "summary": "获取定价信息",
         "deprecated": false,
-        "description": "🔓 无需鉴权（可选登录）",
+        "description": "🔐 需要登录（User权限）",
         "tags": [
           "系统"
         ],

@@ -17,10 +17,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import i18n from 'i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import { convertDetectedLanguage } from './languages'
+import {
+  DEFAULT_INTERFACE_LANGUAGE,
+  SUPPORTED_INTERFACE_LANGUAGES,
+  detectInterfaceLanguage,
+  getBrowserLanguages,
+} from './languages'
 import en from './locales/en.json'
 import fr from './locales/fr.json'
 import ja from './locales/ja.json'
@@ -39,26 +43,29 @@ export const resources = {
   zhTW,
 } as const
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'en',
-    supportedLngs: ['en', 'zhCN', 'fr', 'ru', 'ja', 'vi', 'zhTW'],
-    load: 'currentOnly',
-    nsSeparator: false, // Allow literal colons in keys (e.g., URLs, labels)
-    debug: import.meta.env.DEV,
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-      // Browsers report `zh-CN`/`zh-TW`/`zh`; map them onto our `zhCN`/`zhTW`
-      // codes (non-Chinese codes pass through for normal supportedLngs matching).
-      convertDetectedLanguage,
-    },
-  })
+// The interface language always follows the browser/system language; there
+// is no manual switcher and nothing is cached. Clear the value the former
+// language detector persisted so it cannot pin an old choice.
+const LEGACY_LANGUAGE_STORAGE_KEY = 'i18nextLng'
+try {
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem(LEGACY_LANGUAGE_STORAGE_KEY)
+  }
+} catch {
+  /* Storage can be unavailable in private mode. */
+}
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: detectInterfaceLanguage(getBrowserLanguages()),
+  fallbackLng: DEFAULT_INTERFACE_LANGUAGE,
+  supportedLngs: [...SUPPORTED_INTERFACE_LANGUAGES],
+  load: 'currentOnly',
+  nsSeparator: false, // Allow literal colons in keys (e.g., URLs, labels)
+  debug: import.meta.env.DEV,
+  interpolation: {
+    escapeValue: false, // not needed for react as it escapes by default
+  },
+})
 
 export default i18n

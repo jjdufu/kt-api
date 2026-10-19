@@ -86,20 +86,22 @@ func applyAssetOwnershipPin(c *gin.Context, action string) error {
 		}
 		return pinFromAssetGroup(c, userID, groupID)
 	case "ListAssets":
-		groupID, err := peekAssetStringField(c, "GroupId", "group_id")
+		groupIDs, err := peekListAssetsGroupIDs(c)
 		if err != nil {
 			return err
 		}
-		if groupID == "" {
-			groupID, err = peekAssetFilterGroupID(c)
-			if err != nil {
+		if len(groupIDs) == 0 {
+			return fmt.Errorf("Filter.GroupIds must contain at least one asset group id")
+		}
+		// Every requested group must belong to the caller; the channel is
+		// pinned from the first one. The relay handler re-checks the body
+		// before forwarding it upstream.
+		for _, groupID := range groupIDs[1:] {
+			if _, err := model.GetAssetGroupByUser(userID, groupID); err != nil {
 				return err
 			}
 		}
-		if groupID == "" {
-			return fmt.Errorf("Filter.GroupIds must contain at least one asset group id")
-		}
-		return pinFromAssetGroup(c, userID, groupID)
+		return pinFromAssetGroup(c, userID, groupIDs[0])
 	case "GetAssetGroup", "UpdateAssetGroup", "DeleteAssetGroup":
 		groupID, err := peekAssetStringField(c, "Id", "id")
 		if err != nil {
@@ -230,27 +232,39 @@ func peekAssetStringField(c *gin.Context, keys ...string) (string, error) {
 			}
 		}
 	}
-	// Nested Filter.GroupIds is handled in the handler for ListAssets.
 	return "", nil
 }
 
-func peekAssetFilterGroupID(c *gin.Context) (string, error) {
+// peekListAssetsGroupIDs returns the top-level GroupId/group_id followed by
+// every non-empty Filter.GroupIds entry, de-duplicated, without consuming the
+// body. ListAssets is JSON only.
+func peekListAssetsGroupIDs(c *gin.Context) ([]string, error) {
 	var body map[string]any
 	if err := common.UnmarshalBodyReusable(c, &body); err != nil {
-		return "", fmt.Errorf("invalid JSON body")
+		return nil, fmt.Errorf("invalid JSON body")
+	}
+	seen := map[string]bool{}
+	var ids []string
+	add := func(s string) {
+		s = strings.TrimSpace(s)
+		if s != "" && !seen[s] {
+			seen[s] = true
+			ids = append(ids, s)
+		}
+	}
+	for _, key := range []string{"GroupId", "group_id"} {
+		if s, ok := body[key].(string); ok {
+			add(s)
+		}
 	}
 	filter, _ := body["Filter"].(map[string]any)
-	if filter == nil {
-		return "", nil
-	}
-	raw, _ := filter["GroupIds"].([]any)
-	for _, item := range raw {
-		if s, ok := item.(string); ok {
-			s = strings.TrimSpace(s)
-			if s != "" {
-				return s, nil
+	if filter != nil {
+		raw, _ := filter["GroupIds"].([]any)
+		for _, item := range raw {
+			if s, ok := item.(string); ok {
+				add(s)
 			}
 		}
 	}
-	return "", nil
+	return ids, nil
 }

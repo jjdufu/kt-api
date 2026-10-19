@@ -79,6 +79,72 @@ func TestPrepareAssetUpstreamBodyEmptyOwnedForcesSentinel(t *testing.T) {
 	assert.Contains(t, string(out), "__ktapi_no_owned_groups__")
 }
 
+func prepareListAssetsForTest(t *testing.T, body string) ([]byte, error) {
+	t.Helper()
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	c.Request = httptest.NewRequest(http.MethodPost, "/api/assets/?Action=ListAssets&Version=2024-01-01", bytes.NewBufferString(body))
+	c.Request.Header.Set("Content-Type", "application/json")
+	return prepareAssetUpstreamBody(c, 1, "ListAssets")
+}
+
+func seedListAssetsGroups(t *testing.T) {
+	t.Helper()
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 1, GroupId: "g1", GroupType: model.AssetGroupTypeAIGC, ChannelId: 1}))
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 1, GroupId: "g2", GroupType: "OTHER", ChannelId: 1}))
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 9, GroupId: "other", GroupType: model.AssetGroupTypeAIGC, ChannelId: 9}))
+}
+
+func TestPrepareListAssetsRejectsForeignGroupIDs(t *testing.T) {
+	setupAssetRelayTest(t)
+	seedListAssetsGroups(t)
+
+	for _, body := range []string{
+		`{"Filter":{"GroupIds":["g1","other"]}}`,
+		`{"Filter":{"GroupIds":["other"]}}`,
+		`{"GroupId":"g1","Filter":{"GroupIds":["other"]}}`,
+		`{"GroupId":"other"}`,
+		`{"Filter":{"GroupIds":["g1","missing"]}}`,
+	} {
+		_, err := prepareListAssetsForTest(t, body)
+		require.ErrorIs(t, err, model.ErrAssetNotFound, body)
+	}
+}
+
+func TestPrepareListAssetsRejectsMalformedFilter(t *testing.T) {
+	setupAssetRelayTest(t)
+	seedListAssetsGroups(t)
+
+	for _, body := range []string{
+		`{}`,
+		`{"Filter":{"GroupIds":[]}}`,
+		`{"Filter":{"GroupIds":"g1"}}`,
+		`{"Filter":{"GroupIds":["g1",1]}}`,
+	} {
+		_, err := prepareListAssetsForTest(t, body)
+		require.Error(t, err, body)
+	}
+}
+
+func TestPrepareListAssetsAllowsOwnedGroupIDs(t *testing.T) {
+	setupAssetRelayTest(t)
+	seedListAssetsGroups(t)
+
+	// Owned groups of different GroupType are all allowed and kept.
+	out, err := prepareListAssetsForTest(t, `{"Filter":{"GroupIds":["g1"," g2 ","g1"]},"PageNumber":1}`)
+	require.NoError(t, err)
+	var payload map[string]any
+	require.NoError(t, json.Unmarshal(out, &payload))
+	assert.Equal(t, []any{"g1", "g2"}, payload["Filter"].(map[string]any)["GroupIds"])
+	assert.EqualValues(t, 1, payload["PageNumber"])
+
+	// A top-level GroupId alone is moved into Filter.GroupIds.
+	out, err = prepareListAssetsForTest(t, `{"GroupId":"g1"}`)
+	require.NoError(t, err)
+	payload = nil
+	require.NoError(t, json.Unmarshal(out, &payload))
+	assert.Equal(t, []any{"g1"}, payload["Filter"].(map[string]any)["GroupIds"])
+}
+
 func TestAssetResponseHasError(t *testing.T) {
 	assert.True(t, assetResponseHasError("CreateAssetGroup", []byte(`{"ResponseMetadata":{"Error":{"Code":"X"}}}`)))
 	assert.False(t, assetResponseHasError("CreateAssetGroup", []byte(`{"ResponseMetadata":{},"Result":{"Id":"g1"}}`)))

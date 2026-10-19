@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/QuantumNous/new-api/common"
@@ -76,4 +77,32 @@ func TestPrepareAssetRouteRejectsUnknownAction(t *testing.T) {
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Contains(t, w.Body.String(), "Action is not supported")
+}
+
+func TestApplyAssetOwnershipPinListAssetsChecksEveryGroup(t *testing.T) {
+	setupAssetIntentTest(t)
+	require.NoError(t, model.DB.AutoMigrate(&model.AssetGroup{}))
+	base := "https://yisu.example"
+	require.NoError(t, model.DB.Create(&model.Channel{
+		Id: 42, Type: constant.ChannelTypeDoubaoVideo, Status: common.ChannelStatusEnabled,
+		Name: "seedance", Key: "sk", BaseURL: &base,
+	}).Error)
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 7, GroupId: "g1", GroupType: model.AssetGroupTypeAIGC, ChannelId: 42}))
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 7, GroupId: "g2", GroupType: model.AssetGroupTypeAIGC, ChannelId: 42}))
+	require.NoError(t, model.CreateAssetGroupRecord(&model.AssetGroup{UserId: 9, GroupId: "other", GroupType: model.AssetGroupTypeAIGC, ChannelId: 42}))
+
+	run := func(body string) error {
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		c.Request = httptest.NewRequest(http.MethodPost, "/api/assets/?Action=ListAssets", strings.NewReader(body))
+		c.Request.Header.Set("Content-Type", "application/json")
+		common.SetContextKey(c, constant.ContextKeyUserId, 7)
+		_ = service.GetChannelConstraints(c)
+		return applyAssetOwnershipPin(c, "ListAssets")
+	}
+
+	assert.ErrorIs(t, run(`{"Filter":{"GroupIds":["g1","other"]}}`), model.ErrAssetNotFound)
+	assert.ErrorIs(t, run(`{"GroupId":"g1","Filter":{"GroupIds":["other"]}}`), model.ErrAssetNotFound)
+	assert.Error(t, run(`{"Filter":{"GroupIds":[]}}`))
+	assert.NoError(t, run(`{"Filter":{"GroupIds":["g1","g2"]}}`))
+	assert.NoError(t, run(`{"GroupId":"g1"}`))
 }

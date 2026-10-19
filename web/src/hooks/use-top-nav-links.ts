@@ -37,8 +37,7 @@ export type TopNavLink = {
  * {
  *   home: true,
  *   console: true,
- *   pricing: { enabled: true, requireAuth: false },
- *   rankings: { enabled: true, requireAuth: false },
+ *   pricing: { enabled: true, requireAuth: true },
  *   docs: true,
  *   about: true
  * }
@@ -72,18 +71,10 @@ export function useTopNavLinks(): TopNavLink[] {
     links.push({ title: t('Console'), href: '/dashboard' })
   }
 
-  // Pricing
+  // Pricing (model square) is login-only: hidden from visitors.
   const pricing = modules?.pricing
-  if (pricing && typeof pricing === 'object' && pricing.enabled) {
-    const requiresAuth = pricing.requireAuth && !isAuthed
-    links.push({ title: t('Model Square'), href: '/pricing', requiresAuth })
-  }
-
-  // Rankings
-  const rankings = modules?.rankings
-  if (rankings && typeof rankings === 'object' && rankings.enabled) {
-    const requiresAuth = rankings.requireAuth && !isAuthed
-    links.push({ title: t('Rankings'), href: '/rankings', requiresAuth })
+  if (pricing && typeof pricing === 'object' && pricing.enabled && isAuthed) {
+    links.push({ title: t('Model Square'), href: '/pricing' })
   }
 
   // Docs (supports external links)

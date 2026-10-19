@@ -22,13 +22,12 @@ import { readCachedStatus, statusQueryOptions } from '@/lib/status-query'
 
 export type ModuleAccess = { enabled: boolean; requireAuth: boolean }
 
-export type HeaderNavModule = 'rankings' | 'pricing'
+export type HeaderNavModule = 'pricing'
 
 export type HeaderNavModules = {
   home: boolean
   console: boolean
   pricing: ModuleAccess
-  rankings: ModuleAccess
   docs: boolean
   about: boolean
   [key: string]: boolean | ModuleAccess
@@ -37,22 +36,20 @@ export type HeaderNavModules = {
 const DEFAULT_HEADER_NAV_MODULES: HeaderNavModules = {
   home: true,
   console: true,
-  pricing: { enabled: true, requireAuth: false },
-  rankings: { enabled: true, requireAuth: false },
+  // The model square is always login-only; the backend enforces it too.
+  pricing: { enabled: true, requireAuth: true },
   docs: true,
   about: true,
 }
 
 const DEFAULTS: Record<HeaderNavModule, ModuleAccess> = {
   pricing: DEFAULT_HEADER_NAV_MODULES.pricing,
-  rankings: DEFAULT_HEADER_NAV_MODULES.rankings,
 }
 
 function cloneHeaderNavDefaults(): HeaderNavModules {
   return {
     ...DEFAULT_HEADER_NAV_MODULES,
     pricing: { ...DEFAULT_HEADER_NAV_MODULES.pricing },
-    rankings: { ...DEFAULT_HEADER_NAV_MODULES.rankings },
   }
 }
 
@@ -113,11 +110,14 @@ export function parseHeaderNavModules(raw: unknown): HeaderNavModules {
 
   Object.entries(parsed).forEach(([key, value]) => {
     if (key === 'pricing') {
-      result.pricing = parseAccess(value, result.pricing)
+      result.pricing = {
+        ...parseAccess(value, result.pricing),
+        requireAuth: true,
+      }
       return
     }
     if (key === 'rankings') {
-      result.rankings = parseAccess(value, result.rankings)
+      // Removed module; ignore legacy values.
       return
     }
 

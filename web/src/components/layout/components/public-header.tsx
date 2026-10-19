@@ -21,7 +21,6 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/components/dialog'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { NotificationPopover } from '@/components/notification-popover'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -49,7 +48,6 @@ export interface PublicHeaderProps {
   mobileLinks?: TopNavLink[]
   navContent?: React.ReactNode
   showThemeSwitch?: boolean
-  showLanguageSwitcher?: boolean
   logo?: React.ReactNode
   siteName?: string
   homeUrl?: string
@@ -65,7 +63,6 @@ export function PublicHeader(props: PublicHeaderProps) {
   const {
     navLinks = defaultTopNavLinks,
     showThemeSwitch = true,
-    showLanguageSwitcher = true,
     logo: customLogo,
     siteName: customSiteName,
     homeUrl = '/',
@@ -95,6 +92,8 @@ export function PublicHeader(props: PublicHeaderProps) {
 
   const user = auth.user
   const isAuthenticated = !!user
+  // Notice and announcements are for signed-in users only.
+  const showNotificationsPopover = showNotifications && isAuthenticated
   const displaySiteName = customSiteName || systemName
   const links = dynamicLinks.length > 0 ? dynamicLinks : navLinks
 
@@ -279,15 +278,12 @@ export function PublicHeader(props: PublicHeaderProps) {
                 )
               })}
 
-              {(showLanguageSwitcher ||
-                showThemeSwitch ||
-                showNotifications) && (
+              {(showThemeSwitch || showNotificationsPopover) && (
                 <div className='bg-border/40 mx-2 h-4 w-px' />
               )}
 
-              {showLanguageSwitcher && <LanguageSwitcher />}
               {showThemeSwitch && <ThemeSwitch />}
-              {showNotifications && (
+              {showNotificationsPopover && (
                 <NotificationPopover
                   open={notifications.popoverOpen}
                   onOpenChange={notifications.setPopoverOpen}

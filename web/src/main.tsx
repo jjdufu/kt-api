@@ -26,7 +26,11 @@ import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
 import { initializeFrontendCache } from '@/lib/frontend-cache'
 import { createAppQueryClient } from '@/lib/query-client'
-import { readCachedStatus, statusQueryOptions } from '@/lib/status-query'
+import {
+  readCachedStatus,
+  statusQueryOptions,
+  syncStatusWithAuth,
+} from '@/lib/status-query'
 
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
@@ -46,6 +50,7 @@ installBuildMetadata()
 const queryClient = createAppQueryClient(() => {
   void router.navigate({ to: '/500' })
 })
+syncStatusWithAuth(queryClient)
 
 // Create a new router instance
 const router = createRouter({
