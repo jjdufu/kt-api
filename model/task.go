@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql/driver"
 	"encoding/json"
+	"sync/atomic"
 	"time"
 
 	"github.com/QuantumNous/new-api/common"
@@ -12,6 +13,8 @@ import (
 	"github.com/QuantumNous/new-api/pkg/billingexpr"
 	commonRelay "github.com/QuantumNous/new-api/relay/common"
 	"github.com/QuantumNous/new-api/relaykit/dto"
+
+	"gorm.io/gorm"
 )
 
 type TaskStatus string
@@ -576,11 +579,78 @@ func (t *Task) UpdateQuota() error {
 // falls back to INSERT ON CONFLICT when the WHERE-guarded UPDATE matches
 // zero rows, which silently bypasses the CAS guard.
 func (t *Task) UpdateWithStatus(fromStatus TaskStatus) (bool, error) {
-	result := DB.Model(t).Where("status = ?", fromStatus).Select("*").Updates(t)
-	if result.Error != nil {
-		return false, result.Error
+	observer := currentTaskTransitionObserver()
+	if observer == nil || !observer.ObservesTask(t) {
+		result := DB.Model(t).Where("status = ?", fromStatus).Select("*").Updates(t)
+		if result.Error != nil {
+			return false, result.Error
+		}
+		return result.RowsAffected > 0, nil
 	}
-	return result.RowsAffected > 0, nil
+
+	won, notify := false, false
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Model(t).Where("status = ?", fromStatus).Select("*").Updates(t)
+		if result.Error != nil {
+			return result.Error
+		}
+		won = result.RowsAffected > 0
+		if !won {
+			return nil
+		}
+		// The observer runs in a savepoint after the CAS winner's write, so
+		// its rows commit atomically with the task; an observer failure only
+		// rolls back its own writes and never blocks the task update
+		// (reconciliation catches up later).
+		if observeErr := tx.Transaction(func(savepoint *gorm.DB) error {
+			var observeErr error
+			notify, observeErr = observer.OnTaskTransition(savepoint, t)
+			return observeErr
+		}); observeErr != nil {
+			notify = false
+			common.SysError(common.LogText("task transition observer failed for task %s: %s", t.TaskID, observeErr.Error()))
+		}
+		return nil
+	})
+	if err != nil {
+		return false, err
+	}
+	if notify {
+		observer.AfterTaskTransition(t)
+	}
+	return won, nil
+}
+
+// TaskTransitionObserver reacts to task rows written by UpdateWithStatus.
+// It is installed by the service layer (task callbacks) so the model does not
+// depend on it.
+type TaskTransitionObserver interface {
+	// ObservesTask reports whether a write of this task needs the observer;
+	// unobserved tasks keep the plain single-statement CAS update.
+	ObservesTask(task *Task) bool
+	// OnTaskTransition runs inside the CAS winner's transaction (in a
+	// savepoint) and reports whether AfterTaskTransition should run.
+	OnTaskTransition(tx *gorm.DB, task *Task) (bool, error)
+	// AfterTaskTransition runs after the transaction committed.
+	AfterTaskTransition(task *Task)
+}
+
+var taskTransitionObserver atomic.Pointer[TaskTransitionObserver]
+
+// SetTaskTransitionObserver installs (or, with nil, removes) the observer.
+func SetTaskTransitionObserver(observer TaskTransitionObserver) {
+	if observer == nil {
+		taskTransitionObserver.Store(nil)
+		return
+	}
+	taskTransitionObserver.Store(&observer)
+}
+
+func currentTaskTransitionObserver() TaskTransitionObserver {
+	if observer := taskTransitionObserver.Load(); observer != nil {
+		return *observer
+	}
+	return nil
 }
 
 // TaskBulkUpdateByID performs an unconditional bulk UPDATE by primary key IDs.

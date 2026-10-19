@@ -185,3 +185,24 @@ func arkMaxDeadlineMinutes() int64 {
 // ContextKeySeedanceExecutionExpiresAfter carries the validated
 // execution_expires_after of a Seedance create request to task persistence.
 const ContextKeySeedanceExecutionExpiresAfter = "seedance_execution_expires_after"
+
+// rewriteArkBulkFailureData gives Seedance tasks failed by a bulk update the
+// Ark failed body, so GET and callbacks report status "failed" with an error
+// instead of the last upstream snapshot. Billing is untouched; callback
+// reconciliation enqueues the failed event.
+func rewriteArkBulkFailureData(tasks map[string]*model.Task, upstreamIDs []string, reason string) {
+	now := common.GetTimestamp()
+	for _, upstreamID := range upstreamIDs {
+		task, ok := tasks[upstreamID]
+		if !ok || task == nil || !IsArkVideoTask(task) {
+			continue
+		}
+		data := arkTerminalTaskData(task, ArkTaskStatusFailed, arkLocalFailureCode(reason), reason, now)
+		if len(data) == 0 {
+			continue
+		}
+		if err := model.TaskBulkUpdateByID([]int64{task.ID}, map[string]any{"data": common.RawMessage(data)}); err != nil {
+			common.SysError(common.LogText("rewrite failed task data for %s: %v", task.TaskID, err))
+		}
+	}
+}

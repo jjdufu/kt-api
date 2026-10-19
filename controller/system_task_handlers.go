@@ -9,6 +9,7 @@ import (
 	"github.com/QuantumNous/new-api/model"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/setting/operation_setting"
+	"github.com/QuantumNous/new-api/setting/system_setting"
 )
 
 // RegisterScheduledSystemTasks wires the periodic channel test, upstream model
@@ -22,6 +23,7 @@ func RegisterScheduledSystemTasks() {
 	service.RegisterSystemTaskHandler(midjourneyPollHandler{})
 	service.RegisterSystemTaskHandler(asyncTaskPollHandler{})
 	service.RegisterSystemTaskHandler(taskCallbackCleanupHandler{})
+	service.RegisterSystemTaskHandler(taskCallbackReconcileHandler{})
 }
 
 // channelTestHandler runs the scheduled "test all channels" job. Enablement and
@@ -166,6 +168,29 @@ func (taskCallbackCleanupHandler) NewPayload() any { return nil }
 
 func (taskCallbackCleanupHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
 	summary, err := service.CleanupTaskCallbacks(ctx)
+	if err != nil {
+		finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusFailed, summary, err)
+		return
+	}
+	finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusSucceeded, summary, nil)
+}
+
+// taskCallbackReconcileHandler enqueues callback events for open
+// subscriptions whose task status changed outside the transactional path.
+type taskCallbackReconcileHandler struct{}
+
+func (taskCallbackReconcileHandler) Type() string { return model.SystemTaskTypeTaskCallbackReconcile }
+
+func (taskCallbackReconcileHandler) Enabled() bool {
+	return system_setting.GetTaskCallbackSetting().Enabled && service.HasOpenTaskCallbackSubscriptions()
+}
+
+func (taskCallbackReconcileHandler) Interval() time.Duration { return time.Minute }
+
+func (taskCallbackReconcileHandler) NewPayload() any { return nil }
+
+func (taskCallbackReconcileHandler) Run(ctx context.Context, task *model.SystemTask, runnerID string) {
+	summary, err := service.ReconcileTaskCallbacks(ctx)
 	if err != nil {
 		finishSystemTaskHandler(task, runnerID, model.SystemTaskStatusFailed, summary, err)
 		return

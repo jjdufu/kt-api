@@ -488,13 +488,16 @@ func updateVideoTasks(ctx context.Context, platform constant.TaskPlatform, chann
 				failedIDs = append(failedIDs, t.ID)
 			}
 		}
+		const channelMissingReason = "Failed to get the channel information. Please contact the administrator"
 		errUpdate := model.TaskBulkUpdateByID(failedIDs, map[string]any{
-			"fail_reason": "Failed to get the channel information. Please contact the administrator",
+			"fail_reason": channelMissingReason,
 			"status":      "FAILURE",
 			"progress":    "100%",
 		})
 		if errUpdate != nil {
 			common.SysLog(common.LogText("UpdateVideoTask error: %v", errUpdate))
+		} else {
+			rewriteArkBulkFailureData(taskM, taskIds, channelMissingReason)
 		}
 		return fmt.Errorf("CacheGetChannel failed: %w", err)
 	}

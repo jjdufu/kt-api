@@ -252,3 +252,30 @@ func TestSweepHonorsArkExecutionExpiresAfter(t *testing.T) {
 	assert.EqualValues(t, model.TaskStatusFailure, shortStatus)
 	assert.Equal(t, "expired", shortData)
 }
+
+func TestRewriteArkBulkFailureDataPresentsFailed(t *testing.T) {
+	truncate(t)
+	task := makeTask(613, 613, 1_000, 0, BillingSourceWallet, 0)
+	task.TaskID = "task_ark_bulk"
+	task.Data = []byte(`{"id":"cgt-bulk","model":"m","status":"running"}`)
+	task.PrivateData.UpstreamTaskID = "cgt-bulk"
+	markArkVideoTask(task)
+	other := makeTask(613, 613, 1_000, 0, BillingSourceWallet, 0)
+	other.TaskID = "task_not_ark"
+	other.Data = []byte(`{"status":"running"}`)
+	other.PrivateData.UpstreamTaskID = "other-upstream"
+	require.NoError(t, model.DB.Create(task).Error)
+	require.NoError(t, model.DB.Create(other).Error)
+
+	rewriteArkBulkFailureData(map[string]*model.Task{"cgt-bulk": task, "other-upstream": other}, []string{"cgt-bulk", "other-upstream"}, "Failed to get the channel information. Please contact the administrator")
+
+	var persisted model.Task
+	require.NoError(t, model.DB.First(&persisted, task.ID).Error)
+	data := decodeTaskDataObject(t, persisted.Data)
+	assert.Equal(t, "failed", data["status"])
+	assert.Equal(t, "m", data["model"])
+	assert.Equal(t, map[string]any{"code": "task_failed", "message": "Failed to get the channel information. Please contact the administrator"}, data["error"])
+	var untouched model.Task
+	require.NoError(t, model.DB.First(&untouched, other.ID).Error)
+	assert.JSONEq(t, `{"status":"running"}`, string(untouched.Data))
+}

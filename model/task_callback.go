@@ -130,6 +130,18 @@ func ListOpenTaskCallbackSubscriptions(afterID int64, terminalStatuses []string,
 	return subscriptions, err
 }
 
+// HasOpenTaskCallbackSubscriptions reports whether any customer subscription
+// still awaits a terminal status (gates the reconciliation system task).
+func HasOpenTaskCallbackSubscriptions(terminalStatuses []string) bool {
+	var subscription TaskCallbackSubscription
+	query := DB.Select("id").Where("callback_url <> ?", "")
+	if len(terminalStatuses) > 0 {
+		query = query.Where("last_status NOT IN ?", terminalStatuses)
+	}
+	err := query.Take(&subscription).Error
+	return err == nil
+}
+
 // RecordTaskCallbackSubscriptionStatus advances last_status without an event
 // (used for statuses that are not delivered, e.g. cancelled).
 func RecordTaskCallbackSubscriptionStatus(tx *gorm.DB, subscriptionID int64, status string) error {
