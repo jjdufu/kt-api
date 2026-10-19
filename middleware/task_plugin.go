@@ -265,6 +265,17 @@ func PrepareTaskPluginRoute() gin.HandlerFunc {
 				abortTaskPluginRouteErrorDetail(c, intentErr.StatusCode, intentErr.Message)
 				return
 			}
+			if assetErr := applyAssetIntent(c, resolved, pinned.Plugin.Meta); assetErr != nil {
+				logger.LogWarn(
+					c,
+					common.LogText("task_plugin subsystem=route event=prepare_rejected generation=%d plugin=%q stage=asset reason=%s",
+						generation,
+						pinned.Plugin.Meta.Key,
+						assetErr.Code),
+				)
+				abortTaskPluginRouteErrorDetail(c, assetErr.StatusCode, assetErr.Message)
+				return
+			}
 			_, bodyReplaced := resolved["requestBody"]
 			logger.LogDebug(
 				c,
@@ -730,6 +741,17 @@ func PrepareTaskPluginEndpoint() gin.HandlerFunc {
 					intentErr.Code),
 			)
 			abortWithOpenAiMessage(c, intentErr.StatusCode, intentErr.Message, types.ErrorCode(intentErr.Code))
+			return
+		}
+		if assetErr := applyAssetIntent(c, resolved, pinned.Plugin.Meta); assetErr != nil {
+			logger.LogWarn(
+				c,
+				common.LogText("task_plugin subsystem=endpoint event=prepare_rejected generation=%d plugin=%q stage=asset reason=%s",
+					pinned.Generation.Number,
+					pinned.Plugin.Meta.Key,
+					assetErr.Code),
+			)
+			abortWithOpenAiMessage(c, assetErr.StatusCode, assetErr.Message, types.ErrorCode(assetErr.Code))
 			return
 		}
 		logger.LogDebug(
