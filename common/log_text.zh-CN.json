@@ -721,7 +721,6 @@
   "skip password reset email for %s: %s": "未向 %s 发送密码重置邮件: %s",
   "skipped %d options rows with empty keys while rebuilding the primary key": "重建主键时跳过了 %d 行键为空的 options 记录",
   "stacktrace from panic: %s": "panic 堆栈: %s",
-  "start pyroscope error : %v": "启动 pyroscope 出错: %v",
   "stream ended: %s": "流式响应结束: %s",
   "stream ended: %s, received=%d": "流式响应结束: %s, received=%d",
   "stream event error: %v %v": "流事件报错: %v %v",
