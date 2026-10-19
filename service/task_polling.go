@@ -97,6 +97,11 @@ func sweepTimedOutTasks(ctx context.Context) {
 		} else {
 			task.FailReason = reason
 		}
+		if IsArkVideoTask(task) {
+			// Keep GET and callbacks consistent with the local decision: a task
+			// kt-api times out is presented as expired (Ark semantics).
+			task.Data = arkTerminalTaskData(task, ArkTaskStatusExpired, arkErrorCodeTaskExpired, task.FailReason, now)
+		}
 
 		won, err := task.UpdateWithStatus(oldStatus)
 		if err != nil {
@@ -808,6 +813,9 @@ func failTaskFromPoll(ctx context.Context, adaptor TaskPollingAdaptor, task *mod
 		task.FinishTime = now
 	}
 	task.FailReason = reason
+	if IsArkVideoTask(task) {
+		task.Data = arkTerminalTaskData(task, ArkTaskStatusFailed, arkLocalFailureCode(reason), reason, now)
+	}
 	won, err := task.UpdateWithStatus(fromStatus)
 	if err != nil {
 		return err
