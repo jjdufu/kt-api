@@ -102,8 +102,8 @@ func readRequestBodyBytes(c *gin.Context) ([]byte, error) {
 func prepareAssetUpstreamBody(c *gin.Context, userID int, action string) ([]byte, error) {
 	ct := c.ContentType()
 	if strings.Contains(ct, "multipart/form-data") {
-		if action == "ListAssetGroups" {
-			return nil, fmt.Errorf("ListAssetGroups requires application/json")
+		if action == "ListAssetGroups" || action == "ListAssets" {
+			return nil, fmt.Errorf("%s requires application/json", action)
 		}
 		body, err := readRequestBodyBytes(c)
 		if err != nil {
@@ -118,6 +118,9 @@ func prepareAssetUpstreamBody(c *gin.Context, userID int, action string) ([]byte
 	}
 	if len(body) == 0 {
 		body = []byte("{}")
+	}
+	if action == "ListAssets" {
+		return prepareListAssetsBody(userID, body)
 	}
 	if action != "ListAssetGroups" {
 		return body, nil
@@ -155,6 +158,93 @@ func prepareAssetUpstreamBody(c *gin.Context, userID int, action string) ([]byte
 		filter["GroupIds"] = owned
 	}
 	return common.Marshal(payload)
+}
+
+// prepareListAssetsBody makes sure every asset group a ListAssets request
+// names belongs to userID. The middleware only pins the channel from one
+// group, so without this check a caller could append other users' group IDs
+// to Filter.GroupIds and list their assets.
+func prepareListAssetsBody(userID int, body []byte) ([]byte, error) {
+	var payload map[string]any
+	if err := common.Unmarshal(body, &payload); err != nil {
+		return nil, fmt.Errorf("invalid JSON body")
+	}
+	groupIDs, filterIDs, topLevel, err := collectListAssetsGroupIDs(payload)
+	if err != nil {
+		return nil, err
+	}
+	if len(groupIDs) == 0 {
+		return nil, fmt.Errorf("Filter.GroupIds must contain at least one asset group id")
+	}
+	for _, id := range groupIDs {
+		if _, err := model.GetAssetGroupByUser(userID, id); err != nil {
+			return nil, err
+		}
+	}
+	filter, _ := payload["Filter"].(map[string]any)
+	if filter == nil {
+		filter = map[string]any{}
+		payload["Filter"] = filter
+	}
+	if len(filterIDs) == 0 {
+		filterIDs = []string{topLevel}
+	}
+	filter["GroupIds"] = filterIDs
+	return common.Marshal(payload)
+}
+
+// collectListAssetsGroupIDs returns every non-empty group id in
+// Filter.GroupIds plus the top-level GroupId/group_id, de-duplicated. It also
+// returns the cleaned Filter.GroupIds and the top-level id on their own.
+func collectListAssetsGroupIDs(payload map[string]any) (all []string, filterIDs []string, topLevel string, err error) {
+	seen := map[string]bool{}
+	add := func(s string) {
+		if s != "" && !seen[s] {
+			seen[s] = true
+			all = append(all, s)
+		}
+	}
+	for _, key := range []string{"GroupId", "group_id"} {
+		raw, ok := payload[key]
+		if !ok || raw == nil {
+			continue
+		}
+		s, ok := raw.(string)
+		if !ok {
+			return nil, nil, "", fmt.Errorf("%s must be a string", key)
+		}
+		s = strings.TrimSpace(s)
+		if topLevel == "" {
+			topLevel = s
+		}
+		add(s)
+	}
+	if rawFilter, ok := payload["Filter"]; ok && rawFilter != nil {
+		filter, ok := rawFilter.(map[string]any)
+		if !ok {
+			return nil, nil, "", fmt.Errorf("Filter must be an object")
+		}
+		if rawIDs, ok := filter["GroupIds"]; ok && rawIDs != nil {
+			list, ok := rawIDs.([]any)
+			if !ok {
+				return nil, nil, "", fmt.Errorf("Filter.GroupIds must be an array of strings")
+			}
+			filterSeen := map[string]bool{}
+			for _, item := range list {
+				s, ok := item.(string)
+				if !ok {
+					return nil, nil, "", fmt.Errorf("Filter.GroupIds must be an array of strings")
+				}
+				s = strings.TrimSpace(s)
+				if s != "" && !filterSeen[s] {
+					filterSeen[s] = true
+					filterIDs = append(filterIDs, s)
+				}
+				add(s)
+			}
+		}
+	}
+	return all, filterIDs, topLevel, nil
 }
 
 func forwardAssetRequest(c *gin.Context, body []byte) (int, []byte, error) {
