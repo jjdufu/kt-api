@@ -459,3 +459,30 @@ For commercial licensing, please contact support@quantumnous.com
 [data-theme-preset='kt-comic'] [data-docs] .dc-code * {
   font-family: var(--kt-font-mono);
 }
+
+/* ── Toasts (sonner) ────────────────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-sonner-toaster] [data-sonner-toast] {
+  font-family: var(--kt-font-body) !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: var(--kt-line) solid var(--kt-outline) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 5px 5px 0 var(--kt-shadow) !important;
+}
+.dark [data-theme-preset='kt-comic'] [data-sonner-toaster] [data-sonner-toast] {
+  box-shadow: 5px 5px 0 var(--kt-cyan) !important;
+}
+[data-theme-preset='kt-comic'] [data-sonner-toast] [data-title] {
+  font-family: var(--kt-font-title) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+}
+[data-theme-preset='kt-comic'] [data-sonner-toast] [data-close-button] {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+  border-radius: 0.2rem !important;
+  border: 2px solid var(--kt-outline) !important;
+  background: var(--kt-yellow) !important;
+  color: #000 !important;
+  box-shadow: 2px 2px 0 var(--kt-shadow) !important;
+}
