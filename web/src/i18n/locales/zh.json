@@ -7329,8 +7329,6 @@
     "Speak OpenAI, Claude, Gemini and more protocols out of the box.": "OpenAI、Claude、Gemini 等协议开箱即用。",
     "Three Panels": "三格上手",
     "Your first call in three panels": "三格漫画，跑通第一次调用",
-    "Sign Up": "注册",
-    "Create your account in seconds.": "几秒钟建好账号。",
     "Get a Key": "拿 Key",
     "Generate an API key in the console.": "在控制台生成 API Key。",
     "Send a Request": "发请求",
@@ -7340,6 +7338,7 @@
     "Model Lineup": "模型阵容",
     "Plugged into the models you love": "接入你喜爱的模型",
     "Your story starts with one request": "你的故事，从一次请求开始",
-    "Sign up free and ship your first call in minutes.": "免费注册，几分钟完成第一次调用。"
+    "Sign up free and ship your first call in minutes.": "免费注册，几分钟完成第一次调用。",
+    "Sign in to your account to get started.": "登录账号，马上开始。"
   }
 }

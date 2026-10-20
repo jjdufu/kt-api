@@ -7329,8 +7329,6 @@
     "Speak OpenAI, Claude, Gemini and more protocols out of the box.": "Speak OpenAI, Claude, Gemini and more protocols out of the box.",
     "Three Panels": "Three Panels",
     "Your first call in three panels": "Your first call in three panels",
-    "Sign Up": "Sign Up",
-    "Create your account in seconds.": "Create your account in seconds.",
     "Get a Key": "Get a Key",
     "Generate an API key in the console.": "Generate an API key in the console.",
     "Send a Request": "Send a Request",
@@ -7340,6 +7338,7 @@
     "Model Lineup": "Model Lineup",
     "Plugged into the models you love": "Plugged into the models you love",
     "Your story starts with one request": "Your story starts with one request",
-    "Sign up free and ship your first call in minutes.": "Sign up free and ship your first call in minutes."
+    "Sign up free and ship your first call in minutes.": "Sign up free and ship your first call in minutes.",
+    "Sign in to your account to get started.": "Sign in to your account to get started."
   }
 }

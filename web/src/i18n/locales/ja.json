@@ -7329,8 +7329,6 @@
     "Speak OpenAI, Claude, Gemini and more protocols out of the box.": "OpenAI、Claude、Geminiなどのプロトコルにそのまま対応。",
     "Three Panels": "3コマで導入",
     "Your first call in three panels": "3コマで、はじめての呼び出し",
-    "Sign Up": "登録",
-    "Create your account in seconds.": "数秒でアカウント作成。",
     "Get a Key": "キーを取得",
     "Generate an API key in the console.": "コンソールでAPIキーを発行。",
     "Send a Request": "リクエスト送信",
@@ -7340,6 +7338,7 @@
     "Model Lineup": "モデル・ラインナップ",
     "Plugged into the models you love": "お気に入りのモデルにつながる",
     "Your story starts with one request": "物語は、ひとつのリクエストから",
-    "Sign up free and ship your first call in minutes.": "無料登録して、数分ではじめての呼び出しを。"
+    "Sign up free and ship your first call in minutes.": "無料登録して、数分ではじめての呼び出しを。",
+    "Sign in to your account to get started.": "アカウントにログインして始めよう。"
   }
 }

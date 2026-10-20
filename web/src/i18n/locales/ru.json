@@ -7329,8 +7329,6 @@
     "Speak OpenAI, Claude, Gemini and more protocols out of the box.": "OpenAI, Claude, Gemini и другие протоколы — сразу из коробки.",
     "Three Panels": "Три кадра",
     "Your first call in three panels": "Первый вызов в трёх кадрах",
-    "Sign Up": "Регистрация",
-    "Create your account in seconds.": "Аккаунт создаётся за секунды.",
     "Get a Key": "Получите ключ",
     "Generate an API key in the console.": "Создайте API-ключ в консоли.",
     "Send a Request": "Отправьте запрос",
@@ -7340,6 +7338,7 @@
     "Model Lineup": "Модели",
     "Plugged into the models you love": "Подключено к любимым моделям",
     "Your story starts with one request": "Ваша история начинается с одного запроса",
-    "Sign up free and ship your first call in minutes.": "Бесплатная регистрация и первый вызов за пару минут."
+    "Sign up free and ship your first call in minutes.": "Бесплатная регистрация и первый вызов за пару минут.",
+    "Sign in to your account to get started.": "Войдите в аккаунт, чтобы начать."
   }
 }

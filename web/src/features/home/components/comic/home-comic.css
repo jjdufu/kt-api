@@ -878,6 +878,13 @@
   margin: 0 auto;
   font-size: 1.35rem;
 }
+[data-home] .hc-strip-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--hc-magenta);
+  text-underline-offset: 4px;
+}
 [data-home] .hc-strip-desc {
   position: relative;
   margin-top: 1.4rem;
@@ -1028,6 +1035,7 @@
 }
 [data-home] .hc-reel {
   display: flex;
+  flex-shrink: 0;
   gap: 1rem;
   margin: 0;
   padding: 0 0.5rem;

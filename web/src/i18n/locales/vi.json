@@ -7329,8 +7329,6 @@
     "Speak OpenAI, Claude, Gemini and more protocols out of the box.": "Hỗ trợ sẵn OpenAI, Claude, Gemini và nhiều giao thức khác.",
     "Three Panels": "Ba khung hình",
     "Your first call in three panels": "Cuộc gọi đầu tiên trong ba khung hình",
-    "Sign Up": "Đăng ký",
-    "Create your account in seconds.": "Tạo tài khoản chỉ trong vài giây.",
     "Get a Key": "Lấy Key",
     "Generate an API key in the console.": "Tạo API key trong bảng điều khiển.",
     "Send a Request": "Gửi yêu cầu",
@@ -7340,6 +7338,7 @@
     "Model Lineup": "Đội hình mô hình",
     "Plugged into the models you love": "Kết nối các mô hình bạn yêu thích",
     "Your story starts with one request": "Câu chuyện của bạn bắt đầu từ một yêu cầu",
-    "Sign up free and ship your first call in minutes.": "Đăng ký miễn phí và thực hiện cuộc gọi đầu tiên trong vài phút."
+    "Sign up free and ship your first call in minutes.": "Đăng ký miễn phí và thực hiện cuộc gọi đầu tiên trong vài phút.",
+    "Sign in to your account to get started.": "Đăng nhập tài khoản để bắt đầu."
   }
 }
