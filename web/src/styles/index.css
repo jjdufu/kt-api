@@ -29,6 +29,8 @@ For commercial licensing, please contact support@quantumnous.com
 
 @import './theme.css';
 @import './theme-presets.css';
+@import './theme-preset-kt-comic.css';
+@import './comic/comic-fonts.css';
 
 @layer base {
   :root {

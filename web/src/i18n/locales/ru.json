@@ -7356,6 +7356,7 @@
     "Usage, balance and logs at a glance.": "Расход, баланс и логи с первого взгляда.",
     "Create and manage keys for your apps.": "Создавайте ключи для своих приложений и управляйте ими.",
     "Endpoints, parameters and examples.": "Эндпоинты, параметры и примеры.",
-    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI основан на QuantumNous/new-api и распространяется по лицензии AGPL-3.0."
+    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI основан на QuantumNous/new-api и распространяется по лицензии AGPL-3.0.",
+    "preset.kt-comic": "KT Comic"
   }
 }

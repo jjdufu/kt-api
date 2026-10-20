@@ -7356,6 +7356,7 @@
     "Usage, balance and logs at a glance.": "用量、余额和日志，一眼看清。",
     "Create and manage keys for your apps.": "为你的应用创建和管理密钥。",
     "Endpoints, parameters and examples.": "接口、参数与示例。",
-    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "开天大模型基于 QuantumNous/new-api 构建，遵循 AGPL-3.0 许可证。"
+    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "开天大模型基于 QuantumNous/new-api 构建，遵循 AGPL-3.0 许可证。",
+    "preset.kt-comic": "开天漫画"
   }
 }
