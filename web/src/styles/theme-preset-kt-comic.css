@@ -42,7 +42,8 @@ For commercial licensing, please contact support@quantumnous.com
 [data-theme-preset='kt-comic'] [data-slot='card-title'],
 [data-theme-preset='kt-comic'] [data-slot='dialog-title'],
 [data-theme-preset='kt-comic'] [data-slot='alert-dialog-title'],
-[data-theme-preset='kt-comic'] [data-slot='sheet-title'] {
+[data-theme-preset='kt-comic'] [data-slot='sheet-title'],
+[data-theme-preset='kt-comic'] [data-slot='section-title'] {
   font-family: var(--kt-font-title);
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -223,16 +224,29 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ── Tables (contrast first) ────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='table-container'] {
+/* One outline per table. A StaticDataTable root (`.border`) already draws
+ * the frame, so the inner table-container only gets an outline when it is
+ * standalone: not inside a bordered wrapper, an embedded `.border-0`
+ * wrapper, or another table. */
+[data-theme-preset='kt-comic']
+  [data-slot='table-container']:not(
+    :is(.border, .border-0, [data-slot='table-container'])
+      [data-slot='table-container']
+  ) {
   border: 2px solid var(--kt-outline);
   border-radius: 0.5rem;
   background: var(--card);
 }
+[data-theme-preset='kt-comic']
+  .border:not(.border-0):has(> [data-slot='table-container']) {
+  border: 2px solid var(--kt-outline);
+  background: var(--card);
+}
 [data-theme-preset='kt-comic'] [data-slot='table-header'] {
-  background: color-mix(in srgb, var(--kt-cyan) 14%, var(--card));
+  background: color-mix(in srgb, var(--kt-cyan) 8%, var(--card));
 }
 [data-theme-preset='kt-comic'] [data-slot='table-head'] {
-  color: var(--foreground);
+  color: var(--foreground) !important;
   font-weight: 700;
 }
 [data-theme-preset='kt-comic'] [data-slot='table-row']:hover {

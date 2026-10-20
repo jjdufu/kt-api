@@ -782,7 +782,10 @@ function SectionTitle(props: {
 }) {
   const Icon = props.icon
   return (
-    <h3 className='text-foreground mb-3 flex items-center gap-1.5 text-sm font-semibold'>
+    <h3
+      data-slot='section-title'
+      className='text-foreground mb-3 flex items-center gap-1.5 text-sm font-semibold'
+    >
       <Icon className='text-muted-foreground/70 size-3.5' />
       {props.children}
     </h3>

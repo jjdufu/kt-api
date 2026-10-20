@@ -111,7 +111,10 @@ import { ModelDetailsPerformance } from './model-details-performance'
 
 function SectionTitle(props: { children: React.ReactNode }) {
   return (
-    <h2 className='text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase'>
+    <h2
+      data-slot='section-title'
+      className='text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase'
+    >
       {props.children}
     </h2>
   )
