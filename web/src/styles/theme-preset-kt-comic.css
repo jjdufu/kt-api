@@ -94,7 +94,8 @@ For commercial licensing, please contact support@quantumnous.com
   font-weight: 700;
   letter-spacing: 0.06em;
 }
-[data-theme-preset='kt-comic'] header.sticky {
+[data-theme-preset='kt-comic'] header.sticky,
+[data-theme-preset='kt-comic'] header[data-slot='public-header'] {
   border-bottom: var(--kt-line) solid var(--kt-outline);
   background: color-mix(in srgb, var(--background) 92%, transparent);
   backdrop-filter: blur(6px);
