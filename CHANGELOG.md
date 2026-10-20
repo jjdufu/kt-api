@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.9](https://github.com/jjdufu/kt-api/compare/v0.0.8...v0.0.9) (2026-10-20)
+
+
+### Features
+
+* **brand:** 开天大模型 / KTAPI logo and default site name ([a8d5fa9](https://github.com/jjdufu/kt-api/commit/a8d5fa91b23c1b7c42d57aad2108ab88e9cc4667))
+* **web:** comic restyle for docs, about, auth pages and the user menu ([5188528](https://github.com/jjdufu/kt-api/commit/5188528ee24ed5811432d7185de07d45799f5833))
+* 开天大模型品牌 + 全站漫画风格 + 前端性能优化 ([3d83264](https://github.com/jjdufu/kt-api/commit/3d83264c2b392b8d585eb4295d5860b4e714b03c))
+
+
+### Bug Fixes
+
+* **web:** seamless model marquee and sign-in first step on home page ([d16e248](https://github.com/jjdufu/kt-api/commit/d16e248a5458943d71b1c9babc6b9deb86b66fab))
+
+
+### Performance Improvements
+
+* **web:** lazy-load locales and slim the lobe icon registry ([de87e51](https://github.com/jjdufu/kt-api/commit/de87e51dc1e570db34bf6d279034d1a333c46e21))
+* **web:** preload the home hero image and headline font ([965c8ac](https://github.com/jjdufu/kt-api/commit/965c8acb1aa9b069694a227a8f7b487b5a40fbfa))
+
 ## [0.0.8](https://github.com/jjdufu/kt-api/compare/v0.0.7...v0.0.8) (2026-10-20)
 
 
