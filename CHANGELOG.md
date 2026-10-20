@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.10](https://github.com/jjdufu/kt-api/compare/v0.0.9...v0.0.10) (2026-10-20)
+
+
+### Features
+
+* **web:** add KT Comic (开天漫画) console theme preset ([9316775](https://github.com/jjdufu/kt-api/commit/93167754f95aacf340b78581c381b9479097d069))
+* **web:** comic display fonts for console UI via unicode-range subsets ([36779e0](https://github.com/jjdufu/kt-api/commit/36779e06f80621812e60aab6cadcb5b36147da10))
+* **web:** make KT Comic the default theme preset ([159c740](https://github.com/jjdufu/kt-api/commit/159c7401ac6effb7b66dc916117aa04a0e21200b))
+* **web:** 控制台「开天漫画」主题预设（默认） ([cb9eafd](https://github.com/jjdufu/kt-api/commit/cb9eafd15a164299da1a6ec411259a3b59eca6c0))
+
 ## [0.0.9](https://github.com/jjdufu/kt-api/compare/v0.0.8...v0.0.9) (2026-10-20)
 
 
