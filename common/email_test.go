@@ -281,7 +281,7 @@ func TestSendEmailUsesExplicitStartTLSWithInsecureCertificate(t *testing.T) {
 	SMTPAccount = "sender@example.com"
 	SMTPFrom = "sender@example.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -289,6 +289,7 @@ func TestSendEmailUsesExplicitStartTLSWithInsecureCertificate(t *testing.T) {
 	select {
 	case message := <-server.messages:
 		require.Contains(t, message, "Subject: =?UTF-8?B?")
+		require.Contains(t, message, "From: =?UTF-8?b?5byA5aSp5aSn5qih5Z6L?= <sender@example.com>")
 		require.Contains(t, message, "<p>123456</p>")
 	case <-time.After(2 * time.Second):
 		t.Fatal("timed out waiting for SMTP DATA")
@@ -309,7 +310,7 @@ func TestSendEmailExplicitStartTLSRequiresServerSupport(t *testing.T) {
 	SMTPAccount = "sender@example.com"
 	SMTPFrom = "sender@example.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.Error(t, err)
@@ -330,7 +331,7 @@ func TestSendEmailDoesNotAutoUpgradeWhenStartTLSDisabled(t *testing.T) {
 	SMTPAccount = "sender@example.com"
 	SMTPFrom = "sender@example.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -433,7 +434,7 @@ func TestSendEmailSkipsAuthWhenCredentialsAreEmpty(t *testing.T) {
 	SMTPAccount = ""
 	SMTPFrom = "sender@example.com"
 	SMTPToken = ""
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -466,7 +467,7 @@ func TestSendEmailSkipsAuthWhenCredentialsAreIncomplete(t *testing.T) {
 	SMTPAccount = "sender@example.com"
 	SMTPFrom = "sender@example.com"
 	SMTPToken = ""
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -500,7 +501,7 @@ func TestSendEmailUsesNTLMWhenServerOnlySupportsNTLM(t *testing.T) {
 	SMTPAccount = "no-reply"
 	SMTPFrom = "no-reply@example.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -528,7 +529,7 @@ func TestSendEmailUsesNTLMForMicrosoftAccountWhenServerOnlySupportsNTLM(t *testi
 	SMTPAccount = "no-reply@contoso.onmicrosoft.com"
 	SMTPFrom = "no-reply@contoso.onmicrosoft.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.NoError(t, err)
@@ -555,7 +556,7 @@ func TestSendEmailExplicitStartTLSRejectsUntrustedCertificateByDefault(t *testin
 	SMTPAccount = "sender@example.com"
 	SMTPFrom = "sender@example.com"
 	SMTPToken = "secret"
-	SystemName = "New API"
+	SystemName = "开天大模型"
 
 	err := SendEmail("Verification", "receiver@example.com", "<p>123456</p>")
 	require.Error(t, err)

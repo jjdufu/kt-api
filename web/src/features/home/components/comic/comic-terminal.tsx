@@ -1,4 +1,3 @@
-import { useReducedMotion } from 'motion/react'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -17,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 const MODELS = ['gpt', 'claude', 'deepseek', 'qwen', 'gemini', 'doubao']

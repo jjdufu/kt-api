@@ -25,11 +25,22 @@ import { SectionHeading } from './primitives'
 
 const ICONS = [...AI_MODELS, ...AI_APPLICATIONS]
 
+/**
+ * The track holds two identical reels and slides by exactly one reel width
+ * (-50%), so the loop is seamless only while one reel is wider than the film
+ * window. Ten logos are ~1500px, which left a blank tail on wide screens;
+ * repeating them inside each reel keeps a reel ~4500px wide (4K-safe).
+ */
+const REEL_ROUNDS = ['r1', 'r2', 'r3'] as const
+const REEL_ITEMS = REEL_ROUNDS.flatMap((round) =>
+  ICONS.map((name) => ({ id: `${round}-${name}`, name }))
+)
+
 function Reel({ copy }: { copy: 'a' | 'b' }) {
   return (
     <ul className='hc-reel' aria-hidden={copy === 'b'}>
-      {ICONS.map((name) => (
-        <li key={`${copy}-${name}`} className='hc-frame'>
+      {REEL_ITEMS.map(({ id, name }) => (
+        <li key={`${copy}-${id}`} className='hc-frame'>
           {getLobeIcon(name, 40)}
           <span className='hc-frame-label'>{name.split('.')[0]}</span>
         </li>

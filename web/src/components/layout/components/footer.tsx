@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface FooterProps {
@@ -95,17 +96,15 @@ function ProjectAttribution(props: { inline?: boolean }) {
   if (props.inline) {
     return content
   }
-  return (
-    <div className='text-center text-xs sm:text-right'>{content}</div>
-  )
+  return <div className='text-center text-xs sm:text-right'>{content}</div>
 }
 
 export function Footer(props: FooterProps) {
   const { t } = useTranslation()
   const { systemName, logo: systemLogo, footerHtml } = useSystemConfig()
 
-  const displayLogo = systemLogo || props.logo || '/logo.png'
-  const displayName = systemName || props.name || 'New API'
+  const displayLogo = systemLogo || props.logo || DEFAULT_LOGO
+  const displayName = systemName || props.name || DEFAULT_SYSTEM_NAME
   const currentYear = new Date().getFullYear()
 
   if (footerHtml) {

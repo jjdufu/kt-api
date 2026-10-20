@@ -35,7 +35,11 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
+import '@/styles/comic/comic-base.css'
+
 import { useApiBaseUrl } from '../hooks/use-api-base-url'
+
+import './docs-comic.css'
 
 export type DocsSectionItem = { id: string; title: string }
 
@@ -58,7 +62,8 @@ export type ErrorRow = { scenario: string; message: string }
 
 export type KeyValueRow = { k: string; v: string }
 
-const INLINE_CODE_CLASS = 'bg-muted rounded px-1.5 py-0.5 text-xs'
+const INLINE_CODE_CLASS =
+  'dc-inline-code bg-muted rounded px-1.5 py-0.5 text-xs'
 
 function InlineCode(props: { children: ReactNode }) {
   return <code className={INLINE_CODE_CLASS}>{props.children}</code>
@@ -103,10 +108,10 @@ export function DocsSection(props: {
     <section
       id={props.id}
       data-docs-section
-      className={cn('scroll-mt-24 space-y-6', props.className)}
+      className={cn('dc-section scroll-mt-24 space-y-6', props.className)}
     >
       <div className='space-y-2'>
-        <h2 className='flex items-center gap-2 text-2xl font-semibold tracking-tight'>
+        <h2 className='dc-h2 flex items-center gap-2 text-2xl font-semibold tracking-tight'>
           <span>{props.title}</span>
         </h2>
         {props.description ? (
@@ -123,16 +128,17 @@ export function DocsSection(props: {
 function DocsToc(props: { sections: DocsSectionItem[]; activeId: string }) {
   const { t } = useTranslation()
   return (
-    <nav className='space-y-1 text-sm'>
-      <p className='text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase'>
+    <nav className='dc-toc space-y-1 text-sm'>
+      <p className='dc-toc-label text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase'>
         {t('On this page')}
       </p>
       {props.sections.map((section) => (
         <a
           key={section.id}
           href={`#${section.id}`}
+          data-active={props.activeId === section.id ? '' : undefined}
           className={cn(
-            'block rounded-md px-3 py-1.5 transition-colors',
+            'dc-toc-link block rounded-md px-3 py-1.5 transition-colors',
             props.activeId === section.id
               ? 'bg-primary/10 text-primary font-medium'
               : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -173,42 +179,49 @@ export function DocsPageLayout(props: {
   }, [sections])
 
   return (
-    <PublicLayout showMainContainer={false}>
-      <div className='bg-background text-foreground pt-20'>
-        <div className='mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 md:px-6'>
-          <aside className='hidden w-60 shrink-0 md:block'>
-            <div className='sticky top-24'>
-              <DocsToc sections={sections} activeId={activeId} />
-            </div>
-          </aside>
-          <main className='min-w-0 flex-1 space-y-12 pb-24'>
-            <header className='space-y-3'>
-              <h1 className='text-3xl font-semibold tracking-tight'>
-                {props.title}
-              </h1>
-              <p className='text-muted-foreground text-sm leading-relaxed'>
-                {props.description}
-              </p>
-              {props.headerExtra}
-            </header>
-            {props.children}
-          </main>
+    <div data-docs=''>
+      <PublicLayout showMainContainer={false}>
+        <div className='dc-page bg-background text-foreground pt-20'>
+          <div className='mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 md:px-6'>
+            <aside className='hidden w-60 shrink-0 md:block'>
+              <div className='sticky top-24'>
+                <DocsToc sections={sections} activeId={activeId} />
+              </div>
+            </aside>
+            <main className='min-w-0 flex-1 space-y-12 pb-24'>
+              <header className='dc-hero space-y-3'>
+                <span className='dc-kicker' aria-hidden='true'>
+                  DOCS!
+                </span>
+                <h1 className='dc-h1 text-3xl font-semibold tracking-tight'>
+                  {props.title}
+                </h1>
+                <p className='dc-hero-desc text-muted-foreground text-sm leading-relaxed'>
+                  {props.description}
+                </p>
+                {props.headerExtra}
+              </header>
+              {props.children}
+            </main>
+          </div>
         </div>
-      </div>
-    </PublicLayout>
+      </PublicLayout>
+    </div>
   )
 }
 
 export function CodeSample(props: { code: string; language: string }) {
   return (
-    <CodeBlock
-      code={props.code}
-      language={props.language}
-      showLineNumbers
-      showToolbar={false}
-    >
-      <CodeBlockCopyButton />
-    </CodeBlock>
+    <div className='dc-code'>
+      <CodeBlock
+        code={props.code}
+        language={props.language}
+        showLineNumbers
+        showToolbar={false}
+      >
+        <CodeBlockCopyButton />
+      </CodeBlock>
+    </div>
   )
 }
 
@@ -404,17 +417,19 @@ export function EndpointCard(props: {
   return (
     <Card
       id={props.anchor}
-      className='bg-muted/20 scroll-mt-24 border-0 ring-0'
+      className='dc-endpoint bg-muted/20 scroll-mt-24 border-0 ring-0'
     >
       <CardContent className='space-y-6 pt-6'>
         <div className='space-y-3'>
-          <h3 className='text-xl font-semibold tracking-tight'>
-            {props.number}. {props.title}
+          <h3 className='dc-h3 text-xl font-semibold tracking-tight'>
+            <span className='dc-num'>{props.number}</span>
+            {props.title}
           </h3>
           <div className='flex flex-wrap items-center gap-2'>
             <span
+              data-method={props.method}
               className={cn(
-                'inline-flex h-6 min-w-[58px] items-center justify-center rounded-md border px-2 font-mono text-[11px] tracking-wide',
+                'dc-method inline-flex h-6 min-w-[58px] items-center justify-center rounded-md border px-2 font-mono text-[11px] tracking-wide',
                 props.method === 'POST'
                   ? 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
                   : 'border-sky-500/40 text-sky-600 dark:text-sky-400'
@@ -422,7 +437,7 @@ export function EndpointCard(props: {
             >
               {props.method}
             </span>
-            <code className='text-foreground text-sm break-all'>
+            <code className='dc-path text-foreground text-sm break-all'>
               {props.path}
             </code>
           </div>
@@ -445,7 +460,7 @@ export function EndpointCard(props: {
 
 export function SubHeading(props: { children?: ReactNode; text?: string }) {
   return (
-    <h4 className='text-base font-semibold tracking-tight'>
+    <h4 className='dc-h4 text-base font-semibold tracking-tight'>
       {props.text ?? props.children}
     </h4>
   )
@@ -471,7 +486,7 @@ export function Note(props: { children?: ReactNode; text?: string }) {
   const raw = props.text ?? props.children
   const content = typeof raw === 'string' ? <RichText text={raw} /> : raw
   return (
-    <blockquote className='bg-muted/40 text-muted-foreground border-primary/60 rounded-md border-l-2 px-3 py-2 text-sm leading-relaxed'>
+    <blockquote className='dc-note bg-muted/40 text-muted-foreground border-primary/60 rounded-md border-l-2 px-3 py-2 text-sm leading-relaxed'>
       {content}
     </blockquote>
   )

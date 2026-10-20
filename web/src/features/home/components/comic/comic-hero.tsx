@@ -16,9 +16,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { preload } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 
-import heroGirl from '../../assets/hero-girl.webp'
+import displayFont from '@/assets/comic/fonts/kthome-display.woff2'
+import heroGirl from '@/assets/comic/hero-girl.webp'
+
 import { ComicTerminal } from './comic-terminal'
 import { Burst, ComicBackdrop, Skyline, SpeechBubble } from './decorations'
 import { ComicButton } from './primitives'
@@ -47,6 +50,10 @@ type ComicHeroProps = {
 export function ComicHero({ isAuthenticated }: ComicHeroProps) {
   const { t } = useTranslation()
   const docsHref = useDocsHref()
+  // Start the hero image (LCP) and the CJK headline font right away instead of
+  // waiting for CSS/layout to discover them. React de-duplicates the hints.
+  preload(heroGirl, { as: 'image', fetchPriority: 'high' })
+  preload(displayFont, { as: 'font', type: 'font/woff2', crossOrigin: '' })
   const headline = t('Define Everything with LLMs!')
   const lines = splitHeadline(headline)
 

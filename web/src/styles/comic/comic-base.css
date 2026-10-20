@@ -1,0 +1,111 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * Shared comic / manga cyberpunk foundation: self-hosted OFL font subsets
+ * (see src/assets/comic/fonts/README.md) and the colour tokens used by the
+ * home, about ([data-home]), docs ([data-docs]) and auth ([data-auth])
+ * pages. Imported only by those pages, so other routes never load it and
+ * browsers fetch a font file only when a scoped element actually uses it.
+ */
+
+@font-face {
+  font-family: 'KTHome Display';
+  src: url('../../assets/comic/fonts/kthome-display.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KTHome KuaiLe';
+  src: url('../../assets/comic/fonts/zcool-kuaile.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KTHome Bangers';
+  src: url('../../assets/comic/fonts/bangers.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KTHome Bungee';
+  src: url('../../assets/comic/fonts/bungee.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KTHome Mono';
+  src: url('../../assets/comic/fonts/jetbrains-mono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* ---------- tokens ---------- */
+[data-home],
+[data-docs],
+[data-auth] {
+  --hc-bg: #f7f3ea;
+  --hc-paper: #fffdf6;
+  --hc-ink: #111014;
+  --hc-text: #16151b;
+  --hc-muted: #4a4854;
+  --hc-cyan: #13b5c4;
+  --hc-magenta: #cf2c9f;
+  --hc-yellow: #f2d21b;
+  --hc-dot: rgba(17, 16, 20, 0.13);
+  --hc-line: rgba(17, 16, 20, 0.07);
+  --hc-panel-border: #111014;
+  --hc-shadow: #111014;
+  --hc-head-fill: #fffdf6;
+  --hc-head-stroke: #111014;
+  --hc-night: #15141d;
+  --hc-skyline: rgba(17, 16, 20, 0.85);
+  --hc-glow: 0;
+
+  --hc-font-display:
+    'KTHome Bangers', 'KTHome Display', 'PingFang SC', 'Microsoft YaHei',
+    system-ui, sans-serif;
+  --hc-font-cjk:
+    'KTHome Display', 'KTHome Bangers', 'PingFang SC', 'Microsoft YaHei',
+    system-ui, sans-serif;
+  --hc-font-fun:
+    'KTHome KuaiLe', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --hc-font-accent: 'KTHome Bungee', 'KTHome KuaiLe', system-ui, sans-serif;
+  --hc-font-mono:
+    'KTHome Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  color: var(--hc-text);
+}
+
+.dark [data-home],
+.dark [data-docs],
+.dark [data-auth] {
+  --hc-bg: #0b0b12;
+  --hc-paper: #14131f;
+  --hc-ink: #000;
+  --hc-text: #f4f3ff;
+  --hc-muted: #b4b2c8;
+  --hc-cyan: #00f0ff;
+  --hc-magenta: #ff2bd6;
+  --hc-yellow: #ffe600;
+  --hc-dot: rgba(255, 255, 255, 0.075);
+  --hc-line: rgba(255, 255, 255, 0.06);
+  --hc-panel-border: #f4f3ff;
+  --hc-shadow: #000;
+  --hc-head-fill: #fbfbff;
+  --hc-head-stroke: #000;
+  --hc-night: #07070c;
+  --hc-skyline: rgba(18, 12, 34, 0.95);
+  --hc-glow: 1;
+}

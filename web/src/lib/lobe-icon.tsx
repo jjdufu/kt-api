@@ -25,7 +25,6 @@ For commercial licensing, please contact support@quantumnous.com
  * - Chained properties: "OpenAI.Avatar.type={'platform'}"
  * - Size parameter: getLobeIcon("OpenAI", 20)
  */
-import { toc } from '@lobehub/icons/es/toc'
 import {
   lazy,
   Suspense,
@@ -37,6 +36,11 @@ import {
 import sglangLogo from '@/assets/brand-icons/sglang.svg'
 import { IconSub2api } from '@/assets/custom/icon-sub2api'
 import { IconWan } from '@/assets/custom/icon-wan'
+
+import {
+  LOBE_ICON_FLAGS,
+  LOBE_ICON_VARIANT_MASKS,
+} from './lobe-icon-variants.gen'
 
 const CUSTOM_ICONS: Record<string, ComponentType<{ size?: number }>> = {
   SGLang: (props) => (
@@ -53,7 +57,6 @@ const CUSTOM_ICONS: Record<string, ComponentType<{ size?: number }>> = {
   Wan: IconWan,
 }
 
-const ICON_METADATA = new Map(toc.map((icon) => [icon.id, icon]))
 const ICON_VARIANTS = {
   Avatar: 'hasAvatar',
   Brand: 'hasBrand',
@@ -141,13 +144,16 @@ export function getLobeIcon(
   const CustomIcon = CUSTOM_ICONS[baseKey]
   if (CustomIcon) return <CustomIcon size={size} />
 
-  const metadata = ICON_METADATA.get(baseKey)
-  if (!metadata) return fallback
+  const mask = Object.hasOwn(LOBE_ICON_VARIANT_MASKS, baseKey)
+    ? LOBE_ICON_VARIANT_MASKS[baseKey]
+    : undefined
+  if (mask === undefined) return fallback
 
   const variantKey = segments[1] as keyof typeof ICON_VARIANTS
   const variantFlag = ICON_VARIANTS[variantKey]
+  const flagBit = variantFlag ? LOBE_ICON_FLAGS.indexOf(variantFlag) : -1
   let variant: string =
-    variantFlag && metadata.param[variantFlag] ? variantKey : 'Mono'
+    flagBit >= 0 && (mask & (1 << flagBit)) !== 0 ? variantKey : 'Mono'
   // These published variants are not represented by the package's toc flags.
   if (
     (baseKey === 'Gemma' && segments[1] === 'Simple') ||
@@ -218,8 +224,9 @@ export function getLobeIcon(
 
 // The selector uses the same installed icon registry as the renderer.
 export function getLobeIconNames(): string[] {
-  const names = toc.flatMap((icon) =>
-    icon.param.hasColor ? [icon.id, `${icon.id}.Color`] : [icon.id]
+  const colorBit = 1 << LOBE_ICON_FLAGS.indexOf('hasColor')
+  const names = Object.entries(LOBE_ICON_VARIANT_MASKS).flatMap(([id, mask]) =>
+    (mask & colorBit) !== 0 ? [id, `${id}.Color`] : [id]
   )
   return [...new Set([...names, ...Object.keys(CUSTOM_ICONS)])].sort()
 }

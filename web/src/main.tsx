@@ -21,6 +21,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { localizeSystemName } from '@/lib/brand'
 import { installBuildMetadata } from '@/lib/build-metadata'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
@@ -35,7 +36,7 @@ import {
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
 import { ThemeProvider } from './context/theme-provider'
-import './i18n/config'
+import { i18nReady } from './i18n/config'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
 
@@ -76,7 +77,11 @@ if (!rootElement) {
 ;(function initSystemBranding() {
   try {
     if (typeof window === 'undefined' || typeof document === 'undefined') return
-    const apply = (name: string) => {
+    const apply = (raw: string) => {
+      // Wait for the locale so the built-in name resolves to the right language.
+      void i18nReady.then(() => setTitle(localizeSystemName(raw)))
+    }
+    const setTitle = (name: string) => {
       document.title = name
       const metaTitle = document.querySelector(
         'meta[name="title"]'
@@ -105,7 +110,9 @@ if (!rootElement) {
     /* empty */
   }
 })()
-if (!rootElement.innerHTML) {
+// Mount only once the visitor's locale chunk is in, so no English flashes.
+void i18nReady.then(() => {
+  if (rootElement.innerHTML) return
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
@@ -120,4 +127,4 @@ if (!rootElement.innerHTML) {
       </QueryClientProvider>
     </StrictMode>
   )
-}
+})

@@ -16,7 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { KeyRound, Send, UserPlus, type LucideIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { KeyRound, LogIn, Send, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { SpeechBubble } from './decorations'
@@ -27,14 +28,17 @@ type Step = {
   description: string
   icon: LucideIcon
   sfx: string
+  /** Optional in-app target; the step's bubble becomes a link. */
+  to?: string
 }
 
 const STEPS: Step[] = [
   {
-    title: 'Sign Up',
-    description: 'Create your account in seconds.',
-    icon: UserPlus,
+    title: 'Sign In',
+    description: 'Sign in to your account to get started.',
+    icon: LogIn,
     sfx: 'POP!',
+    to: '/sign-in',
   },
   {
     title: 'Get a Key',
@@ -74,7 +78,13 @@ export function ComicStrip() {
                       <Icon strokeWidth={2.4} />
                     </div>
                     <SpeechBubble className='hc-strip-bubble'>
-                      {t(s.title)}
+                      {s.to ? (
+                        <Link to={s.to} className='hc-strip-link'>
+                          {t(s.title)}
+                        </Link>
+                      ) : (
+                        t(s.title)
+                      )}
                     </SpeechBubble>
                     <p className='hc-strip-desc'>{t(s.description)}</p>
                   </div>
