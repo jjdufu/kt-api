@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.11](https://github.com/jjdufu/kt-api/compare/v0.0.10...v0.0.11) (2026-10-20)
+
+
+### Features
+
+* **brand:** monochrome currentColor logo outside KT Comic ([b1f15b8](https://github.com/jjdufu/kt-api/commit/b1f15b8d39310651b3d1c47c21678e4c34a636d2))
+* **home:** clean theme-token variant of home, about, docs and auth pages ([d0f4195](https://github.com/jjdufu/kt-api/commit/d0f41955170afbd2fd6571123c9597be9a7ba719))
+* **layout:** comic-styled public header navigation and icon buttons ([9db7b30](https://github.com/jjdufu/kt-api/commit/9db7b30b1cf181ff8395e68f0b7507f2003b5fe8))
+* **theme:** full comic fonts for KT Comic via unicode-range slices ([f0fecb3](https://github.com/jjdufu/kt-api/commit/f0fecb3d89a78ce7e7a79ce99a0d62f8f0ffc003))
+* **theme:** keep only underground, simple-large and kt-comic presets ([cebff1f](https://github.com/jjdufu/kt-api/commit/cebff1ff4edf4f2de7185a157f6f0c1588e4d339))
+* **theme:** 三主题收敛、漫画全字体与页面跟随主题 ([abb272b](https://github.com/jjdufu/kt-api/commit/abb272b978f3aa79a7255146f8fc8f757edb016c))
+
+
+### Bug Fixes
+
+* **pricing:** single table outline and readable headers in model details ([53a07e7](https://github.com/jjdufu/kt-api/commit/53a07e7d729b3d040634b1c1ec127312003fa844))
+
 ## [0.0.10](https://github.com/jjdufu/kt-api/compare/v0.0.9...v0.0.10) (2026-10-20)
 
 
