@@ -29,7 +29,11 @@ const html = readFileSync(
   resolve(import.meta.dirname, '../../../index.html'),
   'utf8'
 )
-const bootScript = html.match(/<script>([\s\S]*?)<\/script>/)?.[1] ?? ''
+const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(
+  (m) => m[1]
+)
+const bootScript = scripts[0] ?? ''
+const presetScript = scripts[1] ?? ''
 
 function runBootScript() {
   new Function(bootScript)()
@@ -92,4 +96,32 @@ describe('index.html theme boot script', () => {
 
     expect(document.documentElement).toHaveClass('light')
   })
+})
+
+describe('index.html preset boot script', () => {
+  afterEach(() => document.body.removeAttribute('data-theme-preset'))
+
+  it('applies KT Comic for fresh visitors without storing it', () => {
+    new Function(presetScript)()
+    expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
+    expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBeNull()
+  })
+
+  it('keeps a supported stored preset', () => {
+    localStorage.setItem(THEME_STORAGE_KEYS.preset, 'simple-large')
+    new Function(presetScript)()
+    expect(document.body).toHaveAttribute('data-theme-preset', 'simple-large')
+  })
+
+  it.each(['default', 'anthropic', 'ocean-breeze'])(
+    'migrates removed preset %s to underground',
+    (legacy) => {
+      localStorage.setItem(THEME_STORAGE_KEYS.preset, legacy)
+      new Function(presetScript)()
+      expect(document.body).toHaveAttribute('data-theme-preset', 'underground')
+      expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe(
+        'underground'
+      )
+    }
+  )
 })

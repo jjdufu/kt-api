@@ -1,43 +1,38 @@
-# Home page fonts
+# KT Comic theme fonts
 
-Subsets (pyftsubset, woff2) of SIL Open Font License 1.1 fonts, limited to the
-glyphs the comic pages use. Declared in `src/styles/comic/comic-base.css`,
-which only the home, about, docs and auth pages import; the display fonts are
-used for headings, bubbles and buttons only (body text keeps the app font).
+SIL Open Font License 1.1 fonts used only under the KT Comic theme preset.
 
-| File                   | Source font                                             | License                 |
-| ---------------------- | ------------------------------------------------------- | ----------------------- |
-| `kthome-display.woff2` | Smiley Sans Oblique 得意黑 (atelier-anchor/smiley-sans) | `OFL-SmileySans.txt`    |
-| `zcool-kuaile.woff2`   | ZCOOL KuaiLe                                            | `OFL-ZCOOLKuaiLe.txt`   |
-| `bangers.woff2`        | Bangers                                                 | `OFL-Bangers.txt`       |
-| `bungee.woff2`         | Bungee                                                  | `OFL-Bungee.txt`        |
-| `jetbrains-mono.woff2` | JetBrains Mono (variable)                               | `OFL-JetBrainsMono.txt` |
+## Full CJK fonts (unicode-range slices)
+
+| Family           | Source font                                                    | License               |
+| ---------------- | -------------------------------------------------------------- | --------------------- |
+| `KTHome Display` | Smiley Sans Oblique 得意黑 v2.0.1 (atelier-anchor/smiley-sans) | `OFL-SmileySans.txt`  |
+| `KTHome KuaiLe`  | ZCOOL KuaiLe Regular (google/fonts `ofl/zcoolkuaile`)          | `OFL-ZCOOLKuaiLe.txt` |
 
 Smiley Sans declares the Reserved Font Names "Smiley" and "得意黑", so the
-subset (a Modified Version under the OFL) is renamed to "KTHome Display".
+Modified Version is renamed to "KTHome Display" in its name table.
 
-`glyphs.txt` is the CJK glyph set (home/about copy, docs headings and auth
-headings in every locale). After changing that copy, add the new characters
-and rerun, for example:
+Both are split into woff2 slices under `public/fonts/kt-comic/` with
+`unicode-range` @font-face rules in `src/styles/comic/comic-fonts-sliced.css`.
+Slice 000 holds ASCII/Latin-1/punctuation plus every character in
+`glyphs.txt` and `glyphs-console.txt` (home, auth and console copy) and is
+preloaded by `index.html` when KT Comic is active; then GB2312 level-1 hanzi
+in frequency-ish order, then the rest of the font by code point. Regenerate
+(deterministic output) with:
 
-    pyftsubset SmileySans-Oblique.ttf --text-file=glyphs.txt \
-      --layout-features='*' --no-hinting --desubroutinize --flavor=woff2 \
-      --output-file=kthome-display.woff2   # then rename the name table
-    pyftsubset ZCOOLKuaiLe-Regular.ttf --text-file=glyphs.txt ... \
-      --output-file=zcool-kuaile.woff2
+    pip install 'fonttools[woff]' brotli
+    python3 scripts/build-comic-fonts.py \
+      --display SmileySans-Oblique.ttf --body ZCOOLKuaiLe-Regular.ttf
 
-Latin fonts (Bangers, Bungee, JetBrains Mono) use
-`--unicodes=U+0020-007E,U+00A0-00FF,U+2018-201D,U+2022,U+2026,U+2190-2193`.
-Missing glyphs (e.g. kana, Cyrillic) fall back to system fonts.
+Characters missing from both fonts fall back to system fonts.
 
-## Console extension (KT Comic theme preset)
+## Latin fonts (subsets)
 
-`kthome-display-console.woff2` and `zcool-kuaile-console.woff2` contain only
-the extra CJK glyphs in `glyphs-console.txt`: characters of short (≤ 10
-character) zh / zh-TW console UI strings that are not already in the base
-subsets. `src/styles/comic/comic-fonts.css` declares them under the same
-families with a matching `unicode-range`, so they are fetched only when a
-page actually renders one of those characters in a comic font (titles and
-buttons under the KT Comic preset). Regenerate them with the same
-pyftsubset flags, `--text-file=glyphs-console.txt`, and rename the Smiley
-name table to "KTHome Display" as above.
+| File                   | Source font               | License                 |
+| ---------------------- | ------------------------- | ----------------------- |
+| `bangers.woff2`        | Bangers                   | `OFL-Bangers.txt`       |
+| `bungee.woff2`         | Bungee                    | `OFL-Bungee.txt`        |
+| `jetbrains-mono.woff2` | JetBrains Mono (variable) | `OFL-JetBrainsMono.txt` |
+
+Subset with
+`pyftsubset --unicodes=U+0020-007E,U+00A0-00FF,U+2018-201D,U+2022,U+2026,U+2190-2193 --layout-features='*' --no-hinting --flavor=woff2`.

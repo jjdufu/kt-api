@@ -20,6 +20,7 @@ import { Link } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BrandLogo } from '@/components/brand-logo'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
@@ -140,7 +141,7 @@ export function Footer(props: FooterProps) {
           {/* Brand column */}
           <div className='shrink-0'>
             <Link to='/' className='group flex items-center gap-2.5'>
-              <img
+              <BrandLogo
                 src={displayLogo}
                 alt={displayName}
                 className='size-7 rounded-lg object-contain'

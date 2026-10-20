@@ -25,16 +25,36 @@ For commercial licensing, please contact support@quantumnous.com
  * Everything is scoped to <body data-theme-preset="kt-comic">; other presets
  * render exactly as before.
  *
- * Typography: the comic display fonts (see ./comic/comic-fonts.css) are used
- * only for page titles, card/dialog titles and buttons. Body text, tables,
- * numbers and code keep the app font stack, so long/dynamic text stays
- * readable and glyphs outside the subsets fall back to system fonts.
+ * Typography: every text uses a comic font under this preset, overriding
+ * the user's Font axis choice. Headings, titles and buttons use KTHome
+ * Display (Smiley Sans); body text, including Latin, uses KTHome KuaiLe
+ * (ZCOOL KuaiLe); code, numeric columns and prices use KTHome Mono
+ * (JetBrains Mono). The CJK fonts are full, unicode-range sliced fonts (see
+ * ./comic/comic-fonts.css); missing glyphs fall back to system fonts.
  */
 
 [data-theme-preset='kt-comic'] {
-  --kt-font-title: 'KTHome Display', var(--font-body), system-ui, sans-serif;
-  --kt-font-button: 'KTHome KuaiLe', var(--font-body), system-ui, sans-serif;
+  --kt-font-body: 'KTHome KuaiLe', system-ui, sans-serif;
+  --kt-font-title: 'KTHome Display', var(--kt-font-body);
+  --kt-font-button: 'KTHome Display', var(--kt-font-body);
+  --kt-font-mono:
+    'KTHome Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --kt-line: 2.5px;
+}
+/* (0,2,0) beats the Font axis blocks in theme-presets.css. */
+[data-theme-preset='kt-comic'][data-theme-font],
+[data-theme-preset='kt-comic']:not([data-theme-font]) {
+  --font-ui-sans: var(--kt-font-body);
+  --font-body: var(--kt-font-body);
+  --font-sans: var(--kt-font-body);
+  --font-serif: var(--kt-font-body);
+  --font-mono: var(--kt-font-mono);
+  font-family: var(--kt-font-body);
+}
+[data-theme-preset='kt-comic'] :is(code, kbd, pre, samp, .font-mono),
+[data-theme-preset='kt-comic'] .tabular-nums,
+[data-theme-preset='kt-comic'] [data-slot='table-cell'].font-mono {
+  font-family: var(--kt-font-mono);
 }
 
 /* ── Typography ─────────────────────────────────────────────────────── */
@@ -42,7 +62,9 @@ For commercial licensing, please contact support@quantumnous.com
 [data-theme-preset='kt-comic'] [data-slot='card-title'],
 [data-theme-preset='kt-comic'] [data-slot='dialog-title'],
 [data-theme-preset='kt-comic'] [data-slot='alert-dialog-title'],
-[data-theme-preset='kt-comic'] [data-slot='sheet-title'] {
+[data-theme-preset='kt-comic'] [data-slot='sheet-title'],
+[data-theme-preset='kt-comic'] [data-slot='section-title'],
+[data-theme-preset='kt-comic'] :is(h1, h2, h3, h4) {
   font-family: var(--kt-font-title);
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -76,6 +98,84 @@ For commercial licensing, please contact support@quantumnous.com
   border-bottom: var(--kt-line) solid var(--kt-outline);
   background: color-mix(in srgb, var(--background) 92%, transparent);
   backdrop-filter: blur(6px);
+}
+
+/* Public header (components/layout/components/public-header.tsx) */
+[data-theme-preset='kt-comic'] [data-slot='public-nav-link'] {
+  font-family: var(--kt-font-title);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+  transition:
+    transform 110ms ease,
+    box-shadow 110ms ease,
+    background-color 110ms ease;
+}
+[data-theme-preset='kt-comic'] [data-slot='public-nav-link']:hover,
+[data-theme-preset='kt-comic'] [data-slot='public-nav-link']:focus-visible {
+  color: #000;
+  background: var(--kt-yellow);
+  border-color: #000;
+  box-shadow: 2px 2px 0 var(--kt-shadow);
+  transform: translate(-1px, -1px);
+}
+[data-theme-preset='kt-comic'] [data-slot='public-nav-link'][data-active] {
+  color: #000;
+  background: var(--kt-yellow);
+  border-color: #000;
+  box-shadow: 3px 3px 0 var(--kt-magenta);
+}
+.dark
+  [data-theme-preset='kt-comic']
+  [data-slot='public-nav-link'][data-active] {
+  box-shadow: 3px 3px 0 var(--kt-cyan);
+}
+/* Header icon buttons (theme switch, notifications, menu): small outlined
+ * squares with a hard shadow. */
+[data-theme-preset='kt-comic']
+  [data-slot='public-header']
+  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
+    [class~='size-7'],
+    [class~='size-8'],
+    [class~='size-9'],
+    [class~='w-9']
+  ) {
+  width: 2.125rem;
+  height: 2.125rem;
+  border: 2px solid var(--kt-outline);
+  border-radius: 0.375rem;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 2px 2px 0 var(--kt-shadow);
+}
+.dark
+  [data-theme-preset='kt-comic']
+  [data-slot='public-header']
+  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
+    [class~='size-7'],
+    [class~='size-8'],
+    [class~='size-9'],
+    [class~='w-9']
+  ) {
+  box-shadow: 2px 2px 0 var(--kt-cyan);
+}
+[data-theme-preset='kt-comic']
+  [data-slot='public-header']
+  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
+    [class~='size-7'],
+    [class~='size-8'],
+    [class~='size-9'],
+    [class~='w-9']
+  ):hover {
+  background: var(--kt-yellow);
+  color: #000;
+  transform: translate(-1px, -1px);
+}
+[data-theme-preset='kt-comic'] [data-slot='button'] {
+  font-family: var(--kt-font-button);
 }
 
 /* ── Cards, dialogs, popovers ───────────────────────────────────────── */
@@ -223,16 +323,29 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ── Tables (contrast first) ────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='table-container'] {
+/* One outline per table. A StaticDataTable root (`.border`) already draws
+ * the frame, so the inner table-container only gets an outline when it is
+ * standalone: not inside a bordered wrapper, an embedded `.border-0`
+ * wrapper, or another table. */
+[data-theme-preset='kt-comic']
+  [data-slot='table-container']:not(
+    :is(.border, .border-0, [data-slot='table-container'])
+      [data-slot='table-container']
+  ) {
   border: 2px solid var(--kt-outline);
   border-radius: 0.5rem;
   background: var(--card);
 }
+[data-theme-preset='kt-comic']
+  .border:not(.border-0):has(> [data-slot='table-container']) {
+  border: 2px solid var(--kt-outline);
+  background: var(--card);
+}
 [data-theme-preset='kt-comic'] [data-slot='table-header'] {
-  background: color-mix(in srgb, var(--kt-cyan) 14%, var(--card));
+  background: color-mix(in srgb, var(--kt-cyan) 8%, var(--card));
 }
 [data-theme-preset='kt-comic'] [data-slot='table-head'] {
-  color: var(--foreground);
+  color: var(--foreground) !important;
   font-weight: 700;
 }
 [data-theme-preset='kt-comic'] [data-slot='table-row']:hover {
@@ -340,4 +453,9 @@ For commercial licensing, please contact support@quantumnous.com
     :is([data-slot='button'], .kt-avatar-trigger, header a[href='/sign-in']) {
     transition: none;
   }
+}
+
+/* Docs code blocks keep the monospace face. */
+[data-theme-preset='kt-comic'] [data-docs] .dc-code * {
+  font-family: var(--kt-font-mono);
 }

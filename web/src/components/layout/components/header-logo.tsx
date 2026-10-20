@@ -1,3 +1,4 @@
+import { BrandLogo } from '@/components/brand-logo'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -38,7 +39,7 @@ export function HeaderLogo({
   className,
 }: HeaderLogoProps) {
   return (
-    <img
+    <BrandLogo
       src={src}
       alt={alt}
       className={cn(

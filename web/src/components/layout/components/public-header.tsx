@@ -38,6 +38,12 @@ import { HeaderLogo } from './header-logo'
 
 const AUTH_PROMPT_SECONDS = 5
 
+/** Home matches exactly; other links also match their sub-routes. */
+function isNavLinkActive(pathname: string, href: string) {
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 type AuthPromptTarget = {
   title: string
   href: string
@@ -197,7 +203,10 @@ export function PublicHeader(props: PublicHeaderProps) {
 
   return (
     <>
-      <header className='pointer-events-none fixed inset-x-0 top-0 z-50'>
+      <header
+        data-slot='public-header'
+        className='pointer-events-none fixed inset-x-0 top-0 z-50'
+      >
         <div
           className={cn(
             'pointer-events-auto mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
@@ -237,11 +246,12 @@ export function PublicHeader(props: PublicHeaderProps) {
             {/* Desktop nav */}
             <div className='hidden min-w-0 items-center gap-0.5 lg:flex'>
               {links.map((link) => {
-                const isActive = pathname === link.href
+                const isActive = isNavLinkActive(pathname, link.href)
                 if (link.external) {
                   return (
                     <a
                       key={`${link.title}:${link.href}`}
+                      data-slot='public-nav-link'
                       href={link.href}
                       title={t(link.title)}
                       target='_blank'
@@ -261,6 +271,9 @@ export function PublicHeader(props: PublicHeaderProps) {
                 return (
                   <Link
                     key={`${link.title}:${link.href}`}
+                    data-slot='public-nav-link'
+                    data-active={isActive ? '' : undefined}
+                    aria-current={isActive ? 'page' : undefined}
                     to={link.href}
                     title={t(link.title)}
                     disabled={link.disabled}

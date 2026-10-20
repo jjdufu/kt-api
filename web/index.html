@@ -41,12 +41,35 @@
          DEFAULT_THEME_CUSTOMIZATION / THEME_STORAGE_KEYS.preset. -->
     <script>
       ;(function () {
+        // Removed presets (incl. the old 'default') migrate to 'underground'.
+        // Keep in sync with migrateThemePreset() in lib/theme-customization.
         var preset = 'kt-comic'
+        var keep = { 'kt-comic': 1, underground: 1, 'simple-large': 1 }
         try {
-          preset = localStorage.getItem('newapi:theme:v1:preset') || preset
+          var key = 'newapi:theme:v1:preset'
+          var stored = localStorage.getItem(key)
+          if (stored) {
+            preset = keep[stored] ? stored : 'underground'
+            if (preset !== stored) localStorage.setItem(key, preset)
+          }
         } catch (e) {}
-        if (preset !== 'default') {
-          document.body.setAttribute('data-theme-preset', preset)
+        document.body.setAttribute('data-theme-preset', preset)
+        // KT Comic: preload the first-screen font slices (generated list,
+        // see scripts/build-comic-fonts.py). Other presets fetch nothing.
+        if (preset === 'kt-comic') {
+          var fonts = [
+            /*kt-comic-preload*/ '/fonts/kt-comic/display/000-84398194.woff2',
+            '/fonts/kt-comic/kuaile/000-9433feee.woff2' /*end*/,
+          ]
+          for (var i = 0; i < fonts.length; i++) {
+            var l = document.createElement('link')
+            l.rel = 'preload'
+            l.as = 'font'
+            l.type = 'font/woff2'
+            l.crossOrigin = 'anonymous'
+            l.href = fonts[i]
+            document.head.appendChild(l)
+          }
         }
       })()
     </script>

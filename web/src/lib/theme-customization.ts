@@ -32,61 +32,26 @@ export const THEME_PRESETS = [
     swatches: ['#ffe600', '#ff2bd6'],
   },
   {
-    value: 'default',
-    name: 'Default',
-    swatches: ['oklch(0.72 0.18 250)', 'oklch(0.7 0.12 280)'],
-  },
-  {
-    // Inspired by Anthropic's official brand language: warm cream canvas
-    // (#faf9f5) paired with clay/coral (#d97757) as the single accent.
-    // Swatches preview the canvas → accent gradient that defines the system.
-    value: 'anthropic',
-    name: 'Anthropic',
-    swatches: ['oklch(0.984 0.005 95)', 'oklch(0.685 0.142 38)'],
-  },
-  {
-    value: 'simple-large',
-    name: 'Simple Large-font',
-    swatches: ['oklch(0.15 0 0)', 'oklch(0.99 0 0)'],
-  },
-  {
+    // 暗夜: muted green/magenta night palette (light & dark).
     value: 'underground',
     name: 'Underground',
     swatches: ['oklch(0.5315 0.0694 156.19)', 'oklch(0.5748 0.0862 336.52)'],
   },
   {
-    value: 'rose-garden',
-    name: 'Rose Garden',
-    swatches: ['oklch(0.5827 0.2418 12.23)', 'oklch(0.8131 0.1129 5.67)'],
-  },
-  {
-    value: 'lake-view',
-    name: 'Lake View',
-    swatches: ['oklch(0.765 0.177 163.22)', 'oklch(0.551 0.0899 200.52)'],
-  },
-  {
-    value: 'sunset-glow',
-    name: 'Sunset Glow',
-    swatches: ['oklch(0.5591 0.1882 25.33)', 'oklch(0.7938 0.1248 42.42)'],
-  },
-  {
-    value: 'forest-whisper',
-    name: 'Forest Whisper',
-    swatches: ['oklch(0.5276 0.1072 182.22)', 'oklch(0.5236 0.0505 250.18)'],
-  },
-  {
-    value: 'ocean-breeze',
-    name: 'Ocean Breeze',
-    swatches: ['oklch(0.5461 0.2152 262.88)', 'oklch(0.5854 0.2041 277.12)'],
-  },
-  {
-    value: 'lavender-dream',
-    name: 'Lavender Dream',
-    swatches: ['oklch(0.5709 0.1808 306.89)', 'oklch(0.811 0.0589 201.14)'],
+    // 超大字体简易: high-contrast neutral surfaces with larger type.
+    value: 'simple-large',
+    name: 'Simple Large-font',
+    swatches: ['oklch(0.15 0 0)', 'oklch(0.99 0 0)'],
   },
 ] as const
 
-export type ThemePreset = (typeof THEME_PRESETS)[number]['value']
+export type SelectableThemePreset = (typeof THEME_PRESETS)[number]['value']
+/**
+ * `default` is the hidden neutral fallback (theme.css palette, applied by
+ * removing `data-theme-preset`). It is never offered in the picker and a
+ * stored `default` is migrated like any other removed preset.
+ */
+export type ThemePreset = SelectableThemePreset | 'default'
 export type ThemeRadius = 'default' | 'none' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeScale = 'default' | 'sm' | 'lg' | 'xl'
 export type ContentLayout = 'full' | 'centered'
@@ -95,7 +60,7 @@ export type ContentLayout = 'full' | 'centered'
  * Font axis for the theme.
  *
  * - `default` — use the browser's sans-serif unless the active preset
- *   specifies its own font (Anthropic uses serif).
+ *   specifies its own font.
  * - `sans` — explicitly use Public Sans.
  * - `serif` — use Lora + CJK fallbacks. Monospace contexts keep their
  *   own family via Tailwind preflight and `.font-mono`.
@@ -120,7 +85,7 @@ export type ThemeCustomization = {
 
 /**
  * The neutral palette from theme.css. It is applied by *removing*
- * `data-theme-preset`, so it is distinct from the default preset below.
+ * `data-theme-preset`. Internal only; not selectable.
  */
 export const NEUTRAL_THEME_PRESET: ThemePreset = 'default'
 
@@ -137,6 +102,19 @@ export const DEFAULT_THEME_CUSTOMIZATION: ThemeCustomization = {
 export const THEME_PRESET_VALUES = new Set(
   THEME_PRESETS.map((p) => p.value)
 ) as ReadonlySet<ThemePreset>
+
+/**
+ * Preset a stored-but-removed value (any former preset, including the old
+ * `default`) is migrated to. Fresh visitors without a stored value still get
+ * DEFAULT_THEME_CUSTOMIZATION.preset. Keep in sync with index.html.
+ */
+export const MIGRATED_THEME_PRESET: ThemePreset = 'underground'
+
+export function migrateThemePreset(raw: string | null): ThemePreset | null {
+  if (raw === null || raw === '') return null
+  if (THEME_PRESET_VALUES.has(raw as ThemePreset)) return raw as ThemePreset
+  return MIGRATED_THEME_PRESET
+}
 
 export const THEME_FONT_VALUES: ReadonlySet<ThemeFont> = new Set([
   'default',
@@ -174,9 +152,7 @@ export const CONTENT_LAYOUT_VALUES: ReadonlySet<ContentLayout> = new Set([
  */
 export const PRESET_DEFAULT_FONT: Partial<
   Record<ThemePreset, ResolvedThemeFont>
-> = {
-  anthropic: 'serif',
-}
+> = {}
 
 /**
  * Resolve a user font preference + active preset into the concrete font that

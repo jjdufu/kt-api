@@ -23,7 +23,10 @@ For commercial licensing, please contact support@quantumnous.com
  * browsers fetch a font file only when a scoped element actually uses it.
  */
 
-/* @font-face rules live in ./comic-fonts.css (loaded globally, fetched lazily). */
+/* @font-face rules live in ./comic-fonts.css (loaded globally, fetched lazily).
+ * ./comic-clean.css turns these pages into a clean, theme-token version for
+ * every preset except KT Comic. */
+@import './comic-clean.css';
 
 /* ---------- tokens ---------- */
 [data-home],

@@ -19,7 +19,6 @@ For commercial licensing, please contact support@quantumnous.com
 import { preload } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 
-import displayFont from '@/assets/comic/fonts/kthome-display.woff2'
 import heroGirl from '@/assets/comic/hero-girl.webp'
 
 import { ComicTerminal } from './comic-terminal'
@@ -50,10 +49,9 @@ type ComicHeroProps = {
 export function ComicHero({ isAuthenticated }: ComicHeroProps) {
   const { t } = useTranslation()
   const docsHref = useDocsHref()
-  // Start the hero image (LCP) and the CJK headline font right away instead of
-  // waiting for CSS/layout to discover them. React de-duplicates the hints.
+  // Start the hero image (LCP) right away instead of waiting for CSS/layout.
+  // The comic font slices are preloaded by index.html under KT Comic.
   preload(heroGirl, { as: 'image', fetchPriority: 'high' })
-  preload(displayFont, { as: 'font', type: 'font/woff2', crossOrigin: '' })
   const headline = t('Define Everything with LLMs!')
   const lines = splitHeadline(headline)
 
