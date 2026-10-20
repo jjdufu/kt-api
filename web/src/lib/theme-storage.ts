@@ -23,6 +23,7 @@ export const THEME_STORAGE_KEYS = {
   radius: 'newapi:theme:v1:radius',
   scale: 'newapi:theme:v1:scale',
   contentLayout: 'newapi:theme:v1:content-layout',
+  largeFont: 'newapi:theme:v1:large-font',
 } as const
 
 export function readThemePreference<T extends string>(

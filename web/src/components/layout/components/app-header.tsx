@@ -113,23 +113,32 @@ export function AppHeader({
 
   return (
     <Header>
-      <div className='flex min-w-0 flex-1 items-center gap-1'>
+      {/* Three columns: brand | centred search (lg+) | actions. The two
+          side columns share the remaining width equally so search stays
+          centred in the header. */}
+      <div className='flex min-w-0 flex-1 basis-0 items-center gap-1'>
         <SystemBrand variant='inline' />
       </div>
+
+      {showSearch && !rightContent && (
+        <div className='hidden w-64 shrink-0 justify-center lg:flex xl:w-80 2xl:w-[28rem]'>
+          <Search className='w-full sm:w-full lg:w-full xl:w-full' />
+        </div>
+      )}
 
       {leftContent ? (
         <div className='ms-2 flex items-center'>{leftContent}</div>
       ) : null}
 
       {rightContent ?? (
-        <div className='ms-auto flex shrink-0 items-center gap-1 sm:gap-2'>
+        <div className='ms-auto flex min-w-max flex-1 basis-0 items-center justify-end gap-1 sm:gap-2'>
           {showTopNav && (
             <div className='me-1 hidden lg:block'>
               <TopNav links={links} />
             </div>
           )}
           {showSearch && (
-            <Search className='w-8 flex-none [&>span]:hidden sm:[&>span]:inline' />
+            <Search className='w-8 flex-none sm:w-8 sm:pe-0 lg:hidden [&>kbd]:hidden [&>span]:hidden' />
           )}
           {showNotifications && isAuthenticated && (
             <NotificationPopover

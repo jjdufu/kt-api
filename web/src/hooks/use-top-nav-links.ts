@@ -66,8 +66,8 @@ export function useTopNavLinks(): TopNavLink[] {
     links.push({ title: t('Home'), href: '/' })
   }
 
-  // Console -> /dashboard (new console path)
-  if (modules?.console !== false) {
+  // Console -> /dashboard (new console path); signed-in users only.
+  if (modules?.console !== false && isAuthed) {
     links.push({ title: t('Console'), href: '/dashboard' })
   }
 

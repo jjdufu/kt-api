@@ -107,21 +107,42 @@ describe('index.html preset boot script', () => {
     expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBeNull()
   })
 
-  it('keeps a supported stored preset', () => {
+  afterEach(() => document.body.removeAttribute('data-theme-large-font'))
+
+  it.each(['default', 'simple', 'kt-comic'])(
+    'keeps supported stored preset %s',
+    (preset) => {
+      localStorage.setItem(THEME_STORAGE_KEYS.preset, preset)
+      new Function(presetScript)()
+      expect(document.body).toHaveAttribute('data-theme-preset', preset)
+      expect(document.body).not.toHaveAttribute('data-theme-large-font')
+    }
+  )
+
+  it('migrates simple-large to simple and turns large font on', () => {
     localStorage.setItem(THEME_STORAGE_KEYS.preset, 'simple-large')
     new Function(presetScript)()
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple-large')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-large-font', '')
+    expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('simple')
+    expect(localStorage.getItem(THEME_STORAGE_KEYS.largeFont)).toBe('1')
   })
 
-  it.each(['default', 'anthropic', 'ocean-breeze'])(
-    'migrates removed preset %s to underground',
+  it('applies a stored large-font preference with any preset', () => {
+    localStorage.setItem(THEME_STORAGE_KEYS.largeFont, '1')
+    new Function(presetScript)()
+    expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
+    expect(document.body).toHaveAttribute('data-theme-large-font', '')
+  })
+
+  it.each(['underground', 'anthropic', 'ocean-breeze'])(
+    'migrates removed preset %s to default',
     (legacy) => {
       localStorage.setItem(THEME_STORAGE_KEYS.preset, legacy)
       new Function(presetScript)()
-      expect(document.body).toHaveAttribute('data-theme-preset', 'underground')
-      expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe(
-        'underground'
-      )
+      expect(document.body).toHaveAttribute('data-theme-preset', 'default')
+      expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('default')
+      expect(localStorage.getItem(THEME_STORAGE_KEYS.largeFont)).toBeNull()
     }
   )
 })

@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
 import { RichContent } from '@/components/rich-content'
+import { useThemeCustomization } from '@/context/theme-customization-provider'
 import { useTheme } from '@/context/theme-provider'
 import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
@@ -35,10 +36,12 @@ import {
   NeonStats,
   PageBackdrop,
 } from './components/comic'
+import { EnterpriseHome } from './components/enterprise/enterprise-home'
 import { useHomePageContent } from './hooks'
 
 export function Home() {
   const { i18n, t } = useTranslation()
+  const isComic = useThemeCustomization().customization.preset === 'kt-comic'
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const { resolvedTheme } = useTheme()
   const { auth } = useAuthStore()
@@ -128,7 +131,10 @@ export function Home() {
     )
   }
 
-  // Default comic home page. All of its styles are scoped to [data-home].
+  // Built-in home: enterprise layout for every preset except KT Comic.
+  if (!isComic) return <EnterpriseHome />
+
+  // KT Comic home page. All of its styles are scoped to [data-home].
   return (
     <div data-home=''>
       <PageBackdrop />

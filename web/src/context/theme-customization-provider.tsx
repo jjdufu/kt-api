@@ -29,7 +29,7 @@ import {
   CONTENT_LAYOUT_VALUES,
   type ContentLayout,
   DEFAULT_THEME_CUSTOMIZATION,
-  NEUTRAL_THEME_PRESET,
+  LARGE_FONT_PRESETS,
   resolveThemeFont,
   THEME_FONT_VALUES,
   migrateThemePreset,
@@ -64,9 +64,23 @@ function readInitialPreset(): ThemePreset {
   }
   const migrated = migrateThemePreset(raw)
   if (migrated === null) return DEFAULT_THEME_CUSTOMIZATION.preset
-  if (migrated !== raw)
+  if (migrated !== raw) {
     writeThemePreference(THEME_STORAGE_KEYS.preset, migrated)
+    if (raw && LARGE_FONT_PRESETS.has(raw))
+      writeThemePreference(THEME_STORAGE_KEYS.largeFont, '1')
+  }
   return migrated
+}
+
+function readInitialLargeFont(): boolean {
+  try {
+    return (
+      typeof window !== 'undefined' &&
+      window.localStorage.getItem(THEME_STORAGE_KEYS.largeFont) === '1'
+    )
+  } catch {
+    return false
+  }
 }
 
 function applyAttribute(name: string, value: string | null) {
@@ -88,6 +102,7 @@ type ThemeCustomizationContextType = {
   setRadius: (radius: ThemeRadius) => void
   setScale: (scale: ThemeScale) => void
   setContentLayout: (contentLayout: ContentLayout) => void
+  setLargeFont: (largeFont: boolean) => void
   resetCustomization: () => void
 }
 
@@ -103,6 +118,7 @@ const FALLBACK_CONTEXT: ThemeCustomizationContextType = {
   setRadius: () => {},
   setScale: () => {},
   setContentLayout: () => {},
+  setLargeFont: () => {},
   resetCustomization: () => {},
 }
 
@@ -112,7 +128,9 @@ const ThemeCustomizationContext =
 export function ThemeCustomizationProvider(props: {
   children: React.ReactNode
 }) {
+  // Preset first: its initializer may migrate simple-large → largeFont.
   const [preset, _setPreset] = useState<ThemePreset>(readInitialPreset)
+  const [largeFont, _setLargeFont] = useState<boolean>(readInitialLargeFont)
   const [font, _setFont] = useState<ThemeFont>(() =>
     readThemePreference<ThemeFont>(
       THEME_STORAGE_KEYS.font,
@@ -145,11 +163,12 @@ export function ThemeCustomizationProvider(props: {
   // Mirror state to the <body> via data-* attributes so theme-presets.css can
   // override CSS variables at the right cascade layer.
   useEffect(() => {
-    applyAttribute(
-      'data-theme-preset',
-      preset === NEUTRAL_THEME_PRESET ? null : preset
-    )
+    applyAttribute('data-theme-preset', preset)
   }, [preset])
+
+  useEffect(() => {
+    applyAttribute('data-theme-large-font', largeFont ? '' : null)
+  }, [largeFont])
 
   // Resolve Auto into the preset font or the browser's sans-serif while
   // keeping an explicit Sans choice distinct from that browser fallback.
@@ -215,23 +234,30 @@ export function ThemeCustomizationProvider(props: {
     )
   }, [])
 
+  const setLargeFont = useCallback((value: boolean) => {
+    _setLargeFont(value)
+    writeThemePreference(THEME_STORAGE_KEYS.largeFont, value ? '1' : null)
+  }, [])
+
   const resetCustomization = useCallback(() => {
     setPreset(DEFAULT_THEME_CUSTOMIZATION.preset)
     setFont(DEFAULT_THEME_CUSTOMIZATION.font)
     setRadius(DEFAULT_THEME_CUSTOMIZATION.radius)
     setScale(DEFAULT_THEME_CUSTOMIZATION.scale)
     setContentLayout(DEFAULT_THEME_CUSTOMIZATION.contentLayout)
-  }, [setPreset, setFont, setRadius, setScale, setContentLayout])
+    setLargeFont(DEFAULT_THEME_CUSTOMIZATION.largeFont)
+  }, [setPreset, setFont, setRadius, setScale, setContentLayout, setLargeFont])
 
   const value = useMemo<ThemeCustomizationContextType>(
     () => ({
       defaults: DEFAULT_THEME_CUSTOMIZATION,
-      customization: { preset, font, radius, scale, contentLayout },
+      customization: { preset, font, radius, scale, contentLayout, largeFont },
       setPreset,
       setFont,
       setRadius,
       setScale,
       setContentLayout,
+      setLargeFont,
       resetCustomization,
     }),
     [
@@ -240,11 +266,13 @@ export function ThemeCustomizationProvider(props: {
       radius,
       scale,
       contentLayout,
+      largeFont,
       setPreset,
       setFont,
       setRadius,
       setScale,
       setContentLayout,
+      setLargeFont,
       resetCustomization,
     ]
   )

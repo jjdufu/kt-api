@@ -4716,8 +4716,6 @@
     "Preset templates": "Mẫu sẵn",
     "Product configuration error": "Lỗi cấu hình sản phẩm",
     "Product does not exist": "Sản phẩm không tồn tại",
-    "preset.simple-large": "Chữ lớn & Đơn giản",
-    "preset.underground": "Bóng đêm",
     "Press Enter or comma to add tags": "Nhấn Enter hoặc dấu phẩy để thêm thẻ",
     "Press Enter to use \"{{value}}\"": "Nhấn Enter để dùng \"{{value}}\"",
     "Prevent server-side request forgery attacks": "Ngăn chặn các cuộc tấn công giả mạo yêu cầu phía máy chủ",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "Tạo và quản lý khóa cho ứng dụng của bạn.",
     "Endpoints, parameters and examples.": "Endpoint, tham số và ví dụ.",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI được xây dựng trên QuantumNous/new-api và cấp phép theo AGPL-3.0.",
-    "preset.kt-comic": "KT Comic"
+    "preset.kt-comic": "KT Comic",
+    "preset.default": "Mặc định",
+    "preset.simple": "Đơn giản",
+    "Large font": "Chữ lớn",
+    "Larger text across the interface, with any theme.": "Chữ lớn hơn trên toàn giao diện, áp dụng cho mọi chủ đề."
   }
 }

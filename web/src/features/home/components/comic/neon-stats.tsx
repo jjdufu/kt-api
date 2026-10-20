@@ -20,7 +20,7 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getDefaultStats } from '../../constants'
-import { Reveal, SectionHeading } from './primitives'
+import { SectionHeading } from './primitives'
 
 function CountUp({ end, suffix }: { end: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -81,7 +81,7 @@ export function NeonStats() {
         />
         <div className='hc-neon-grid'>
           {stats.map((s, i) => (
-            <Reveal key={s.description} delay={i * 0.08} tilt={0}>
+            <div key={s.description}>
               <div
                 className={`hc-neon-sign hc-neon-${TONES[i % TONES.length]}`}
               >
@@ -90,7 +90,7 @@ export function NeonStats() {
                 </span>
                 <span className='hc-neon-label'>{s.description}</span>
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
       </div>

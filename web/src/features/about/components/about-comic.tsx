@@ -17,14 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import {
-  BookOpenText,
-  Gauge,
-  KeyRound,
-  Layers,
-  Sparkles,
-  type LucideIcon,
-} from 'lucide-react'
+import { BookOpenText, Gauge, KeyRound, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
@@ -34,7 +27,6 @@ import {
   CapabilityWall,
   ComicButton,
   ModelMarquee,
-  Reveal,
   SectionHeading,
   PageBackdrop,
   SpeechBubble,
@@ -42,35 +34,9 @@ import {
 } from '@/features/home/components/comic'
 import { useAuthStore } from '@/stores/auth-store'
 
+import { PILLARS } from './content'
+
 import '../about-comic.css'
-
-type Pillar = {
-  title: string
-  body: string
-  icon: LucideIcon
-  tone: 'cyan' | 'magenta' | 'yellow'
-}
-
-const PILLARS: Pillar[] = [
-  {
-    title: 'One gateway',
-    body: 'KTAPI puts every major model behind one OpenAI-compatible endpoint, so switching models is a one-line change.',
-    icon: Layers,
-    tone: 'cyan',
-  },
-  {
-    title: 'Built for creators',
-    body: 'Text, images, video and assets share the same keys, billing and logs, so you spend time creating instead of wiring vendors together.',
-    icon: Sparkles,
-    tone: 'magenta',
-  },
-  {
-    title: 'Clear and in control',
-    body: 'Usage-based billing, per-key quotas and detailed logs show exactly where every request and every credit went.',
-    icon: Gauge,
-    tone: 'yellow',
-  },
-]
 
 type Entry = { title: string; body: string; to: string; icon: LucideIcon }
 
@@ -167,11 +133,7 @@ export function AboutComic() {
                 {PILLARS.map((p, i) => {
                   const Icon = p.icon
                   return (
-                    <Reveal
-                      key={p.title}
-                      delay={i * 0.1}
-                      className='ab-pillar-cell'
-                    >
+                    <div className='ab-pillar-cell' key={p.title}>
                       <article
                         className={`hc-card hc-tone-${p.tone} ab-pillar`}
                       >
@@ -182,7 +144,7 @@ export function AboutComic() {
                         <h3 className='hc-card-title'>{t(p.title)}</h3>
                         <p className='hc-card-desc'>{t(p.body)}</p>
                       </article>
-                    </Reveal>
+                    </div>
                   )
                 })}
               </div>

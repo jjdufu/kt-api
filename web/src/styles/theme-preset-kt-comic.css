@@ -25,25 +25,70 @@ For commercial licensing, please contact support@quantumnous.com
  * Everything is scoped to <body data-theme-preset="kt-comic">; other presets
  * render exactly as before.
  *
- * Typography: every text uses a comic font under this preset, overriding
- * the user's Font axis choice. Headings, titles and buttons use KTHome
- * Display (Smiley Sans); body text, including Latin, uses KTHome KuaiLe
- * (ZCOOL KuaiLe); code, numeric columns and prices use KTHome Mono
- * (JetBrains Mono). The CJK fonts are full, unicode-range sliced fonts (see
- * ./comic/comic-fonts.css); missing glyphs fall back to system fonts.
+ * Typography: the comic fonts (KTHome Display = Smiley Sans for headings
+ * and buttons, KTHome KuaiLe = ZCOOL KuaiLe for body) are used only on the
+ * marketing pages: home / about ([data-home]) and auth ([data-auth]). The
+ * console and every other page use a formal cyber set: Chakra Petch (OFL,
+ * Latin subset, self-hosted) for headings, nav and buttons, the system
+ * sans for body text and all CJK, and KTHome Mono (JetBrains Mono) for code
+ * and numbers. Both override the user's Font axis choice.
  */
 
+@font-face {
+  font-family: 'KT Console Display';
+  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-500-normal.woff2')
+    format('woff2');
+  font-weight: 400 500;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+@font-face {
+  font-family: 'KT Console Display';
+  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-600-normal.woff2')
+    format('woff2');
+  font-weight: 600;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+@font-face {
+  font-family: 'KT Console Display';
+  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-700-normal.woff2')
+    format('woff2');
+  font-weight: 700 900;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+
+/* Console / default: formal cyber set. */
 [data-theme-preset='kt-comic'] {
-  --kt-font-body: 'KTHome KuaiLe', system-ui, sans-serif;
-  --kt-font-title: 'KTHome Display', var(--kt-font-body);
-  --kt-font-button: 'KTHome Display', var(--kt-font-body);
+  --kt-font-system:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Source Han Sans SC', sans-serif;
+  --kt-font-body: var(--kt-font-system);
+  --kt-font-title: 'KT Console Display', var(--kt-font-system);
+  --kt-font-button: 'KT Console Display', var(--kt-font-system);
   --kt-font-mono:
     'KTHome Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --kt-line: 2.5px;
 }
-/* (0,2,0) beats the Font axis blocks in theme-presets.css. */
+/* Marketing pages: comic fonts. */
+[data-theme-preset='kt-comic'] :is([data-home], [data-auth]) {
+  --kt-font-body: 'KTHome KuaiLe', system-ui, sans-serif;
+  --kt-font-title: 'KTHome Display', 'KTHome KuaiLe', system-ui, sans-serif;
+  --kt-font-button: 'KTHome Display', 'KTHome KuaiLe', system-ui, sans-serif;
+}
+/* (0,2,0) beats the Font axis blocks in theme-presets.css. Re-declared on
+ * the marketing roots because var() resolves where it is declared. */
 [data-theme-preset='kt-comic'][data-theme-font],
-[data-theme-preset='kt-comic']:not([data-theme-font]) {
+[data-theme-preset='kt-comic']:not([data-theme-font]),
+[data-theme-preset='kt-comic'] :is([data-home], [data-auth]) {
   --font-ui-sans: var(--kt-font-body);
   --font-body: var(--kt-font-body);
   --font-sans: var(--kt-font-body);

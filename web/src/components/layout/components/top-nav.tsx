@@ -99,10 +99,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
 
       {/* 桌面端水平导航 */}
       <nav
-        className={cn(
-          'hidden items-center gap-0.5 lg:flex',
-          className
-        )}
+        className={cn('hidden items-center gap-0.5 lg:flex', className)}
         {...props}
       >
         {normalizedLinks.map(({ title, href, isActive, disabled, external }) =>
@@ -113,7 +110,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               target='_blank'
               rel='noopener noreferrer'
               data-slot='site-nav-link'
-              className='text-muted-foreground hover:text-foreground rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200'
+              className='text-muted-foreground hover:text-foreground rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200'
             >
               {title}
             </a>
@@ -126,7 +123,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               data-active={isActive ? '' : undefined}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200',
+                'rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200',
                 isActive
                   ? 'text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
