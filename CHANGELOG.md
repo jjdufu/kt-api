@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.15](https://github.com/jjdufu/kt-api/compare/v0.0.14...v0.0.15) (2026-10-20)
+
+
+### Features
+
+* **home:** 首页、关于、文档改为网格底面 + 首屏赛博层 ([37fe000](https://github.com/jjdufu/kt-api/commit/37fe0003797fe8bd93320ef5bf5df4aa11ef4e4d))
+* **i18n:** 首页漫画腔文案改为中性专业表述（7 种语言） ([4af5bb6](https://github.com/jjdufu/kt-api/commit/4af5bb6824162084708e9f3b776c315242f53982))
+* **theme:** 删除简易主题，只保留默认与开天漫画 ([4b5ac97](https://github.com/jjdufu/kt-api/commit/4b5ac97330b5898e80f538316694793aa6f15327))
+* **theme:** 开天漫画全站统一使用控制台字体 ([90123a0](https://github.com/jjdufu/kt-api/commit/90123a0621525abe80f95e2b1559b6f6a874aa57))
+* **toast:** 提示移到右下角，成功提示 2 秒自动消失 ([7afdb74](https://github.com/jjdufu/kt-api/commit/7afdb748a2c71be734a0088788e7e5627f3bba63))
+* 开天漫画统一字体、删除简易主题、首页背景重构与提示调整 ([a08c4e7](https://github.com/jjdufu/kt-api/commit/a08c4e78679351e1e763025b4ae9950247669b41))
+
 ## [0.0.14](https://github.com/jjdufu/kt-api/compare/v0.0.13...v0.0.14) (2026-10-20)
 
 
