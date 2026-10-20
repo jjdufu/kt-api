@@ -17,28 +17,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 /*
- * Self-hosted OFL fonts for the KT Comic theme (see
- * src/assets/comic/fonts/README.md). Declared globally; browsers only fetch a
- * face (or unicode-range slice) when a rendered element uses it, and every
- * comic font-family is applied under [data-theme-preset='kt-comic'] only, so
- * other presets download nothing.
- *
- * KTHome Display (Smiley Sans, renamed per OFL RFN) and KTHome KuaiLe
- * (ZCOOL KuaiLe) are full fonts split into unicode-range slices by
- * scripts/build-comic-fonts.py.
+ * Self-hosted OFL mono font for the KT Comic theme (see
+ * src/assets/comic/fonts/README.md). The display face (Chakra Petch) is
+ * declared in ../theme-preset-kt-comic.css; CJK uses the system fonts.
  */
-@import './comic-fonts-sliced.css';
-
-@font-face {
-  font-family: 'KTHome Bangers';
-  src: url('../../assets/comic/fonts/bangers.woff2') format('woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'KTHome Bungee';
-  src: url('../../assets/comic/fonts/bungee.woff2') format('woff2');
-  font-display: swap;
-}
 @font-face {
   font-family: 'KTHome Mono';
   src: url('../../assets/comic/fonts/jetbrains-mono.woff2') format('woff2');

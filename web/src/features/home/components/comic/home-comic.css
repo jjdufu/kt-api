@@ -400,7 +400,7 @@ For commercial licensing, please contact support@quantumnous.com
   filter: drop-shadow(4px 4px 0 var(--hc-shadow));
 }
 [data-home] .hc-burst-text {
-  font-family: 'KTHome Bangers', Impact, sans-serif;
+  font-family: var(--hc-font-display);
   font-size: 30px;
   fill: #000;
   letter-spacing: 1px;
@@ -668,7 +668,7 @@ For commercial licensing, please contact support@quantumnous.com
   position: absolute;
   top: 0.9rem;
   right: 1rem;
-  font-family: 'KTHome Bangers', Impact, sans-serif;
+  font-family: var(--hc-font-display);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   color: var(--hc-tone);
   -webkit-text-stroke: 2px var(--hc-ink);
@@ -776,7 +776,7 @@ For commercial licensing, please contact support@quantumnous.com
   position: absolute;
   top: 1rem;
   right: 1rem;
-  font-family: 'KTHome Bangers', Impact, sans-serif;
+  font-family: var(--hc-font-display);
   font-size: 1.7rem;
   color: var(--hc-yellow);
   -webkit-text-stroke: 2px #000;
