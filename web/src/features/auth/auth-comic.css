@@ -203,9 +203,9 @@ body:not([data-theme-preset='kt-comic']) [data-auth] .ka-backdrop > * {
   position: relative;
   color: var(--hc-text);
   background: var(--hc-paper);
-  border: 4px solid var(--hc-panel-border);
+  border: 3px solid var(--hc-panel-border);
   border-radius: 0.5rem;
-  box-shadow: 10px 10px 0 var(--hc-magenta);
+  box-shadow: 6px 6px 0 var(--hc-magenta);
 }
 @media (max-width: 639px) {
   [data-auth] .ka-panel {
@@ -214,13 +214,15 @@ body:not([data-theme-preset='kt-comic']) [data-auth] .ka-backdrop > * {
     box-shadow: 6px 6px 0 var(--hc-magenta);
   }
 }
+/* No comic SFX tag: the panel stays clean like the rest of the site. */
 [data-auth] .ka-panel::before {
+  display: none;
   content: 'GO!';
   position: absolute;
   top: -1.4rem;
   right: 1.25rem;
   padding: 0.15rem 0.7rem;
-  font-family: 'KTHome Bangers', Impact, sans-serif;
+  font-family: var(--hc-font-display);
   font-size: 1.6rem;
   letter-spacing: 0.04em;
   color: #000;

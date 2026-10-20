@@ -23,12 +23,11 @@ import { useTranslation } from 'react-i18next'
 import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
 import {
-  Burst,
   CapabilityWall,
   ComicButton,
+  HeroFx,
   ModelMarquee,
   SectionHeading,
-  PageBackdrop,
   SpeechBubble,
   useDocsHref,
 } from '@/features/home/components/comic'
@@ -100,10 +99,10 @@ export function AboutComic() {
 
   return (
     <div data-home=''>
-      <PageBackdrop />
       <PublicLayout showMainContainer={false}>
         <main className='hc-main'>
           <section className='hc-hero ab-hero'>
+            <HeroFx />
             <div className='hc-container ab-hero-inner'>
               <span className='hc-kicker'>{t('About')}</span>
               <h1 className='hc-headline ab-headline'>
@@ -119,7 +118,6 @@ export function AboutComic() {
                   'KTAPI is a large-model gateway for builders and creators: one key, one endpoint, every model you need.'
                 )}
               </p>
-              <Burst label='HELLO!' className='ab-hello' />
             </div>
           </section>
 

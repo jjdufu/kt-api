@@ -94,7 +94,7 @@ export function SectionHeading(props: {
   )
 }
 
-/** Radial glow + a fine grid that fades out towards the edges (hero only). */
+/** Soft radial glow + a dot matrix that fades out towards the edges (hero only). */
 export function HeroBackdrop() {
   return (
     <div
@@ -102,7 +102,7 @@ export function HeroBackdrop() {
       className='pointer-events-none absolute inset-0 -z-10 overflow-hidden'
     >
       <div className='absolute top-[-14rem] left-1/2 h-[38rem] w-[min(72rem,140vw)] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklch,var(--primary)_18%,transparent),transparent)]' />
-      <div className='absolute inset-0 [background-image:linear-gradient(to_right,color-mix(in_oklch,var(--foreground)_5%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--foreground)_5%,transparent)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_0%,#000_30%,transparent_80%)] [background-size:56px_56px]' />
+      <div className='absolute inset-0 [background-image:radial-gradient(color-mix(in_oklch,var(--foreground)_14%,transparent)_1px,transparent_1.4px)] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_0%,#000_30%,transparent_80%)] [background-size:22px_22px]' />
     </div>
   )
 }

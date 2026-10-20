@@ -18,7 +18,7 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
-import { Burst, ComicBackdrop } from './decorations'
+import { ComicBackdrop } from './decorations'
 import { ComicButton } from './primitives'
 import { useDocsHref } from './use-docs-href'
 
@@ -32,10 +32,7 @@ export function ComicCTA() {
         <div>
           <div className='hc-cta'>
             <ComicBackdrop />
-            <Burst label='POW!' className='hc-cta-pow' />
-            <h2 className='hc-cta-title'>
-              {t('Your story starts with one request')}
-            </h2>
+            <h2 className='hc-cta-title'>{t('Start building with one API')}</h2>
             <p className='hc-cta-sub'>
               {t('Sign up free and ship your first call in minutes.')}
             </p>

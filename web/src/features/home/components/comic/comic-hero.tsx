@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 import heroGirl from '@/assets/comic/hero-girl.webp'
 
 import { ComicTerminal } from './comic-terminal'
-import { Burst, SpeechBubble } from './decorations'
+import { HeroFx, SpeechBubble } from './decorations'
 import { splitHeadline } from './headline'
 import { ComicButton } from './primitives'
 import { useDocsHref } from './use-docs-href'
@@ -35,13 +35,13 @@ export function ComicHero({ isAuthenticated }: ComicHeroProps) {
   const { t } = useTranslation()
   const docsHref = useDocsHref()
   // Start the hero image (LCP) right away instead of waiting for CSS/layout.
-  // The comic font slices are preloaded by index.html under KT Comic.
   preload(heroGirl, { as: 'image', fetchPriority: 'high' })
   const headline = t('Define Everything with LLMs!')
   const lines = splitHeadline(headline)
 
   return (
     <section className='hc-hero'>
+      <HeroFx />
       <div className='hc-hero-inner'>
         <div className='hc-hero-copy'>
           <h1 className='hc-headline' aria-label={headline}>
@@ -66,7 +66,6 @@ export function ComicHero({ isAuthenticated }: ComicHeroProps) {
             <ComicButton to={docsHref} variant='outline'>
               {t('Read the Docs')}
             </ComicButton>
-            <Burst label='ZAP!' className='hc-hero-zap' />
           </div>
         </div>
 

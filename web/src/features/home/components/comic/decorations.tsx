@@ -172,16 +172,15 @@ export function ComicBackdrop({ className }: { className?: string }) {
 }
 
 /**
- * One fixed, continuous backdrop behind the whole home / about page (all
- * presets). KT Comic: speed lines + halftone with a faint skyline silhouette
- * at the bottom fading upward. Other presets hide the comic layers and use
- * a dot grid + soft glow (page-backdrop.css). Sections stay transparent.
+ * Hero-only cyber layer: neon glow, skyline silhouette and scanlines. The
+ * rest of the page sits on a plain grid surface (see page-backdrop.css).
  */
-export function PageBackdrop() {
+export function HeroFx() {
   return (
-    <div className='hc-page-backdrop' aria-hidden='true'>
-      <ComicBackdrop />
-      <Skyline className='hc-page-skyline' />
+    <div className='hc-hero-fx' aria-hidden='true'>
+      <div className='hc-hero-glow' />
+      <Skyline className='hc-hero-fx-skyline' />
+      <div className='hc-scanlines' />
     </div>
   )
 }

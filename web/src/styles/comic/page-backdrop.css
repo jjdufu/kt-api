@@ -17,37 +17,42 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 /*
- * One fixed, continuous page backdrop for home and about (every preset).
- * <PageBackdrop/> sits first inside [data-home]; the layout and all
- * sections above it are transparent, so the page reads as one surface.
+ * Page surface for the KT Comic home and about pages.
+ *
+ * The whole page is one quiet surface: base colour + a faint grid that
+ * scrolls with the content (no fixed, stretched artwork). The cyber layer
+ * (neon glow, skyline, scanlines; <HeroFx/>) lives only in the hero and
+ * fades into the surface, so there is no hard edge. Below the hero, content
+ * sits on solid cards separated by whitespace and a faint neon divider.
  */
 [data-home] {
+  --hc-grid: rgba(17, 16, 20, 0.045);
   position: relative;
   isolation: isolate;
   background-color: var(--hc-bg);
+  background-image:
+    linear-gradient(to right, var(--hc-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hc-grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: center top;
 }
-[data-home] > div:not(.hc-page-backdrop) {
+.dark [data-home] {
+  --hc-grid: rgba(0, 240, 255, 0.05);
+}
+[data-home] > div {
   position: relative;
   z-index: 1;
   background: transparent !important;
 }
-[data-home] .hc-page-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-[data-home] :is(.hc-hero, .hc-section, .hc-section-night),
-body:not([data-theme-preset='kt-comic'])
-  [data-home]
-  :is(.hc-hero, .hc-section, .hc-section-night, .hc-section:nth-of-type(odd)) {
+[data-home] :is(.hc-hero, .hc-section, .hc-section-night) {
   background: transparent !important;
 }
-/* The header sits in flow (sticky), so heroes no longer pad for it. */
+
+/* ── Hero: the only place with cyber decoration ──────────────────────── */
 [data-home] .hc-hero {
   padding-top: 3.5rem;
-  overflow: visible;
+  border-bottom: 0;
+  overflow: hidden;
 }
 [data-home] .ab-hero {
   padding-top: 4rem;
@@ -57,53 +62,163 @@ body:not([data-theme-preset='kt-comic'])
     padding-top: 2.5rem;
   }
 }
-
-/* KT Comic: quiet speed lines + halftone, skyline silhouette at the bottom
- * fading upward. */
-[data-home] .hc-page-backdrop .hc-speedlines {
-  opacity: 0.55;
+[data-home] .hc-hero-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Fade the whole layer into the page surface: no hard bottom edge. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
 }
-[data-home] .hc-page-backdrop .hc-page-skyline {
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 42vh;
-  opacity: 0.22;
-  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 25%, transparent);
-  mask-image: linear-gradient(to top, #000 0%, #000 25%, transparent);
-}
-.dark [data-home] .hc-page-backdrop .hc-page-skyline {
-  opacity: 0.3;
-}
-
-/* Other presets: dot grid + soft glow, no comic layers. */
-body:not([data-theme-preset='kt-comic']) [data-home] {
-  background-color: var(--background);
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-page-backdrop > * {
-  display: none;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-page-backdrop {
+[data-home] .hc-hero-glow {
+  position: absolute;
+  inset: 0;
   background:
     radial-gradient(
-      60rem 32rem at 50% -8rem,
-      color-mix(in oklch, var(--primary) 16%, transparent),
+      38rem 22rem at 78% 30%,
+      color-mix(in srgb, var(--hc-magenta) 16%, transparent),
       transparent 70%
     ),
     radial-gradient(
-      40rem 28rem at 100% 100%,
-      color-mix(in oklch, var(--primary) 8%, transparent),
+      34rem 20rem at 18% 70%,
+      color-mix(in srgb, var(--hc-cyan) 16%, transparent),
+      transparent 70%
+    );
+}
+.dark [data-home] .hc-hero-glow {
+  background:
+    radial-gradient(
+      40rem 24rem at 78% 30%,
+      color-mix(in srgb, var(--hc-magenta) 24%, transparent),
       transparent 70%
     ),
     radial-gradient(
-        color-mix(in oklch, var(--foreground) 14%, transparent) 1px,
-        transparent 1.4px
-      )
-      0 0 / 22px 22px;
+      36rem 22rem at 18% 72%,
+      color-mix(in srgb, var(--hc-cyan) 20%, transparent),
+      transparent 70%
+    );
+}
+[data-home] .hc-hero-fx .hc-hero-fx-skyline {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46%;
+  opacity: 0.14;
+}
+.dark [data-home] .hc-hero-fx .hc-hero-fx-skyline {
+  opacity: 0.32;
+}
+[data-home] .hc-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(17, 16, 20, 0.035) 0 1px,
+    transparent 1px 4px
+  );
+}
+.dark [data-home] .hc-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 240, 255, 0.045) 0 1px,
+    transparent 1px 4px
+  );
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dark [data-home] .hc-scanlines::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 6rem;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(0, 240, 255, 0.05),
+      transparent
+    );
+    animation: hc-scan 7s linear infinite;
+  }
+}
+@keyframes hc-scan {
+  from {
+    top: -6rem;
+  }
+  to {
+    top: 100%;
+  }
 }
 
-/* Stats: no band, no wrapper card, no divider lines; only the stat cards. */
+/* ── Sections: whitespace + a faint neon divider ─────────────────────── */
+[data-home] .hc-main > .hc-section {
+  position: relative;
+}
+[data-home] .hc-hero::after,
+[data-home] .hc-main > .hc-section + .hc-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(72rem, calc(100% - 2.5rem));
+  right: auto;
+  height: 1px;
+  border: 0;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--hc-cyan) 55%, transparent) 30%,
+    color-mix(in srgb, var(--hc-magenta) 55%, transparent) 70%,
+    transparent
+  );
+  opacity: 0.6;
+}
+[data-home] .hc-hero::after {
+  top: auto;
+  bottom: 0;
+}
+
+/* Comic SFX words and bursts read as noise on the cleaner page. */
+[data-home] :is(.hc-card-sfx, .hc-strip-sfx, .hc-burst) {
+  display: none !important;
+}
+
+/* ── Stats: solid, readable cards (both modes) ───────────────────────── */
+[data-home] .hc-section-night {
+  --hc-text: inherit;
+  border: 0;
+}
 [data-home] .hc-section-night::before,
 [data-home] .hc-section-night::after {
   display: none !important;
+}
+[data-home] .hc-section-night .hc-title {
+  color: var(--hc-text);
+}
+[data-home] .hc-neon-sign {
+  background: var(--hc-paper);
+  border: 2px solid var(--hc-panel-border);
+  border-top: 4px solid var(--hc-n);
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0 var(--hc-shadow);
+}
+[data-home] .hc-neon-value {
+  color: var(--hc-text);
+  text-shadow: none;
+  animation: none;
+}
+[data-home] .hc-neon-label {
+  color: var(--hc-muted);
+}
+.dark [data-home] .hc-neon-sign {
+  border-color: color-mix(in srgb, var(--hc-n) 70%, transparent);
+  border-top-color: var(--hc-n);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--hc-n) 22%, transparent);
+}
+.dark [data-home] .hc-neon-value {
+  color: #fff;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--hc-n) 70%, transparent);
 }
