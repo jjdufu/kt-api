@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
+import { TableEmptyOverlay } from '../core/table-empty'
 import { TruncatedCell } from '../core/truncated-cell'
 import { staticDataTableClassNames } from './static-data-table-classnames'
 
@@ -75,10 +76,13 @@ export function StaticDataTable<TData = unknown>(
   props: StaticDataTableProps<TData>
 ) {
   const { className, tableClassName, containerProps, tableProps } = props
+  const emptyOverlay =
+    props.columns !== undefined &&
+    (props.empty ?? (props.data !== undefined && props.data.length === 0))
 
   return (
     <div
-      className={cn(staticDataTableClassNames.container, className)}
+      className={cn(staticDataTableClassNames.container, 'relative', className)}
       {...containerProps}
     >
       <Table className={tableClassName} {...tableProps}>
@@ -88,6 +92,11 @@ export function StaticDataTable<TData = unknown>(
           props.children
         )}
       </Table>
+      {emptyOverlay && (
+        <TableEmptyOverlay className='text-muted-foreground text-center text-sm'>
+          {props.emptyContent}
+        </TableEmptyOverlay>
+      )}
     </div>
   )
 }
@@ -99,7 +108,6 @@ function StaticDataTableWithColumns<TData>({
   getRowClassName,
   renderRow,
   empty,
-  emptyContent,
   emptyClassName,
   headerRowClassName,
 }: StaticDataTableDataProps<TData>) {
@@ -131,9 +139,7 @@ function StaticDataTableWithColumns<TData>({
           <StaticDataTableEmptyRow
             colSpan={columns.length}
             className={emptyClassName}
-          >
-            {emptyContent}
-          </StaticDataTableEmptyRow>
+          />
         ) : (
           bodyRows
         )}
@@ -219,23 +225,18 @@ function getStaticCellClassName<TData>(
 
 type StaticDataTableEmptyRowProps = {
   colSpan: number
-  children: React.ReactNode
   className?: string
 }
 
 function StaticDataTableEmptyRow({
   colSpan,
-  children,
   className,
 }: StaticDataTableEmptyRowProps) {
   return (
-    <TableRow>
-      <TableCell
-        colSpan={colSpan}
-        className={cn('h-24 text-center', className)}
-      >
-        {children}
-      </TableCell>
+    // Height spacer only; the content is drawn by TableEmptyOverlay in the
+    // non-scrolling container so it stays centred under horizontal scroll.
+    <TableRow aria-hidden='true' className='hover:bg-transparent'>
+      <TableCell colSpan={colSpan} className={cn('h-24', className)} />
     </TableRow>
   )
 }

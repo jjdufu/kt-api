@@ -19,7 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import type { Row, Table as TanstackTable } from '@tanstack/react-table'
 import * as React from 'react'
 
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { Table, TableBody } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 import {
@@ -29,7 +29,11 @@ import {
 import { DataTableColgroup } from './data-table-colgroup'
 import { DataTableHeader } from './data-table-header'
 import { DataTableRow } from './data-table-row'
-import { TableEmpty } from './table-empty'
+import {
+  TableEmptyContent,
+  TableEmptyOverlay,
+  TableEmptySpacer,
+} from './table-empty'
 import { getTableSizeStyle } from './table-sizing'
 import { TableSkeleton } from './table-skeleton'
 import type {
@@ -61,7 +65,7 @@ export function DataTableView<TData>(props: DataTableViewProps<TData>) {
   return (
     <div
       className={cn(
-        'overflow-hidden rounded-lg border',
+        'relative overflow-hidden rounded-lg border',
         props.containerClassName
       )}
       {...props.containerProps}
@@ -81,6 +85,9 @@ export function DataTableView<TData>(props: DataTableViewProps<TData>) {
           getColumnClassName={columnClassName}
         />
       )}
+      {!props.isLoading && rows.length === 0 && (
+        <TableEmptyOverlay>{renderEmptyContent(props)}</TableEmptyOverlay>
+      )}
     </div>
   )
 }
@@ -99,7 +106,7 @@ function UnifiedTableView<TData>({
   const tableSizing = getTableSizing(props)
 
   return (
-    <div className={props.tableContainerClassName}>
+    <div data-slot='table-scroll' className={props.tableContainerClassName}>
       <Table className={props.tableClassName} style={tableSizing.style}>
         {tableSizing.colgroup}
         <DataTableHeader
@@ -136,6 +143,7 @@ function SplitHeaderTableView<TData>({
       )}
     >
       <div
+        data-slot='table-scroll'
         className={cn(
           'min-h-0 flex-1 overflow-auto',
           '**:data-[slot=table-header]:[--table-header-bg:var(--table-header)]',
@@ -288,25 +296,25 @@ function renderEmptyState<TData>(
   props: DataTableViewProps<TData>,
   colSpan: number
 ) {
-  if (props.emptyContent) {
-    return (
-      <TableRow>
-        <TableCell colSpan={colSpan} className={props.emptyCellClassName}>
-          {props.emptyContent}
-        </TableCell>
-      </TableRow>
-    )
-  }
-
+  // The visible empty state is the overlay rendered by DataTableView.
   return (
-    <TableEmpty
+    <TableEmptySpacer
       colSpan={colSpan}
+      className={props.emptyContent ? props.emptyCellClassName : undefined}
+    />
+  )
+}
+
+function renderEmptyContent<TData>(props: DataTableViewProps<TData>) {
+  if (props.emptyContent) return props.emptyContent
+  return (
+    <TableEmptyContent
       title={props.emptyTitle}
       description={props.emptyDescription}
       icon={props.emptyIcon}
     >
       {props.emptyAction}
-    </TableEmpty>
+    </TableEmptyContent>
   )
 }
 
