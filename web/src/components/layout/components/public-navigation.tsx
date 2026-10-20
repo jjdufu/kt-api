@@ -63,7 +63,7 @@ export function PublicNavigation({
           return (
             <a
               key={index}
-              data-slot='public-nav-link'
+              data-slot='site-nav-link'
               href={link.href}
               target='_blank'
               rel='noopener noreferrer'
@@ -80,7 +80,7 @@ export function PublicNavigation({
         return (
           <Link
             key={index}
-            data-slot='public-nav-link'
+            data-slot='site-nav-link'
             to={link.href}
             activeOptions={{ exact: link.href === '/' }}
             activeProps={ACTIVE_LINK_PROPS}

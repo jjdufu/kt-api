@@ -16,7 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
 import { useMemo } from 'react'
 
@@ -30,6 +30,7 @@ import {
 import { cn } from '@/lib/utils'
 
 import { type TopNavLink } from '../types'
+import { isNavLinkActive } from './site-header'
 
 type TopNavProps = React.HTMLAttributes<HTMLElement> & {
   links: TopNavLink[]
@@ -40,16 +41,18 @@ type TopNavProps = React.HTMLAttributes<HTMLElement> & {
  * 在大屏幕显示水平导航，在小屏幕显示下拉菜单
  */
 export function TopNav({ className, links, ...props }: TopNavProps) {
+  const pathname = useLocation({ select: (l) => l.pathname })
   // 规范化链接，确保所有可选属性都有默认值
   const normalizedLinks = useMemo(
     () =>
       links.map((link) => ({
-        isActive: false,
         disabled: false,
         external: false,
         ...link,
+        // Same active rule as the public header.
+        isActive: link.isActive || isNavLinkActive(pathname, link.href),
       })),
-    [links]
+    [links, pathname]
   )
 
   return (
@@ -97,7 +100,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
       {/* 桌面端水平导航 */}
       <nav
         className={cn(
-          'hidden items-center space-x-4 lg:flex lg:space-x-4 xl:space-x-6',
+          'hidden items-center gap-0.5 lg:flex',
           className
         )}
         {...props}
@@ -109,7 +112,8 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               href={href}
               target='_blank'
               rel='noopener noreferrer'
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              data-slot='site-nav-link'
+              className='text-muted-foreground hover:text-foreground rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200'
             >
               {title}
             </a>
@@ -118,7 +122,15 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               key={`${title}-${href}`}
               to={href}
               disabled={disabled}
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              data-slot='site-nav-link'
+              data-active={isActive ? '' : undefined}
+              aria-current={isActive ? 'page' : undefined}
+              className={cn(
+                'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200',
+                isActive
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
             >
               {title}
             </Link>
