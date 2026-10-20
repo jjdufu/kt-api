@@ -67,8 +67,16 @@
         if (large) document.body.setAttribute('data-theme-large-font', '')
         document.body.setAttribute('data-theme-preset', preset)
         // KT Comic: preload the first-screen font slices (generated list,
-        // see scripts/build-comic-fonts.py). Other presets fetch nothing.
-        if (preset === 'kt-comic') {
+        // see scripts/build-comic-fonts.py), marketing pages only.
+        // Comic fonts are only used on the marketing pages (home, about,
+        // auth); the KT Comic console uses Chakra Petch + system fonts.
+        var path = location.pathname
+        var marketing =
+          path === '/' ||
+          /^\/(about|sign-in|sign-up|forgot-password|reset-password|otp)(\/|$)/.test(
+            path
+          )
+        if (preset === 'kt-comic' && marketing) {
           var fonts = [
             /*kt-comic-preload*/ '/fonts/kt-comic/display/000-84398194.woff2',
             '/fonts/kt-comic/kuaile/000-9433feee.woff2' /*end*/,
