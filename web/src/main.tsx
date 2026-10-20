@@ -21,6 +21,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { localizeSystemName } from '@/lib/brand'
 import { installBuildMetadata } from '@/lib/build-metadata'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
@@ -76,7 +77,11 @@ if (!rootElement) {
 ;(function initSystemBranding() {
   try {
     if (typeof window === 'undefined' || typeof document === 'undefined') return
-    const apply = (name: string) => {
+    const apply = (raw: string) => {
+      // Wait for the locale so the built-in name resolves to the right language.
+      void i18nReady.then(() => setTitle(localizeSystemName(raw)))
+    }
+    const setTitle = (name: string) => {
       document.title = name
       const metaTitle = document.querySelector(
         'meta[name="title"]'

@@ -21,8 +21,10 @@ For commercial licensing, please contact support@quantumnous.com
  */
 
 // System Configuration Defaults
-export const DEFAULT_SYSTEM_NAME = 'New API'
-export const DEFAULT_LOGO = '/logo.png'
+export const DEFAULT_SYSTEM_NAME = '开天大模型'
+export const DEFAULT_LOGO = '/logo.svg'
+/** Small single-colour mark used as the tab icon for the built-in logo. */
+export const DEFAULT_FAVICON = '/logo-mono.svg'
 
 // LocalStorage Keys
 export const STORAGE_KEYS = {
