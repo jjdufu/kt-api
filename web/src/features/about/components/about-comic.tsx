@@ -32,12 +32,11 @@ import { Footer } from '@/components/layout/components/footer'
 import {
   Burst,
   CapabilityWall,
-  ComicBackdrop,
   ComicButton,
   ModelMarquee,
   Reveal,
   SectionHeading,
-  Skyline,
+  PageBackdrop,
   SpeechBubble,
   useDocsHref,
 } from '@/features/home/components/comic'
@@ -135,11 +134,10 @@ export function AboutComic() {
 
   return (
     <div data-home=''>
+      <PageBackdrop />
       <PublicLayout showMainContainer={false}>
         <main className='hc-main'>
           <section className='hc-hero ab-hero'>
-            <ComicBackdrop />
-            <Skyline className='ab-skyline' />
             <div className='hc-container ab-hero-inner'>
               <span className='hc-kicker'>{t('About')}</span>
               <h1 className='hc-headline ab-headline'>
