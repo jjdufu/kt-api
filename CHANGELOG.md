@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.13](https://github.com/jjdufu/kt-api/compare/v0.0.12...v0.0.13) (2026-10-20)
+
+
+### Features
+
+* **auth:** 登录页移除立绘，改为全屏赛博朋克场景 ([a2f3b45](https://github.com/jjdufu/kt-api/commit/a2f3b451bf76b8d294d0e2b35b73eef94e0d3206))
+* **home:** 首页与关于页使用一张固定连续的页面背景 ([c42881d](https://github.com/jjdufu/kt-api/commit/c42881dfb109ad3eef5932e5e69081e62bc35133))
+* **layout:** 统一 SiteHeader，控制台与公共页共用同一顶栏 ([b72a1a4](https://github.com/jjdufu/kt-api/commit/b72a1a42179c89cae0c426c6da4f596eecb6a469))
+* 统一顶栏、连续页面背景、登录页场景与表格空状态居中 ([55bc4b6](https://github.com/jjdufu/kt-api/commit/55bc4b6c546f13b5e1b8a22dc8e62fbb42f9e92c))
+
+
+### Bug Fixes
+
+* **data-table:** 空状态改为表格外层非滚动容器中的绝对定位覆盖层 ([26e278c](https://github.com/jjdufu/kt-api/commit/26e278ceed87c0dd4bef21d8b79ad9b64fa3cb8d))
+
 ## [0.0.12](https://github.com/jjdufu/kt-api/compare/v0.0.11...v0.0.12) (2026-10-20)
 
 
