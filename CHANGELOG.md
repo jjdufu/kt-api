@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.14](https://github.com/jjdufu/kt-api/compare/v0.0.13...v0.0.14) (2026-10-20)
+
+
+### Features
+
+* **home:** 默认与简易主题的首页、关于页改为企业级 SaaS 布局 ([ce6585c](https://github.com/jjdufu/kt-api/commit/ce6585c8db65b84bcb726be598635e697ad235ca))
+* **layout:** 控制台入口仅登录后显示，头像菜单新增控制台，控制台顶栏三栏布局 ([9c343fa](https://github.com/jjdufu/kt-api/commit/9c343fa39e555275884e77460f3e0a4bb14ec04b))
+* **theme:** 开天漫画控制台改用 Chakra Petch + 系统字体，漫画字体仅用于首页/关于/登录 ([1318b54](https://github.com/jjdufu/kt-api/commit/1318b545deafead93d313bbe6cc95a0c7167fed4))
+* **theme:** 恢复默认主题替代暗夜，超大字体简易改为简易 + 独立大字体开关 ([c77ae00](https://github.com/jjdufu/kt-api/commit/c77ae000c8841212e0c3dac2c4b34206e9213d11))
+* 主题重整（默认 / 开天漫画 / 简易 + 大字体开关）与企业级首页 ([dede5a7](https://github.com/jjdufu/kt-api/commit/dede5a78aa0c4fb8ff65779ecadd848085f8e67c))
+
+
+### Bug Fixes
+
+* **home:** 首页与关于页各区块不再使用 Reveal 入场动画，数据区移除外层卡片 ([2256ea5](https://github.com/jjdufu/kt-api/commit/2256ea58c76b5795157d05cb3f3c3b9cc3c479a0))
+* **layout:** 控制台顶栏导航不换行，居中搜索框按断点收窄 ([756d9af](https://github.com/jjdufu/kt-api/commit/756d9af982632968f4ff2ed0a47b6e5cefdf1d96))
+
 ## [0.0.13](https://github.com/jjdufu/kt-api/compare/v0.0.12...v0.0.13) (2026-10-20)
 
 
