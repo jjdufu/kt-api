@@ -1,0 +1,86 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+import { useThemeCustomization } from '@/context/theme-customization-provider'
+import { DEFAULT_LOGO } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+
+const KT_MARK_PATH =
+  'M19.67590618336887 53.0 16.6908315565032 50.05756929637527Q19.29211087420043 47.11513859275053 20.997867803837956 44.23667377398721Q22.70362473347548 41.35820895522389 23.748400852878465 38.394456289978685Q24.79317697228145 35.43070362473348 25.432835820895523 32.18976545842218H18.95095948827292L19.377398720682304 28.351812366737743H26.115138592750533Q26.285714285714285 26.987206823027723 26.47761194029851 25.558635394456296Q26.66950959488273 24.130063965884865 26.840085287846485 22.59488272921109L27.52238805970149 16.83795309168444H21.936034115138593L22.362473347547976 13.000000000000007H47.3091684434968L46.88272921108742 16.83795309168444H42.14925373134328L41.04051172707889 28.351812366737743H47.053304904051174L46.626865671641795 32.18976545842218H40.656716417910445L38.652452025586356 52.36034115138593H34.771855010660985L36.776119402985074 32.18976545842218H29.526652452025587Q28.844349680170577 35.81449893390192 27.735607675906184 39.28997867803838Q26.62686567164179 42.765458422174845 24.686567164179102 46.1769722814499Q22.746268656716417 49.58848614072495 19.67590618336887 53.0ZM30.80597014925373 22.722814498933907Q30.63539445628998 24.172707889125803 30.464818763326228 25.57995735607676Q30.294243070362477 26.987206823027723 30.12366737739872 28.351812366737743H37.15991471215352L38.26865671641791 16.83795309168444H31.48827292110874Z'
+
+/**
+ * Monochrome 开 mark drawn with currentColor (outline + glyph), used for the
+ * built-in logo under every preset except KT Comic so it follows the theme's
+ * foreground in light and dark.
+ */
+export function KtMonoMark(props: { className?: string; title?: string }) {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 64 64'
+      role='img'
+      aria-label={props.title}
+      data-slot='brand-logo'
+      data-variant='mono'
+      className={cn('text-foreground', props.className)}
+    >
+      {props.title ? <title>{props.title}</title> : null}
+      <rect
+        x='4'
+        y='4'
+        width='56'
+        height='56'
+        rx='14'
+        fill='none'
+        stroke='currentColor'
+        strokeWidth='4'
+      />
+      <path d={KT_MARK_PATH} fill='currentColor' />
+    </svg>
+  )
+}
+
+type BrandLogoProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+  src: string
+}
+
+/**
+ * Site logo. A custom (admin-configured) logo always renders as-is. The
+ * built-in logo uses the comic burst under KT Comic and the monochrome
+ * currentColor mark under the other presets.
+ */
+export function BrandLogo({ src, alt, className, ...rest }: BrandLogoProps) {
+  const { customization } = useThemeCustomization()
+  if (src === DEFAULT_LOGO && customization.preset !== 'kt-comic') {
+    return (
+      <KtMonoMark
+        title={alt}
+        className={cn(className, 'rounded-none object-contain')}
+      />
+    )
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      data-slot='brand-logo'
+      {...rest}
+    />
+  )
+}

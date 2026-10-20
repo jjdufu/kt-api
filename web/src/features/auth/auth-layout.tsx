@@ -20,11 +20,12 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import heroGirl from '@/assets/comic/hero-girl.webp'
+import { BrandLogo } from '@/components/brand-logo'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useSystemConfig } from '@/hooks/use-system-config'
 
 import '@/styles/comic/comic-base.css'
 import './auth-comic.css'
+import { useSystemConfig } from '@/hooks/use-system-config'
 
 type AuthLayoutProps = {
   children: React.ReactNode
@@ -54,7 +55,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           {loading ? (
             <Skeleton className='absolute inset-0 rounded-full' />
           ) : (
-            <img
+            <BrandLogo
               src={logo}
               alt={t('Logo')}
               className='h-8 w-8 rounded-full object-cover'
