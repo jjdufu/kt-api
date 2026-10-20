@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.12](https://github.com/jjdufu/kt-api/compare/v0.0.11...v0.0.12) (2026-10-20)
+
+
+### Features
+
+* **home:** enterprise SaaS finish for home and about outside KT Comic ([fad6bf2](https://github.com/jjdufu/kt-api/commit/fad6bf25780e7f082435f28b4eeca2bc958a3ea8))
+* **home:** one layout system for home and about ([be3a900](https://github.com/jjdufu/kt-api/commit/be3a900de7f886600e485129db2f91929f26d947))
+* **layout:** full-width sticky public header on every public page ([93971eb](https://github.com/jjdufu/kt-api/commit/93971eb3a5ebcf45863c417460ed61ac26ab7681))
+
+
+### Bug Fixes
+
+* **auth:** one session-expired toast and a quiet sign-out ([d0f59b1](https://github.com/jjdufu/kt-api/commit/d0f59b135a12d4ecc3e40e70e5c0b5f5615835b7))
+* **data-table:** centre the empty state in the visible table viewport ([6a11f14](https://github.com/jjdufu/kt-api/commit/6a11f1454a8ce3ec0f788c6699956c1a4b38ceea))
+
 ## [0.0.11](https://github.com/jjdufu/kt-api/compare/v0.0.10...v0.0.11) (2026-10-20)
 
 
