@@ -1,0 +1,107 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * One layout system for the home and about pages (every preset): a single
+ * content width (--site-max) and gutter (--site-gutter) shared by the hero,
+ * all sections and the footer. Section backgrounds may run full-bleed, but
+ * borders and divider lines stay inside the content column, and the model
+ * marquee is clipped to it with faded edges.
+ */
+[data-home] {
+  --site-max: 72rem;
+  --site-gutter: clamp(1rem, 4vw, 2rem);
+  --site-width: calc(var(--site-max) + 2 * var(--site-gutter));
+  /* Left/right inset of the content column inside a full-width band. */
+  --site-inset: max(var(--site-gutter), calc((100% - var(--site-max)) / 2));
+}
+
+[data-home] .hc-container,
+[data-home] .hc-hero-inner {
+  max-width: var(--site-width) !important;
+  padding-inline: var(--site-gutter) !important;
+}
+[data-home] footer > div {
+  max-width: var(--site-width) !important;
+  padding-inline: var(--site-gutter) !important;
+}
+
+/* Divider lines inside the column, not edge to edge. */
+[data-home] footer {
+  position: relative;
+  border-top: 0 !important;
+}
+[data-home] footer::before,
+[data-home] .hc-hero::after,
+[data-home] .hc-section-night::before,
+[data-home] .hc-section-night::after {
+  content: '';
+  position: absolute;
+  left: var(--site-inset);
+  right: var(--site-inset);
+  height: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+[data-home] footer::before {
+  top: 0;
+  border-top: 1px solid var(--border);
+}
+[data-home] .hc-hero {
+  border-bottom: 0 !important;
+}
+[data-home] .hc-hero::after {
+  bottom: 0;
+  border-bottom: 4px solid var(--hc-panel-border);
+}
+[data-home] .hc-section-night {
+  border-block: 0 !important;
+}
+[data-home] .hc-section-night::before {
+  top: 0;
+  border-top: 4px solid var(--hc-panel-border);
+}
+[data-home] .hc-section-night::after {
+  bottom: 0;
+  border-bottom: 4px solid var(--hc-panel-border);
+}
+
+/* Model marquee: inside the content column, edges faded out. The KT Comic
+ * tilt stays, but within the clip box. */
+[data-home] .hc-film-clip {
+  margin-top: 2rem;
+  overflow: hidden;
+  padding-block: 1.25rem;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+[data-home] .hc-film-clip .hc-film {
+  margin: 0 !important;
+}

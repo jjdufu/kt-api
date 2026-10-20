@@ -59,11 +59,14 @@ export function ModelMarquee() {
           kicker={t('Model Lineup')}
           title={t('Plugged into the models you love')}
         />
-      </div>
-      <div className='hc-film'>
-        <div className='hc-film-track'>
-          <Reel copy='a' />
-          <Reel copy='b' />
+        {/* Clipped to the content width with faded edges (site-layout.css). */}
+        <div className='hc-film-clip'>
+          <div className='hc-film'>
+            <div className='hc-film-track'>
+              <Reel copy='a' />
+              <Reel copy='b' />
+            </div>
+          </div>
         </div>
       </div>
     </section>
