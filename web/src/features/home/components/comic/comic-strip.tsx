@@ -21,7 +21,7 @@ import { KeyRound, LogIn, Send, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { SpeechBubble } from './decorations'
-import { Reveal, SectionHeading } from './primitives'
+import { SectionHeading } from './primitives'
 
 type Step = {
   title: string
@@ -68,7 +68,7 @@ export function ComicStrip() {
             const Icon = s.icon
             return (
               <li key={s.title} className='hc-strip-item'>
-                <Reveal className='hc-strip-reveal' delay={0} tilt={0}>
+                <div className='hc-strip-reveal'>
                   <div className='hc-strip-panel'>
                     <span className='hc-strip-no'>{i + 1}</span>
                     <span className='hc-strip-sfx' aria-hidden='true'>
@@ -88,7 +88,7 @@ export function ComicStrip() {
                     </SpeechBubble>
                     <p className='hc-strip-desc'>{t(s.description)}</p>
                   </div>
-                </Reveal>
+                </div>
                 {i < STEPS.length - 1 && (
                   <svg
                     className='hc-strip-arrow'

@@ -19,7 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import { useTranslation } from 'react-i18next'
 
 import { Burst, ComicBackdrop } from './decorations'
-import { ComicButton, Reveal } from './primitives'
+import { ComicButton } from './primitives'
 import { useDocsHref } from './use-docs-href'
 
 /** Closing call to action; rendered for signed-out visitors only. */
@@ -29,7 +29,7 @@ export function ComicCTA() {
   return (
     <section className='hc-section'>
       <div className='hc-container'>
-        <Reveal tilt={-1.5}>
+        <div>
           <div className='hc-cta'>
             <ComicBackdrop />
             <Burst label='POW!' className='hc-cta-pow' />
@@ -46,7 +46,7 @@ export function ComicCTA() {
               </ComicButton>
             </div>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   )

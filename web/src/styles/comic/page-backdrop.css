@@ -102,37 +102,8 @@ body:not([data-theme-preset='kt-comic']) [data-home] .hc-page-backdrop {
       0 0 / 22px 22px;
 }
 
-/* Stats band: a contained card inside the content column, not a full-bleed
- * band. ::before (formerly the top divider) draws the card; ::after is off. */
+/* Stats: no band, no wrapper card, no divider lines; only the stat cards. */
+[data-home] .hc-section-night::before,
 [data-home] .hc-section-night::after {
-  display: none;
-}
-[data-home] .hc-section-night > * {
-  position: relative;
-  z-index: 1;
-}
-[data-home] .hc-section-night::before {
-  top: 1.5rem;
-  bottom: 1.5rem;
-  height: auto;
-  z-index: 0;
-  border: 4px solid var(--hc-panel-border) !important;
-  border-radius: 0.75rem;
-  background: var(--hc-night);
-  box-shadow: 8px 8px 0 var(--hc-shadow);
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::before {
-  border: 1px solid var(--border) !important;
-  border-radius: 1rem;
-  background: color-mix(in oklch, var(--card) 88%, transparent);
-  box-shadow:
-    0 1px 2px color-mix(in oklch, var(--foreground) 6%, transparent),
-    0 12px 32px -12px color-mix(in oklch, var(--foreground) 18%, transparent);
-  backdrop-filter: blur(6px);
-}
-@media (max-width: 767px) {
-  [data-home] .hc-section-night::before {
-    top: 0.75rem;
-    bottom: 0.75rem;
-  }
+  display: none !important;
 }

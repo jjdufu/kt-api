@@ -34,7 +34,6 @@ import {
   CapabilityWall,
   ComicButton,
   ModelMarquee,
-  Reveal,
   SectionHeading,
   PageBackdrop,
   SpeechBubble,
@@ -167,11 +166,7 @@ export function AboutComic() {
                 {PILLARS.map((p, i) => {
                   const Icon = p.icon
                   return (
-                    <Reveal
-                      key={p.title}
-                      delay={i * 0.1}
-                      className='ab-pillar-cell'
-                    >
+                    <div className='ab-pillar-cell' key={p.title}>
                       <article
                         className={`hc-card hc-tone-${p.tone} ab-pillar`}
                       >
@@ -182,7 +177,7 @@ export function AboutComic() {
                         <h3 className='hc-card-title'>{t(p.title)}</h3>
                         <p className='hc-card-desc'>{t(p.body)}</p>
                       </article>
-                    </Reveal>
+                    </div>
                   )
                 })}
               </div>

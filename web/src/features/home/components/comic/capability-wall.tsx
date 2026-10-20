@@ -27,7 +27,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Reveal, SectionHeading } from './primitives'
+import { SectionHeading } from './primitives'
 
 type Capability = {
   no: string
@@ -107,12 +107,7 @@ export function CapabilityWall() {
           {CAPABILITIES.map((c, i) => {
             const Icon = c.icon
             return (
-              <Reveal
-                key={c.no}
-                className={`hc-wall-cell hc-wall-cell-${i + 1}`}
-                delay={i * 0.06}
-                tilt={i % 2 === 0 ? -3 : 3}
-              >
+              <div key={c.no} className={`hc-wall-cell hc-wall-cell-${i + 1}`}>
                 <article className={`hc-card hc-tone-${c.tone}`}>
                   <span className='hc-card-no'>{c.no}</span>
                   <span className='hc-card-sfx' aria-hidden='true'>
@@ -124,7 +119,7 @@ export function CapabilityWall() {
                   <h3 className='hc-card-title'>{t(c.title)}</h3>
                   <p className='hc-card-desc'>{t(c.description)}</p>
                 </article>
-              </Reveal>
+              </div>
             )
           })}
         </div>
