@@ -41,18 +41,30 @@
          DEFAULT_THEME_CUSTOMIZATION / THEME_STORAGE_KEYS.preset. -->
     <script>
       ;(function () {
-        // Removed presets (incl. the old 'default') migrate to 'underground'.
-        // Keep in sync with migrateThemePreset() in lib/theme-customization.
+        // Removed presets migrate: simple-large -> simple (+ large font on),
+        // underground and anything else -> default. Keep in sync with
+        // migrateThemePreset() in lib/theme-customization.
         var preset = 'kt-comic'
-        var keep = { 'kt-comic': 1, underground: 1, 'simple-large': 1 }
+        var keep = { 'kt-comic': 1, default: 1, simple: 1 }
+        var large = false
         try {
           var key = 'newapi:theme:v1:preset'
+          var lkey = 'newapi:theme:v1:large-font'
           var stored = localStorage.getItem(key)
           if (stored) {
-            preset = keep[stored] ? stored : 'underground'
-            if (preset !== stored) localStorage.setItem(key, preset)
+            preset = keep[stored]
+              ? stored
+              : stored === 'simple-large'
+                ? 'simple'
+                : 'default'
+            if (preset !== stored) {
+              localStorage.setItem(key, preset)
+              if (stored === 'simple-large') localStorage.setItem(lkey, '1')
+            }
           }
+          large = localStorage.getItem(lkey) === '1'
         } catch (e) {}
+        if (large) document.body.setAttribute('data-theme-large-font', '')
         document.body.setAttribute('data-theme-preset', preset)
         // KT Comic: preload the first-screen font slices (generated list,
         // see scripts/build-comic-fonts.py). Other presets fetch nothing.

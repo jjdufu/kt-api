@@ -4716,8 +4716,6 @@
     "Preset templates": "Предустановленные шаблоны",
     "Product configuration error": "Ошибка настройки продукта",
     "Product does not exist": "Продукт не существует",
-    "preset.simple-large": "Простая крупная",
-    "preset.underground": "Подполье",
     "Press Enter or comma to add tags": "Нажмите Enter или запятую, чтобы добавить теги",
     "Press Enter to use \"{{value}}\"": "Нажмите Enter, чтобы использовать «{{value}}»",
     "Prevent server-side request forgery attacks": "Предотвращение атак подделки запросов на стороне сервера",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "Создавайте ключи для своих приложений и управляйте ими.",
     "Endpoints, parameters and examples.": "Эндпоинты, параметры и примеры.",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI основан на QuantumNous/new-api и распространяется по лицензии AGPL-3.0.",
-    "preset.kt-comic": "KT Comic"
+    "preset.kt-comic": "KT Comic",
+    "preset.default": "По умолчанию",
+    "preset.simple": "Простая",
+    "Large font": "Крупный шрифт",
+    "Larger text across the interface, with any theme.": "Более крупный текст во всём интерфейсе, с любой темой."
   }
 }

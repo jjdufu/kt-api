@@ -25,7 +25,7 @@ import { resolveThemeColor, useThemeColor } from '../theme-color'
 // cascade: the dark class lives on <html> and the preset attribute on <body>,
 // as in theme.css and theme-presets.css.
 function cascadedForeground(): string {
-  if (document.body.getAttribute('data-theme-preset') === 'underground') {
+  if (document.body.getAttribute('data-theme-preset') === 'simple') {
     return 'rgb(80, 20, 40)'
   }
   return document.documentElement.classList.contains('dark')
@@ -68,7 +68,7 @@ describe('useThemeColor', () => {
     const { result } = renderHook(() => useThemeColor('--foreground'))
 
     await act(async () => {
-      document.body.setAttribute('data-theme-preset', 'underground')
+      document.body.setAttribute('data-theme-preset', 'simple')
     })
 
     expect(result.current).toBe('rgb(80, 20, 40)')

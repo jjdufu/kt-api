@@ -4716,8 +4716,6 @@
     "Preset templates": "プリセットのテンプレート",
     "Product configuration error": "商品設定エラー",
     "Product does not exist": "商品が存在しません",
-    "preset.simple-large": "特大フォント・シンプル",
-    "preset.underground": "アンダーグラウンド",
     "Press Enter or comma to add tags": "Enterキーまたはコンマを押してタグを追加",
     "Press Enter to use \"{{value}}\"": "Enter キーを押して「{{value}}」を使用",
     "Prevent server-side request forgery attacks": "サーバーサイドリクエストフォージェリ攻撃を防ぐ",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "アプリ用のキーを作成・管理。",
     "Endpoints, parameters and examples.": "エンドポイント、パラメータ、サンプル。",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "開天大模型は QuantumNous/new-api をベースに構築され、AGPL-3.0 ライセンスに従います。",
-    "preset.kt-comic": "開天コミック"
+    "preset.kt-comic": "開天コミック",
+    "preset.default": "デフォルト",
+    "preset.simple": "シンプル",
+    "Large font": "大きな文字",
+    "Larger text across the interface, with any theme.": "どのテーマでも、画面全体の文字を大きくします。"
   }
 }

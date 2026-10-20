@@ -4716,8 +4716,6 @@
     "Preset templates": "Modèles prédéfinis",
     "Product configuration error": "Erreur de configuration du produit",
     "Product does not exist": "Le produit n'existe pas",
-    "preset.simple-large": "Simple & Grands Caractères",
-    "preset.underground": "Souterrain",
     "Press Enter or comma to add tags": "Appuyez sur Entrée ou sur la virgule pour ajouter des tags",
     "Press Enter to use \"{{value}}\"": "Appuyez sur Entrée pour utiliser « {{value}} »",
     "Prevent server-side request forgery attacks": "Prévenir les attaques de falsification de requêtes côté serveur",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "Créez et gérez les clés de vos applications.",
     "Endpoints, parameters and examples.": "Points d’accès, paramètres et exemples.",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI est construit sur QuantumNous/new-api et distribué sous licence AGPL-3.0.",
-    "preset.kt-comic": "KT Comic"
+    "preset.kt-comic": "KT Comic",
+    "preset.default": "Par défaut",
+    "preset.simple": "Simple",
+    "Large font": "Grande police",
+    "Larger text across the interface, with any theme.": "Texte plus grand dans toute l'interface, avec n'importe quel thème."
   }
 }

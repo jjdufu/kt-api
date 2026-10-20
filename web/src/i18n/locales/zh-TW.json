@@ -4716,8 +4716,6 @@
     "Preset templates": "預設模板",
     "Product configuration error": "產品設定錯誤",
     "Product does not exist": "產品不存在",
-    "preset.simple-large": "超大字體簡易",
-    "preset.underground": "暗夜",
     "Press Enter or comma to add tags": "按 Enter 或逗號新增標籤",
     "Press Enter to use \"{{value}}\"": "按 Enter 使用「{{value}}」",
     "Prevent server-side request forgery attacks": "防止伺服器端請求偽造攻擊",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "為你的應用建立和管理金鑰。",
     "Endpoints, parameters and examples.": "介面、參數與範例。",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "開天大模型基於 QuantumNous/new-api 構建，遵循 AGPL-3.0 授權條款。",
-    "preset.kt-comic": "開天漫畫"
+    "preset.kt-comic": "開天漫畫",
+    "preset.default": "預設",
+    "preset.simple": "簡易",
+    "Large font": "大字體",
+    "Larger text across the interface, with any theme.": "整個介面使用更大的文字，適用於所有主題。"
   }
 }

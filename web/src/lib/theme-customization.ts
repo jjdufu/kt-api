@@ -25,6 +25,13 @@ For commercial licensing, please contact support@quantumnous.com
 
 export const THEME_PRESETS = [
   {
+    // 默认: the stock New API look (neutral surfaces, blue/violet accents,
+    // Public Sans). Its palette is theme.css :root.
+    value: 'default',
+    name: 'Default',
+    swatches: ['oklch(0.72 0.18 250)', 'oklch(0.7 0.12 280)'],
+  },
+  {
     // 开天漫画: the site's comic / manga cyberpunk look (paper & ink light,
     // neon-on-ink dark). Site default for visitors without a saved choice.
     value: 'kt-comic',
@@ -32,26 +39,15 @@ export const THEME_PRESETS = [
     swatches: ['#ffe600', '#ff2bd6'],
   },
   {
-    // 暗夜: muted green/magenta night palette (light & dark).
-    value: 'underground',
-    name: 'Underground',
-    swatches: ['oklch(0.5315 0.0694 156.19)', 'oklch(0.5748 0.0862 336.52)'],
-  },
-  {
-    // 超大字体简易: high-contrast neutral surfaces with larger type.
-    value: 'simple-large',
-    name: 'Simple Large-font',
+    // 简易: high-contrast neutral surfaces. Large type is now the separate
+    // `largeFont` toggle, available with every preset.
+    value: 'simple',
+    name: 'Simple',
     swatches: ['oklch(0.15 0 0)', 'oklch(0.99 0 0)'],
   },
 ] as const
 
-export type SelectableThemePreset = (typeof THEME_PRESETS)[number]['value']
-/**
- * `default` is the hidden neutral fallback (theme.css palette, applied by
- * removing `data-theme-preset`). It is never offered in the picker and a
- * stored `default` is migrated like any other removed preset.
- */
-export type ThemePreset = SelectableThemePreset | 'default'
+export type ThemePreset = (typeof THEME_PRESETS)[number]['value']
 export type ThemeRadius = 'default' | 'none' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeScale = 'default' | 'sm' | 'lg' | 'xl'
 export type ContentLayout = 'full' | 'centered'
@@ -81,13 +77,9 @@ export type ThemeCustomization = {
   radius: ThemeRadius
   scale: ThemeScale
   contentLayout: ContentLayout
+  /** Larger type everywhere, independent of the preset. */
+  largeFont: boolean
 }
-
-/**
- * The neutral palette from theme.css. It is applied by *removing*
- * `data-theme-preset`. Internal only; not selectable.
- */
-export const NEUTRAL_THEME_PRESET: ThemePreset = 'default'
 
 export const DEFAULT_THEME_CUSTOMIZATION: ThemeCustomization = {
   // New visitors (no stored preference) get the KT Comic look. Users can
@@ -97,6 +89,7 @@ export const DEFAULT_THEME_CUSTOMIZATION: ThemeCustomization = {
   radius: 'default',
   scale: 'default',
   contentLayout: 'full',
+  largeFont: false,
 }
 
 export const THEME_PRESET_VALUES = new Set(
@@ -104,16 +97,23 @@ export const THEME_PRESET_VALUES = new Set(
 ) as ReadonlySet<ThemePreset>
 
 /**
- * Preset a stored-but-removed value (any former preset, including the old
- * `default`) is migrated to. Fresh visitors without a stored value still get
- * DEFAULT_THEME_CUSTOMIZATION.preset. Keep in sync with index.html.
+ * Preset a stored-but-removed value is migrated to. Fresh visitors without a
+ * stored value still get DEFAULT_THEME_CUSTOMIZATION.preset (kt-comic).
+ * `simple-large` → `simple` and turns the large-font toggle on (see
+ * LARGE_FONT_PRESETS). Keep in sync with the boot script in index.html.
  */
-export const MIGRATED_THEME_PRESET: ThemePreset = 'underground'
+export const MIGRATED_THEME_PRESET: ThemePreset = 'default'
+const RENAMED_THEME_PRESETS: Record<string, ThemePreset> = {
+  'simple-large': 'simple',
+  underground: 'default',
+}
+/** Former presets that implied large type; migrating them enables largeFont. */
+export const LARGE_FONT_PRESETS: ReadonlySet<string> = new Set(['simple-large'])
 
 export function migrateThemePreset(raw: string | null): ThemePreset | null {
   if (raw === null || raw === '') return null
   if (THEME_PRESET_VALUES.has(raw as ThemePreset)) return raw as ThemePreset
-  return MIGRATED_THEME_PRESET
+  return RENAMED_THEME_PRESETS[raw] ?? MIGRATED_THEME_PRESET
 }
 
 export const THEME_FONT_VALUES: ReadonlySet<ThemeFont> = new Set([
@@ -152,7 +152,10 @@ export const CONTENT_LAYOUT_VALUES: ReadonlySet<ContentLayout> = new Set([
  */
 export const PRESET_DEFAULT_FONT: Partial<
   Record<ThemePreset, ResolvedThemeFont>
-> = {}
+> = {
+  // Stock default shipped with Public Sans.
+  default: 'sans',
+}
 
 /**
  * Resolve a user font preference + active preset into the concrete font that

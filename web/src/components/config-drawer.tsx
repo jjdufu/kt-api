@@ -48,6 +48,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { Switch } from '@/components/ui/switch'
 import { useDirection } from '@/context/direction-provider'
 import { type Collapsible, useLayout } from '@/context/layout-provider'
 import { useThemeCustomization } from '@/context/theme-customization-provider'
@@ -108,6 +109,7 @@ export function ConfigDrawer() {
         <div className={sideDrawerFormClassName()}>
           <ThemeConfig />
           <PresetConfig />
+          <LargeFontConfig />
           <FontConfig />
           <RadiusConfig />
           <ScaleConfig />
@@ -316,6 +318,31 @@ const FONT_OPTIONS: {
   { value: 'sans', label: 'Sans', preview: 'var(--font-public-sans)' },
   { value: 'serif', label: 'Serif', preview: 'var(--font-serif)' },
 ]
+
+function LargeFontConfig() {
+  const { t } = useTranslation()
+  const { customization, setLargeFont } = useThemeCustomization()
+  return (
+    <div className='flex items-center justify-between gap-4'>
+      <div className='min-w-0'>
+        <label
+          htmlFor='theme-large-font'
+          className='text-muted-foreground text-sm font-semibold'
+        >
+          {t('Large font')}
+        </label>
+        <p className='text-muted-foreground mt-0.5 text-xs'>
+          {t('Larger text across the interface, with any theme.')}
+        </p>
+      </div>
+      <Switch
+        id='theme-large-font'
+        checked={customization.largeFont}
+        onCheckedChange={(v) => setLargeFont(v)}
+      />
+    </div>
+  )
+}
 
 function FontConfig() {
   const { t } = useTranslation()

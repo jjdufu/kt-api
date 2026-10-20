@@ -4716,8 +4716,6 @@
     "Preset templates": "Preset templates",
     "Product configuration error": "Product configuration error",
     "Product does not exist": "Product does not exist",
-    "preset.simple-large": "Simple Large-font",
-    "preset.underground": "Underground",
     "Press Enter or comma to add tags": "Press Enter or comma to add tags",
     "Press Enter to use \"{{value}}\"": "Press Enter to use \"{{value}}\"",
     "Prevent server-side request forgery attacks": "Prevent server-side request forgery attacks",
@@ -7343,6 +7341,10 @@
     "Create and manage keys for your apps.": "Create and manage keys for your apps.",
     "Endpoints, parameters and examples.": "Endpoints, parameters and examples.",
     "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.",
-    "preset.kt-comic": "KT Comic"
+    "preset.kt-comic": "KT Comic",
+    "preset.default": "Default",
+    "preset.simple": "Simple",
+    "Large font": "Large font",
+    "Larger text across the interface, with any theme.": "Larger text across the interface, with any theme."
   }
 }
