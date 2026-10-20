@@ -121,7 +121,7 @@ export function AppHeader({
       </div>
 
       {showSearch && !rightContent && (
-        <div className='hidden w-80 shrink justify-center lg:flex xl:w-[28rem]'>
+        <div className='hidden w-64 shrink-0 justify-center lg:flex xl:w-80 2xl:w-[28rem]'>
           <Search className='w-full sm:w-full lg:w-full xl:w-full' />
         </div>
       )}
@@ -131,7 +131,7 @@ export function AppHeader({
       ) : null}
 
       {rightContent ?? (
-        <div className='ms-auto flex min-w-0 flex-1 basis-0 items-center justify-end gap-1 sm:gap-2'>
+        <div className='ms-auto flex min-w-max flex-1 basis-0 items-center justify-end gap-1 sm:gap-2'>
           {showTopNav && (
             <div className='me-1 hidden lg:block'>
               <TopNav links={links} />
