@@ -96,7 +96,13 @@ function RootComponent() {
     <ThemeCustomizationProvider>
       <NavigationProgress />
       <Outlet />
-      <Toaster closeButton duration={5000} position='top-center' />
+      <Toaster
+        closeButton
+        duration={5000}
+        position='bottom-right'
+        offset={{ bottom: 24, right: 24 }}
+        mobileOffset={{ bottom: 16 }}
+      />
       {import.meta.env.MODE === 'development' && (
         <>
           <ReactQueryDevtools buttonPosition='bottom-left' />

@@ -191,7 +191,7 @@ export function DocsPageLayout(props: {
             <main className='min-w-0 flex-1 space-y-12 pb-24'>
               <header className='dc-hero space-y-3'>
                 <span className='dc-kicker' aria-hidden='true'>
-                  DOCS!
+                  API DOCS
                 </span>
                 <h1 className='dc-h1 text-3xl font-semibold tracking-tight'>
                   {props.title}

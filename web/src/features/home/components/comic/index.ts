@@ -18,6 +18,8 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import '@/styles/comic/comic-base.css'
 import './home-comic.css'
+// After the page stylesheet so its surface rules win at equal specificity.
+import '@/styles/comic/page-backdrop.css'
 
 export { CapabilityWall } from './capability-wall'
 export { ComicCTA } from './comic-cta'
@@ -30,7 +32,7 @@ export { NeonStats } from './neon-stats'
 export {
   Burst,
   ComicBackdrop,
-  PageBackdrop,
+  HeroFx,
   Skyline,
   SpeechBubble,
 } from './decorations'

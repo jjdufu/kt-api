@@ -25,6 +25,7 @@ import { localizeSystemName } from '@/lib/brand'
 import { installBuildMetadata } from '@/lib/build-metadata'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
+import '@/lib/toast-defaults'
 import { initializeFrontendCache } from '@/lib/frontend-cache'
 import { createAppQueryClient } from '@/lib/query-client'
 import {
@@ -33,7 +34,6 @@ import {
   syncStatusWithAuth,
 } from '@/lib/status-query'
 
-import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
 import { ThemeProvider } from './context/theme-provider'
 import { i18nReady } from './i18n/config'
@@ -119,9 +119,7 @@ void i18nReady.then(() => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <FontProvider>
-            <DirectionProvider>
-              <RouterProvider router={router} />
-            </DirectionProvider>
+            <RouterProvider router={router} />
           </FontProvider>
         </ThemeProvider>
       </QueryClientProvider>

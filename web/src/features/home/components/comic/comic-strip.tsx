@@ -29,8 +29,8 @@ export function ComicStrip() {
     <section className='hc-section'>
       <div className='hc-container'>
         <SectionHeading
-          kicker={t('Three Panels')}
-          title={t('Your first call in three panels')}
+          kicker={t('Quick Start')}
+          title={t('Make your first call in three steps')}
         />
         <ol className='hc-strip'>
           {STEPS.map((s, i) => {

@@ -324,7 +324,7 @@ function Steps() {
     <Section className='bg-muted/30 border-y'>
       <SectionHeading
         kicker={t('Get Started')}
-        title={t('Your first call in three panels')}
+        title={t('Make your first call in three steps')}
       />
       <ol className='relative grid gap-10 md:grid-cols-3 md:gap-8'>
         <div
@@ -435,7 +435,7 @@ export function QuietCta() {
           className='absolute inset-0 -z-10 bg-[radial-gradient(60%_120%_at_50%_0%,color-mix(in_oklch,var(--primary)_12%,transparent),transparent)]'
         />
         <h2 className='text-foreground text-3xl font-semibold tracking-tight text-balance sm:text-4xl'>
-          {t('Your story starts with one request')}
+          {t('Start building with one API')}
         </h2>
         <p className='text-muted-foreground mx-auto mt-4 max-w-xl text-base'>
           {t('Sign up free and ship your first call in minutes.')}

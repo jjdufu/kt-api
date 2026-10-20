@@ -77,7 +77,7 @@ export function NeonStats() {
       <div className='hc-container'>
         <SectionHeading
           kicker={t('By the Numbers')}
-          title={t('The gateway in neon')}
+          title={t('Platform at a glance')}
         />
         <div className='hc-neon-grid'>
           {stats.map((s, i) => (

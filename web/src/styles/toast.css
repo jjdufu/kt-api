@@ -26,6 +26,7 @@ For commercial licensing, please contact support@quantumnous.com
   background: var(--popover) !important;
   color: var(--popover-foreground) !important;
   border: 1px solid var(--border) !important;
+  box-shadow: 0 6px 20px -8px rgb(0 0 0 / 0.18) !important;
 }
 [data-sonner-toast][data-type='success'] [data-icon] {
   color: var(--success) !important;

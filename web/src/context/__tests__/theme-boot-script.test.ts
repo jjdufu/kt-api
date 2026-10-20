@@ -109,7 +109,7 @@ describe('index.html preset boot script', () => {
 
   afterEach(() => document.body.removeAttribute('data-theme-large-font'))
 
-  it.each(['default', 'simple', 'kt-comic'])(
+  it.each(['default', 'kt-comic'])(
     'keeps supported stored preset %s',
     (preset) => {
       localStorage.setItem(THEME_STORAGE_KEYS.preset, preset)
@@ -119,12 +119,12 @@ describe('index.html preset boot script', () => {
     }
   )
 
-  it('migrates simple-large to simple and turns large font on', () => {
+  it('migrates simple-large to default and turns large font on', () => {
     localStorage.setItem(THEME_STORAGE_KEYS.preset, 'simple-large')
     new Function(presetScript)()
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
     expect(document.body).toHaveAttribute('data-theme-large-font', '')
-    expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('simple')
+    expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('default')
     expect(localStorage.getItem(THEME_STORAGE_KEYS.largeFont)).toBe('1')
   })
 
@@ -135,7 +135,7 @@ describe('index.html preset boot script', () => {
     expect(document.body).toHaveAttribute('data-theme-large-font', '')
   })
 
-  it.each(['underground', 'anthropic', 'ocean-breeze'])(
+  it.each(['simple', 'underground', 'anthropic', 'ocean-breeze'])(
     'migrates removed preset %s to default',
     (legacy) => {
       localStorage.setItem(THEME_STORAGE_KEYS.preset, legacy)

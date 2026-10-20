@@ -120,7 +120,7 @@ export const STEPS: Step[] = [
   },
   {
     title: 'Send a Request',
-    description: 'Point your SDK at the gateway and go.',
+    description: 'Set the gateway as your SDK base URL.',
     icon: Send,
     sfx: 'ZOOM!',
   },

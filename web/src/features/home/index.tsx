@@ -34,7 +34,6 @@ import {
   ComicStrip,
   ModelMarquee,
   NeonStats,
-  PageBackdrop,
 } from './components/comic'
 import { EnterpriseHome } from './components/enterprise/enterprise-home'
 import { useHomePageContent } from './hooks'
@@ -137,7 +136,6 @@ export function Home() {
   // KT Comic home page. All of its styles are scoped to [data-home].
   return (
     <div data-home=''>
-      <PageBackdrop />
       <PublicLayout showMainContainer={false}>
         <main className='hc-main'>
           <ComicHero isAuthenticated={isAuthenticated} />
