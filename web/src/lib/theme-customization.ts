@@ -25,6 +25,13 @@ For commercial licensing, please contact support@quantumnous.com
 
 export const THEME_PRESETS = [
   {
+    // 开天漫画: the site's comic / manga cyberpunk look (paper & ink light,
+    // neon-on-ink dark). Site default for visitors without a saved choice.
+    value: 'kt-comic',
+    name: 'KT Comic',
+    swatches: ['#ffe600', '#ff2bd6'],
+  },
+  {
     value: 'default',
     name: 'Default',
     swatches: ['oklch(0.72 0.18 250)', 'oklch(0.7 0.12 280)'],
@@ -111,8 +118,16 @@ export type ThemeCustomization = {
   contentLayout: ContentLayout
 }
 
+/**
+ * The neutral palette from theme.css. It is applied by *removing*
+ * `data-theme-preset`, so it is distinct from the default preset below.
+ */
+export const NEUTRAL_THEME_PRESET: ThemePreset = 'default'
+
 export const DEFAULT_THEME_CUSTOMIZATION: ThemeCustomization = {
-  preset: 'default',
+  // New visitors (no stored preference) get the KT Comic look. Users can
+  // still pick any other preset; that choice is persisted in localStorage.
+  preset: 'kt-comic',
   font: 'default',
   radius: 'default',
   scale: 'default',

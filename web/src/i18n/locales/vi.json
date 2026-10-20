@@ -7356,6 +7356,7 @@
     "Usage, balance and logs at a glance.": "Mức dùng, số dư và nhật ký trong nháy mắt.",
     "Create and manage keys for your apps.": "Tạo và quản lý khóa cho ứng dụng của bạn.",
     "Endpoints, parameters and examples.": "Endpoint, tham số và ví dụ.",
-    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI được xây dựng trên QuantumNous/new-api và cấp phép theo AGPL-3.0."
+    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI được xây dựng trên QuantumNous/new-api và cấp phép theo AGPL-3.0.",
+    "preset.kt-comic": "KT Comic"
   }
 }

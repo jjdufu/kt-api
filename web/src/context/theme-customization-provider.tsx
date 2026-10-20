@@ -29,6 +29,7 @@ import {
   CONTENT_LAYOUT_VALUES,
   type ContentLayout,
   DEFAULT_THEME_CUSTOMIZATION,
+  NEUTRAL_THEME_PRESET,
   resolveThemeFont,
   THEME_FONT_VALUES,
   THEME_PRESET_VALUES,
@@ -130,7 +131,7 @@ export function ThemeCustomizationProvider(props: {
   useEffect(() => {
     applyAttribute(
       'data-theme-preset',
-      preset === DEFAULT_THEME_CUSTOMIZATION.preset ? null : preset
+      preset === NEUTRAL_THEME_PRESET ? null : preset
     )
   }, [preset])
 

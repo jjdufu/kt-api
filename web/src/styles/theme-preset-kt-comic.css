@@ -1,0 +1,343 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * 开天漫画 / KT Comic preset — component layer.
+ *
+ * Colour tokens are declared in ./theme-presets.css. This file adds the comic
+ * outlines, hard shadows and press feedback on shared UI primitives, matched
+ * through their `data-slot` attributes so no component code is involved.
+ * Everything is scoped to <body data-theme-preset="kt-comic">; other presets
+ * render exactly as before.
+ *
+ * Typography: the comic display fonts (see ./comic/comic-fonts.css) are used
+ * only for page titles, card/dialog titles and buttons. Body text, tables,
+ * numbers and code keep the app font stack, so long/dynamic text stays
+ * readable and glyphs outside the subsets fall back to system fonts.
+ */
+
+[data-theme-preset='kt-comic'] {
+  --kt-font-title: 'KTHome Display', var(--font-body), system-ui, sans-serif;
+  --kt-font-button: 'KTHome KuaiLe', var(--font-body), system-ui, sans-serif;
+  --kt-line: 2.5px;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-slot='page-title'],
+[data-theme-preset='kt-comic'] [data-slot='card-title'],
+[data-theme-preset='kt-comic'] [data-slot='dialog-title'],
+[data-theme-preset='kt-comic'] [data-slot='alert-dialog-title'],
+[data-theme-preset='kt-comic'] [data-slot='sheet-title'] {
+  font-family: var(--kt-font-title);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+[data-theme-preset='kt-comic'] [data-slot='page-title'] {
+  font-size: 1.45rem;
+  line-height: 1.2;
+  text-shadow:
+    2px 2px 0 var(--kt-magenta),
+    -1px -1px 0 var(--kt-cyan);
+}
+
+/* ── Sidebar & header ───────────────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-slot='sidebar-inner'] {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--foreground) 9%, transparent) 1px,
+    transparent 1.3px
+  );
+  background-size: 9px 9px;
+}
+[data-theme-preset='kt-comic'] [data-slot='sidebar-menu-button'][data-active] {
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0 var(--kt-magenta);
+  font-weight: 700;
+}
+[data-theme-preset='kt-comic'] [data-slot='sidebar-group-label'] {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+[data-theme-preset='kt-comic'] header.sticky {
+  border-bottom: var(--kt-line) solid var(--kt-outline);
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+/* ── Cards, dialogs, popovers ───────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-slot='card'] {
+  border: var(--kt-line) solid var(--kt-outline);
+  box-shadow: 5px 5px 0 var(--kt-shadow);
+  --tw-ring-shadow: 0 0 #0000;
+}
+.dark [data-theme-preset='kt-comic'] [data-slot='card'] {
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--kt-cyan) 55%, #000);
+}
+[data-theme-preset='kt-comic'] [data-slot='dialog-content'],
+[data-theme-preset='kt-comic'] [data-slot='alert-dialog-content'] {
+  border: 3px solid var(--kt-outline);
+  box-shadow: 9px 9px 0 var(--kt-magenta);
+  --tw-ring-shadow: 0 0 #0000;
+}
+[data-theme-preset='kt-comic'] [data-slot='sheet-content'] {
+  border-color: var(--kt-outline);
+  border-width: 0 0 0 3px;
+}
+[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-content'],
+[data-theme-preset='kt-comic'] [data-slot='popover-content'],
+[data-theme-preset='kt-comic'] [data-slot='select-content'] {
+  border: var(--kt-line) solid var(--kt-outline);
+  box-shadow: 5px 5px 0 var(--kt-cyan);
+  --tw-ring-shadow: 0 0 #0000;
+}
+[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-item']:focus,
+[data-theme-preset='kt-comic']
+  [data-slot='dropdown-menu-item'][data-highlighted],
+[data-theme-preset='kt-comic'] [data-slot='select-item'][data-highlighted] {
+  background: var(--kt-yellow);
+  color: #000;
+}
+[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-item']:focus svg,
+[data-theme-preset='kt-comic']
+  [data-slot='dropdown-menu-item'][data-highlighted]
+  svg {
+  color: #000;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+/* Solid variants (default / secondary / outline / destructive) get the ink
+ * outline + hard shadow; ghost and link buttons stay flat. Variants are
+ * recognised by their class tokens from components/ui/button.tsx. */
+[data-theme-preset='kt-comic']
+  [data-slot='button']:is(
+    [class~='bg-primary'],
+    [class~='bg-secondary'],
+    [class~='border-border'],
+    [class~='bg-destructive/10']
+  ) {
+  font-family: var(--kt-font-button);
+  font-weight: 400;
+  border: var(--kt-line) solid #000;
+  box-shadow: 3px 3px 0 var(--kt-shadow);
+  transition:
+    transform 110ms ease,
+    box-shadow 110ms ease,
+    background-color 110ms ease;
+}
+.dark
+  [data-theme-preset='kt-comic']
+  [data-slot='button']:is(
+    [class~='bg-secondary'],
+    [class~='border-border'],
+    [class~='bg-destructive/10']
+  ) {
+  border-color: var(--kt-outline);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--kt-cyan) 60%, #000);
+}
+.dark [data-theme-preset='kt-comic'] [data-slot='button'][class~='bg-primary'] {
+  box-shadow: 3px 3px 0 #8a7a00;
+}
+[data-theme-preset='kt-comic']
+  [data-slot='button']:is(
+    [class~='bg-primary'],
+    [class~='bg-secondary'],
+    [class~='border-border'],
+    [class~='bg-destructive/10']
+  ):hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--kt-shadow);
+}
+[data-theme-preset='kt-comic']
+  [data-slot='button'][class~='bg-primary']:hover:not(:disabled) {
+  background: var(--primary);
+}
+[data-theme-preset='kt-comic']
+  [data-slot='button']:is(
+    [class~='bg-primary'],
+    [class~='bg-secondary'],
+    [class~='border-border'],
+    [class~='bg-destructive/10']
+  ):active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 transparent;
+}
+[data-theme-preset='kt-comic'] [data-slot='button']:focus-visible {
+  outline: 2.5px dashed var(--kt-magenta);
+  outline-offset: 2px;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────────────── */
+[data-theme-preset='kt-comic']
+  :is(
+    [data-slot='input'],
+    [data-slot='textarea'],
+    [data-slot='select-trigger']
+  ) {
+  border-width: 2px;
+  border-color: var(--input);
+}
+[data-theme-preset='kt-comic']
+  :is(
+    [data-slot='input'],
+    [data-slot='textarea'],
+    [data-slot='select-trigger']
+  ):focus-visible {
+  border-color: var(--kt-cyan);
+  box-shadow: 3px 3px 0 var(--kt-cyan);
+  --tw-ring-shadow: 0 0 #0000;
+}
+
+/* ── Tabs & badges ──────────────────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-slot='tabs-list'] {
+  border: 2px solid var(--kt-outline);
+  background: var(--muted);
+}
+[data-theme-preset='kt-comic'] [data-slot='tabs-trigger'] {
+  font-weight: 600;
+}
+[data-theme-preset='kt-comic']
+  [data-slot='tabs-trigger']:is([data-active], [aria-selected='true']) {
+  color: #000;
+  background: var(--kt-yellow);
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+}
+[data-theme-preset='kt-comic'] [data-slot='badge'] {
+  border-width: 1.5px;
+  border-color: color-mix(in srgb, var(--foreground) 55%, transparent);
+  font-weight: 700;
+}
+
+/* ── Tables (contrast first) ────────────────────────────────────────── */
+[data-theme-preset='kt-comic'] [data-slot='table-container'] {
+  border: 2px solid var(--kt-outline);
+  border-radius: 0.5rem;
+  background: var(--card);
+}
+[data-theme-preset='kt-comic'] [data-slot='table-header'] {
+  background: color-mix(in srgb, var(--kt-cyan) 14%, var(--card));
+}
+[data-theme-preset='kt-comic'] [data-slot='table-head'] {
+  color: var(--foreground);
+  font-weight: 700;
+}
+[data-theme-preset='kt-comic'] [data-slot='table-row']:hover {
+  background: color-mix(in srgb, var(--kt-yellow) 12%, transparent);
+}
+
+/* ── Avatar button & user menu (components/profile-dropdown.tsx) ─────── */
+[data-theme-preset='kt-comic'] .kt-avatar-trigger {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  padding: 0;
+  border: 2.5px solid #000;
+  background: var(--kt-yellow);
+  box-shadow: 3px 3px 0 var(--kt-magenta);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.dark [data-theme-preset='kt-comic'] .kt-avatar-trigger {
+  box-shadow: 3px 3px 0 var(--kt-cyan);
+}
+[data-theme-preset='kt-comic'] .kt-avatar-trigger [data-slot='avatar'] {
+  width: 100%;
+  height: 100%;
+}
+[data-theme-preset='kt-comic']
+  .kt-avatar-trigger
+  [data-slot='avatar-fallback'] {
+  font-size: 0.8rem;
+  font-weight: 800;
+  border: 2px solid #fff;
+}
+[data-theme-preset='kt-comic'] .kt-avatar-trigger:hover {
+  transform: translate(-1px, -1px) rotate(-4deg);
+}
+[data-theme-preset='kt-comic']
+  .kt-avatar-trigger:is(:active, [data-popup-open]) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--kt-magenta);
+}
+[data-theme-preset='kt-comic'] .kt-user-menu {
+  border: 3px solid var(--kt-outline);
+  border-radius: 0.6rem;
+  box-shadow: 6px 6px 0 var(--kt-magenta);
+  padding: 0.35rem;
+}
+.dark [data-theme-preset='kt-comic'] .kt-user-menu {
+  box-shadow: 6px 6px 0 var(--kt-cyan);
+}
+[data-theme-preset='kt-comic'] .kt-user-menu-head {
+  border-radius: 0.4rem;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--kt-magenta) 35%, transparent) 1px,
+    transparent 1.4px
+  );
+  background-size: 7px 7px;
+}
+[data-theme-preset='kt-comic'] .kt-user-menu-avatar {
+  border: 2px solid var(--kt-outline);
+  box-shadow: 2px 2px 0 var(--kt-yellow);
+}
+[data-theme-preset='kt-comic']
+  .kt-user-menu
+  [data-slot='dropdown-menu-separator'] {
+  height: 2px;
+  background: var(--kt-outline);
+}
+[data-theme-preset='kt-comic'] .kt-user-menu [data-slot='dropdown-menu-item'] {
+  border: 2px solid transparent;
+  font-weight: 600;
+}
+[data-theme-preset='kt-comic']
+  .kt-user-menu
+  [data-slot='dropdown-menu-item']:is(:focus, [data-highlighted]) {
+  border-color: #000;
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* ── Public header sign-in button (docs, about, pricing …) ──────────── */
+[data-theme-preset='kt-comic'] header a[href='/sign-in'] {
+  font-family: var(--kt-font-button);
+  height: 2.25rem;
+  padding: 0 1rem;
+  color: #000;
+  background: var(--kt-yellow);
+  border: 2.5px solid #000;
+  border-radius: 0.6rem;
+  box-shadow: 3px 3px 0 var(--kt-magenta);
+  transition:
+    transform 110ms ease,
+    box-shadow 110ms ease;
+}
+[data-theme-preset='kt-comic'] header a[href='/sign-in']:hover {
+  transform: translate(-1px, -1px);
+  background: var(--kt-yellow);
+}
+[data-theme-preset='kt-comic'] header a[href='/sign-in']:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme-preset='kt-comic']
+    :is([data-slot='button'], .kt-avatar-trigger, header a[href='/sign-in']) {
+    transition: none;
+  }
+}

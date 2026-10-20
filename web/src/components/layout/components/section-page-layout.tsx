@@ -93,7 +93,10 @@ export function SectionPageLayout(props: SectionPageLayoutProps) {
                   : 'min-w-0 flex-1'
               }
             >
-              <h2 className='truncate text-base font-bold tracking-tight sm:text-lg'>
+              <h2
+                data-slot='page-title'
+                className='truncate text-base font-bold tracking-tight sm:text-lg'
+              >
                 {title}
               </h2>
             </div>

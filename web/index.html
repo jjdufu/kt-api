@@ -36,6 +36,20 @@
   </head>
 
   <body>
+    <!-- Apply the colour preset before first paint (default: kt-comic) so the
+         console never flashes the neutral palette. Keep in sync with
+         DEFAULT_THEME_CUSTOMIZATION / THEME_STORAGE_KEYS.preset. -->
+    <script>
+      ;(function () {
+        var preset = 'kt-comic'
+        try {
+          preset = localStorage.getItem('newapi:theme:v1:preset') || preset
+        } catch (e) {}
+        if (preset !== 'default') {
+          document.body.setAttribute('data-theme-preset', preset)
+        }
+      })()
+    </script>
     <div id="root" translate="no" class="notranslate"></div>
   </body>
 </html>

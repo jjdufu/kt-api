@@ -38,8 +38,6 @@ import { getUserAvatarFallback, getUserAvatarStyle } from '@/lib/avatar'
 import { ROLE } from '@/lib/roles'
 import { useAuthStore } from '@/stores/auth-store'
 
-import './profile-dropdown.css'
-
 const avatarFallbackClassName = 'font-semibold text-white'
 
 export function ProfileDropdown() {

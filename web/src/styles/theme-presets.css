@@ -426,10 +426,13 @@ For commercial licensing, please contact support@quantumnous.com
  *   - `anthropic`: warm cream surfaces are a brand choice, NOT a primary-mix
  *     derivation (the Anthropic system deliberately uses warm neutrals for
  *     cards/borders rather than tinting them with the clay accent).
- *   - `simple-large`: keeps intentionally neutral, high-contrast surfaces. */
+ *   - `simple-large`: keeps intentionally neutral, high-contrast surfaces.
+ *   - `kt-comic`: paper/ink surfaces are hand-picked (see below). */
 [data-theme-preset]:not([data-theme-preset='default']):not(
-  [data-theme-preset='anthropic']
-):not([data-theme-preset='simple-large']) {
+    [data-theme-preset='anthropic']
+  ):not([data-theme-preset='simple-large']):not(
+    [data-theme-preset='kt-comic']
+  ) {
   --card: color-mix(in oklch, var(--primary) 3%, var(--background));
   --popover: color-mix(in oklch, var(--primary) 5%, var(--background));
   --muted: color-mix(in oklch, var(--primary) 7%, var(--background));
@@ -454,7 +457,9 @@ For commercial licensing, please contact support@quantumnous.com
 .dark
   [data-theme-preset]:not([data-theme-preset='default']):not(
     [data-theme-preset='anthropic']
-  ):not([data-theme-preset='simple-large']) {
+  ):not([data-theme-preset='simple-large']):not(
+    [data-theme-preset='kt-comic']
+  ) {
   --card: color-mix(in oklch, var(--primary) 8%, var(--background));
   --popover: color-mix(in oklch, var(--primary) 12%, var(--background));
   --muted: color-mix(in oklch, var(--primary) 12%, var(--background));
@@ -610,6 +615,126 @@ For commercial licensing, please contact support@quantumnous.com
 
   --skeleton-base: oklch(0.305 0.004 60);
   --skeleton-highlight: oklch(0.41 0.004 60);
+}
+
+/* ── 开天漫画 / KT Comic ─────────────────────────────────────────────── */
+/*
+ * The site's own comic / manga cyberpunk look (matches the public home page).
+ * Light = paper #f7f3ea with black ink; dark = ink #0b0b12 with neon cyan
+ * #00f0ff, magenta #ff2bd6 and yellow #ffe600. Primary actions are yellow
+ * with black text. Opted out of the surface bridge above so these bespoke
+ * surfaces win. Component-level outlines, hard shadows and the comic
+ * heading/button fonts live in ./theme-preset-kt-comic.css.
+ */
+[data-theme-preset='kt-comic'] {
+  --kt-ink: #111014;
+  --kt-cyan: #13b5c4;
+  --kt-magenta: #cf2c9f;
+  --kt-yellow: #f2d21b;
+  --kt-outline: #111014;
+  --kt-shadow: #111014;
+
+  --background: #f7f3ea;
+  --foreground: #111014;
+  --card: #fffdf6;
+  --card-foreground: #111014;
+  --popover: #fffdf6;
+  --popover-foreground: #111014;
+  --primary: #f2d21b;
+  --primary-foreground: #111014;
+  --secondary: #d7f3f5;
+  --secondary-foreground: #111014;
+  --muted: #efe9dc;
+  --muted-foreground: #4a4854;
+  --accent: #fff1a8;
+  --accent-foreground: #111014;
+  --destructive: #d42a3c;
+  --destructive-foreground: #ffffff;
+  --success: #1f9d55;
+  --success-foreground: #ffffff;
+  --warning: #c27c00;
+  --warning-foreground: #111014;
+  --info: #0f8fa0;
+  --info-foreground: #ffffff;
+  --neutral: #4a4854;
+  --neutral-foreground: #ffffff;
+  --border: #cfc6b3;
+  --input: #8c8577;
+  --ring: #13b5c4;
+
+  --chart-1: #13b5c4;
+  --chart-2: #cf2c9f;
+  --chart-3: #e0b800;
+  --chart-4: #6b4fd8;
+  --chart-5: #f06a2a;
+
+  --sidebar: #f1ebdd;
+  --sidebar-foreground: #111014;
+  --sidebar-primary: #f2d21b;
+  --sidebar-primary-foreground: #111014;
+  --sidebar-accent: #f2d21b;
+  --sidebar-accent-foreground: #111014;
+  --sidebar-border: #111014;
+  --sidebar-ring: #13b5c4;
+
+  --skeleton-base: #ebe4d4;
+  --skeleton-highlight: #f6f1e6;
+
+  --radius: 0.6rem;
+}
+.dark [data-theme-preset='kt-comic'] {
+  --kt-ink: #000000;
+  --kt-cyan: #00f0ff;
+  --kt-magenta: #ff2bd6;
+  --kt-yellow: #ffe600;
+  --kt-outline: #e9e7f7;
+  --kt-shadow: #000000;
+
+  --background: #0b0b12;
+  --foreground: #f4f3ff;
+  --card: #14131f;
+  --card-foreground: #f4f3ff;
+  --popover: #17162a;
+  --popover-foreground: #f4f3ff;
+  --primary: #ffe600;
+  --primary-foreground: #000000;
+  --secondary: #0f3a40;
+  --secondary-foreground: #e9fdff;
+  --muted: #1b1a28;
+  --muted-foreground: #b4b2c8;
+  --accent: #2a1633;
+  --accent-foreground: #ffffff;
+  --destructive: #ff4d6a;
+  --destructive-foreground: #000000;
+  --success: #39ff88;
+  --success-foreground: #000000;
+  --warning: #ffb020;
+  --warning-foreground: #000000;
+  --info: #00f0ff;
+  --info-foreground: #000000;
+  --neutral: #b4b2c8;
+  --neutral-foreground: #000000;
+  --border: #34324a;
+  --input: #57546f;
+  --ring: #00f0ff;
+
+  --chart-1: #00f0ff;
+  --chart-2: #ff2bd6;
+  --chart-3: #ffe600;
+  --chart-4: #39ff88;
+  --chart-5: #ff8a3d;
+
+  --sidebar: #0f0e18;
+  --sidebar-foreground: #e9e7f7;
+  --sidebar-primary: #ffe600;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #ffe600;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #2a2840;
+  --sidebar-ring: #00f0ff;
+
+  --skeleton-base: #1d1c2b;
+  --skeleton-highlight: #2a2940;
 }
 
 /* ── Font axis ────────────────────────────────────────────────────────────
