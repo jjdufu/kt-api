@@ -31,29 +31,165 @@ For commercial licensing, please contact support@quantumnous.com
   position: fixed;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
+  /* Night sky, always dark: the scene is neon-on-ink in light mode too. */
   background:
-    radial-gradient(var(--hc-dot) 1.2px, transparent 1.6px) 0 0 / 9px 9px,
+    radial-gradient(
+      70rem 30rem at 50% 105%,
+      rgba(255, 43, 214, 0.35),
+      transparent 70%
+    ),
+    linear-gradient(to bottom, #0b0620 0%, #1d0b3d 55%, #2a0d4a 100%);
+}
+[data-auth] .ka-scene {
+  position: absolute;
+  inset: 0;
+}
+[data-auth] .ka-scene::before {
+  /* speed lines + halftone over the sky */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.6px) 0 0 /
+      9px 9px,
     repeating-conic-gradient(
-      from 0deg at 50% 45%,
-      var(--hc-line) 0deg 1.6deg,
-      transparent 1.6deg 6deg
+      from 0deg at 30% 70%,
+      rgba(0, 240, 255, 0.07) 0deg 1.4deg,
+      transparent 1.4deg 7deg
     );
 }
-[data-auth] .ka-girl {
-  position: fixed;
-  right: max(1rem, calc(50% - 44rem));
+[data-auth] .ka-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
   bottom: 0;
-  z-index: -1;
-  width: min(30vw, 24rem);
-  height: auto;
+  width: 100%;
   pointer-events: none;
-  filter: drop-shadow(-6px 0 0 rgba(0, 240, 255, 0.35))
-    drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.45));
+  --hc-skyline: #0a0418;
 }
-@media (max-width: 1099px) {
-  [data-auth] .ka-girl {
+[data-auth] .hc-skyline-body {
+  fill: #0a0418;
+}
+[data-auth] :is(.hc-neon-cyan, .hc-window-cyan) {
+  fill: #00f0ff;
+}
+[data-auth] :is(.hc-neon-magenta, .hc-window-magenta) {
+  fill: #ff2bd6;
+}
+[data-auth] :is(.hc-window-cyan, .hc-window-magenta) {
+  opacity: 0.75;
+}
+[data-theme-preset='kt-comic'] [data-auth] .ka-brand {
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+}
+[data-auth] .ka-skyline-far {
+  height: 62%;
+  opacity: 0.55;
+  transform: scaleX(-1);
+  filter: blur(1px);
+}
+[data-auth] .ka-skyline-near {
+  height: 44%;
+  filter: drop-shadow(0 0 8px rgba(255, 43, 214, 0.45));
+}
+/* Elevated track crossing the city with a neon train streaking along. */
+[data-auth] .ka-rail {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: 30%;
+  height: 0.9rem;
+  transform: rotate(-4deg);
+  background: linear-gradient(#2b1a4d, #12081f);
+  border-top: 3px solid #000;
+  border-bottom: 3px solid #000;
+  box-shadow: 0 -2px 10px rgba(0, 240, 255, 0.45);
+}
+[data-auth] .ka-train {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: min(60vw, 46rem);
+  height: 2.6rem;
+  border: 3px solid #000;
+  border-radius: 1.4rem 2.6rem 0.4rem 0.4rem;
+  background:
+    repeating-linear-gradient(
+        90deg,
+        transparent 0 2.2rem,
+        rgba(0, 240, 255, 0.85) 2.2rem 3.6rem
+      )
+      0 0.5rem / 100% 0.8rem no-repeat,
+    linear-gradient(#e9e4ff, #9c8cd6);
+  box-shadow:
+    -3rem 0 2.5rem -0.5rem rgba(255, 43, 214, 0.55),
+    0 0 18px rgba(0, 240, 255, 0.5);
+  animation: ka-train 14s linear infinite;
+}
+@keyframes ka-train {
+  from {
+    transform: translateX(-70vw);
+  }
+  to {
+    transform: translateX(130vw);
+  }
+}
+/* Dark gradient behind the card keeps the form readable. */
+[data-auth] .ka-scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 38rem 34rem at 50% 48%,
+    rgba(5, 2, 14, 0.78),
+    rgba(5, 2, 14, 0.35) 60%,
+    transparent 100%
+  );
+}
+@media (max-width: 767px) {
+  /* Reduced on phones: no train, flatter skyline, stronger scrim. */
+  [data-auth] .ka-rail,
+  [data-auth] .ka-skyline-far {
     display: none;
+  }
+  [data-auth] .ka-skyline-near {
+    height: 26%;
+    opacity: 0.7;
+  }
+  [data-auth] .ka-scrim {
+    background: rgba(5, 2, 14, 0.55);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-auth] .ka-train {
+    animation: none;
+    transform: translateX(10vw);
+  }
+}
+
+/* Other presets: same dot grid + soft glow as the home page, no scene. */
+body:not([data-theme-preset='kt-comic']) [data-auth] .ka-backdrop {
+  background:
+    radial-gradient(
+      60rem 32rem at 50% -8rem,
+      color-mix(in oklch, var(--primary) 16%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+        color-mix(in oklch, var(--foreground) 14%, transparent) 1px,
+        transparent 1.4px
+      )
+      0 0 / 22px 22px,
+    var(--background);
+}
+body:not([data-theme-preset='kt-comic']) [data-auth] .ka-backdrop > * {
+  display: none;
+}
+@media (max-width: 767px) {
+  body:not([data-theme-preset='kt-comic']) [data-auth] .ka-backdrop {
+    background: var(--background);
   }
 }
 
