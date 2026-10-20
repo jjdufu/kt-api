@@ -144,8 +144,11 @@ export function LogStatCards(props: LogStatCardsProps) {
   })
 
   return (
-    <div className='overflow-hidden rounded-lg border'>
-      <div className='divide-border/60 grid min-w-0 grid-cols-2 divide-x sm:grid-cols-3 lg:grid-cols-7'>
+    <div
+      data-slot='dashboard-stat-strip'
+      className='overflow-hidden rounded-lg border'
+    >
+      <div className='bg-border/60 grid min-w-0 grid-cols-2 gap-px sm:grid-cols-4 xl:grid-cols-7'>
         {items.map((it, idx) => {
           const Icon = it.icon
           let valueContent
@@ -187,13 +190,15 @@ export function LogStatCards(props: LogStatCardsProps) {
             <div
               key={it.key}
               role='group'
+              data-slot='dashboard-stat'
+              data-stat-key={it.key}
               aria-label={it.title}
               aria-busy={loading}
               className={cn(
-                'min-w-0 px-2.5 py-1.5 sm:px-3 sm:py-4 xl:px-4',
+                'bg-card min-w-0 px-2.5 py-1.5 sm:px-4 sm:py-4',
                 idx === items.length - 1 &&
                   items.length % 2 !== 0 &&
-                  'col-span-2 sm:col-span-1'
+                  'col-span-2 xl:col-span-1'
               )}
             >
               <div className='flex min-w-0 items-center gap-1.5 sm:gap-2'>
@@ -217,11 +222,6 @@ export function LogStatCards(props: LogStatCardsProps) {
           )
         })}
       </div>
-      {/*<p className='text-muted-foreground border-t px-3 py-2 text-xs'>*/}
-      {/*  {t(*/}
-      {/*    'Cache usage is recorded only after the upgrade; historical data is not backfilled.'*/}
-      {/*  )}*/}
-      {/*</p>*/}
     </div>
   )
 }
