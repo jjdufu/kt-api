@@ -32,7 +32,7 @@ import {
   NEUTRAL_THEME_PRESET,
   resolveThemeFont,
   THEME_FONT_VALUES,
-  THEME_PRESET_VALUES,
+  migrateThemePreset,
   THEME_RADIUS_VALUES,
   THEME_SCALE_VALUES,
   type ThemeCustomization,
@@ -46,6 +46,28 @@ import {
   THEME_STORAGE_KEYS,
   writeThemePreference,
 } from '@/lib/theme-storage'
+
+/**
+ * Read the stored preset, migrating removed presets (including the old
+ * neutral `default`) to MIGRATED_THEME_PRESET and writing the result back so
+ * the boot script in index.html agrees on the next load.
+ */
+function readInitialPreset(): ThemePreset {
+  let raw: string | null = null
+  try {
+    raw =
+      typeof window === 'undefined'
+        ? null
+        : window.localStorage.getItem(THEME_STORAGE_KEYS.preset)
+  } catch {
+    raw = null
+  }
+  const migrated = migrateThemePreset(raw)
+  if (migrated === null) return DEFAULT_THEME_CUSTOMIZATION.preset
+  if (migrated !== raw)
+    writeThemePreference(THEME_STORAGE_KEYS.preset, migrated)
+  return migrated
+}
 
 function applyAttribute(name: string, value: string | null) {
   if (typeof document === 'undefined') return
@@ -90,13 +112,7 @@ const ThemeCustomizationContext =
 export function ThemeCustomizationProvider(props: {
   children: React.ReactNode
 }) {
-  const [preset, _setPreset] = useState<ThemePreset>(() =>
-    readThemePreference<ThemePreset>(
-      THEME_STORAGE_KEYS.preset,
-      THEME_PRESET_VALUES,
-      DEFAULT_THEME_CUSTOMIZATION.preset
-    )
-  )
+  const [preset, _setPreset] = useState<ThemePreset>(readInitialPreset)
   const [font, _setFont] = useState<ThemeFont>(() =>
     readThemePreference<ThemeFont>(
       THEME_STORAGE_KEYS.font,

@@ -41,13 +41,19 @@
          DEFAULT_THEME_CUSTOMIZATION / THEME_STORAGE_KEYS.preset. -->
     <script>
       ;(function () {
+        // Removed presets (incl. the old 'default') migrate to 'underground'.
+        // Keep in sync with migrateThemePreset() in lib/theme-customization.
         var preset = 'kt-comic'
+        var keep = { 'kt-comic': 1, underground: 1, 'simple-large': 1 }
         try {
-          preset = localStorage.getItem('newapi:theme:v1:preset') || preset
+          var key = 'newapi:theme:v1:preset'
+          var stored = localStorage.getItem(key)
+          if (stored) {
+            preset = keep[stored] ? stored : 'underground'
+            if (preset !== stored) localStorage.setItem(key, preset)
+          }
         } catch (e) {}
-        if (preset !== 'default') {
-          document.body.setAttribute('data-theme-preset', preset)
-        }
+        document.body.setAttribute('data-theme-preset', preset)
       })()
     </script>
     <div id="root" translate="no" class="notranslate"></div>

@@ -29,7 +29,7 @@ import { initializeFrontendCache } from '@/lib/frontend-cache'
 
 const savedPreferences = {
   'newapi:theme:v1:mode': 'dark',
-  'newapi:theme:v1:preset': 'rose-garden',
+  'newapi:theme:v1:preset': 'simple-large',
   'newapi:theme:v1:font': 'serif',
   'newapi:theme:v1:radius': 'lg',
   'newapi:theme:v1:scale': 'sm',
@@ -51,18 +51,15 @@ function ThemeControls() {
       </button>
       <button
         type='button'
-        onClick={() => customization.setPreset('anthropic')}
+        onClick={() => customization.setPreset('underground')}
       >
-        Anthropic preset
-      </button>
-      <button type='button' onClick={() => customization.setPreset('default')}>
-        Default preset
+        Underground preset
       </button>
       <button
         type='button'
         onClick={() => {
           theme.setTheme('dark')
-          customization.setPreset('rose-garden')
+          customization.setPreset('simple-large')
           customization.setFont('serif')
           customization.setRadius('lg')
           customization.setScale('sm')
@@ -142,7 +139,7 @@ describe('theme preference persistence', () => {
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
     expect(document.documentElement).toHaveClass('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'rose-garden')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'simple-large')
     expect(document.body).toHaveAttribute('data-theme-font', 'serif')
     expect(document.body).toHaveAttribute('data-theme-radius', 'lg')
     expect(document.body).toHaveAttribute('data-theme-scale', 'sm')
@@ -193,7 +190,12 @@ describe('theme preference persistence', () => {
       render(<ThemeFixture />)
 
       expect(screen.getByLabelText('Theme mode')).toHaveTextContent('system')
-      expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
+      // An empty value counts as "no choice"; an unknown one is a removed
+      // preset and migrates to Underground.
+      expect(document.body).toHaveAttribute(
+        'data-theme-preset',
+        value === '' ? 'kt-comic' : 'underground'
+      )
       expect(document.body).toHaveAttribute('data-theme-font', 'system')
       expect(document.body).not.toHaveAttribute('data-theme-radius')
       expect(document.body).not.toHaveAttribute('data-theme-scale')
@@ -225,7 +227,7 @@ describe('theme preference persistence', () => {
     await user.click(screen.getByRole('button', { name: 'Customize' }))
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'rose-garden')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'simple-large')
 
     await user.click(screen.getByRole('button', { name: 'Reset' }))
 
@@ -244,7 +246,7 @@ describe('theme preference persistence', () => {
     render(<ThemeFixture />)
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'rose-garden')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'simple-large')
     for (const [key, value] of Object.entries(savedPreferences)) {
       expect(localStorage.getItem(key)).toBe(value)
     }
@@ -253,25 +255,23 @@ describe('theme preference persistence', () => {
 })
 
 describe('theme preset default', () => {
-  it('defaults to KT Comic and persists an explicit neutral Default choice', async () => {
-    const user = userEvent.setup()
-    const first = render(<ThemeFixture />)
+  it('defaults fresh visitors to KT Comic without storing a value', () => {
+    render(<ThemeFixture />)
 
     expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
     expect(localStorage.getItem('newapi:theme:v1:preset')).toBeNull()
-
-    await user.click(screen.getByRole('button', { name: 'Default preset' }))
-
-    // The neutral palette is applied by removing the attribute, and because
-    // it is no longer the default it must be stored explicitly.
-    expect(document.body).not.toHaveAttribute('data-theme-preset')
-    expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('default')
-
-    first.unmount()
-    render(<ThemeFixture />)
-
-    expect(document.body).not.toHaveAttribute('data-theme-preset')
   })
+
+  it.each(['default', 'anthropic', 'rose-garden', 'lavender-dream', 'bogus'])(
+    'migrates removed preset %s to Underground and writes it back',
+    (legacy) => {
+      localStorage.setItem('newapi:theme:v1:preset', legacy)
+      render(<ThemeFixture />)
+
+      expect(document.body).toHaveAttribute('data-theme-preset', 'underground')
+      expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('underground')
+    }
+  )
 })
 
 describe('theme font selection', () => {
@@ -286,7 +286,7 @@ describe('theme font selection', () => {
     expect(document.body).toHaveAttribute('data-theme-font', 'sans')
     expect(localStorage.getItem('newapi:theme:v1:font')).toBe('sans')
 
-    await user.click(screen.getByRole('button', { name: 'Anthropic preset' }))
+    await user.click(screen.getByRole('button', { name: 'Underground preset' }))
 
     expect(document.body).toHaveAttribute('data-theme-font', 'sans')
   })
@@ -305,19 +305,5 @@ describe('theme font selection', () => {
     render(<ThemeFixture />)
 
     expect(document.body).toHaveAttribute('data-theme-font', 'system')
-  })
-
-  it('uses the preset font in Auto and restores the browser font on the default preset', async () => {
-    const user = userEvent.setup()
-    render(<ThemeFixture />)
-
-    await user.click(screen.getByRole('button', { name: 'Anthropic preset' }))
-
-    expect(document.body).toHaveAttribute('data-theme-font', 'serif')
-
-    await user.click(screen.getByRole('button', { name: 'Default preset' }))
-
-    expect(document.body).toHaveAttribute('data-theme-font', 'system')
-    expect(localStorage.getItem('newapi:theme:v1:font')).toBeNull()
   })
 })
