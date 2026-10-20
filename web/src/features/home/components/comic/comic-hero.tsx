@@ -23,24 +23,9 @@ import heroGirl from '@/assets/comic/hero-girl.webp'
 
 import { ComicTerminal } from './comic-terminal'
 import { Burst, SpeechBubble } from './decorations'
+import { splitHeadline } from './headline'
 import { ComicButton } from './primitives'
 import { useDocsHref } from './use-docs-href'
-
-/**
- * Split a headline into two balanced lines. CJK text has no spaces, so break
- * after a CJK comma when there is one, otherwise in the middle.
- */
-function splitHeadline(text: string): string[] {
-  const trimmed = text.trim()
-  if (/\s/.test(trimmed)) return [trimmed]
-  const comma = trimmed.search(/[、，,]/)
-  if (comma > 0 && comma < trimmed.length - 1) {
-    return [trimmed.slice(0, comma + 1), trimmed.slice(comma + 1)]
-  }
-  if (trimmed.length < 6) return [trimmed]
-  const mid = Math.floor(trimmed.length / 2)
-  return [trimmed.slice(0, mid), trimmed.slice(mid)]
-}
 
 type ComicHeroProps = {
   isAuthenticated: boolean

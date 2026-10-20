@@ -22,14 +22,17 @@ import { useTranslation } from 'react-i18next'
 import { PublicLayout } from '@/components/layout'
 import { RichContent } from '@/components/rich-content'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useThemeCustomization } from '@/context/theme-customization-provider'
 import { isHttpUrl, isLikelyHtml } from '@/lib/content-format'
 import { requireServerSuccess } from '@/lib/server-error-message'
 
 import { getAboutContent } from './api'
 import { AboutComic } from './components/about-comic'
+import { AboutEnterprise } from './components/about-enterprise'
 
 export function About() {
   const { t } = useTranslation()
+  const isComic = useThemeCustomization().customization.preset === 'kt-comic'
   const { data, isLoading } = useQuery({
     queryKey: ['about-content'],
     queryFn: async () => requireServerSuccess(await getAboutContent()),
@@ -54,8 +57,9 @@ export function About() {
   }
 
   if (!hasContent) {
-    // No admin About content: show the built-in comic about page.
-    return <AboutComic />
+    // No admin About content: built-in page (comic for KT Comic, enterprise
+    // layout for every other preset).
+    return isComic ? <AboutComic /> : <AboutEnterprise />
   }
 
   if (isUrl) {

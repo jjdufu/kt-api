@@ -17,42 +17,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import { KeyRound, LogIn, Send, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { STEPS } from './content'
 import { SpeechBubble } from './decorations'
 import { SectionHeading } from './primitives'
-
-type Step = {
-  title: string
-  description: string
-  icon: LucideIcon
-  sfx: string
-  /** Optional in-app target; the step's bubble becomes a link. */
-  to?: string
-}
-
-const STEPS: Step[] = [
-  {
-    title: 'Sign In',
-    description: 'Sign in to your account to get started.',
-    icon: LogIn,
-    sfx: 'POP!',
-    to: '/sign-in',
-  },
-  {
-    title: 'Get a Key',
-    description: 'Generate an API key in the console.',
-    icon: KeyRound,
-    sfx: 'CLICK!',
-  },
-  {
-    title: 'Send a Request',
-    description: 'Point your SDK at the gateway and go.',
-    icon: Send,
-    sfx: 'ZOOM!',
-  },
-]
 
 export function ComicStrip() {
   const { t } = useTranslation()

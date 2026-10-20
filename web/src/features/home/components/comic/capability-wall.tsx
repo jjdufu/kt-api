@@ -16,83 +16,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import {
-  Boxes,
-  Coins,
-  KeyRound,
-  Plug,
-  Route,
-  Timer,
-  type LucideIcon,
-} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { CAPABILITIES } from './content'
 import { SectionHeading } from './primitives'
-
-type Capability = {
-  no: string
-  title: string
-  description: string
-  sfx: string
-  icon: LucideIcon
-  tone: 'cyan' | 'magenta' | 'yellow'
-}
-
-const CAPABILITIES: Capability[] = [
-  {
-    no: '#01',
-    title: 'Unified API',
-    description:
-      'One OpenAI-compatible endpoint for chat, images, video and more.',
-    sfx: 'ZAP!',
-    icon: Plug,
-    tone: 'cyan',
-  },
-  {
-    no: '#02',
-    title: 'Multi-model Routing',
-    description:
-      'Send each request to the right model and channel, with automatic failover.',
-    sfx: 'WHOOSH!',
-    icon: Route,
-    tone: 'magenta',
-  },
-  {
-    no: '#03',
-    title: 'Pay as You Go',
-    description: 'Pay only for what you use, with every call itemized.',
-    sfx: 'KA-CHING!',
-    icon: Coins,
-    tone: 'yellow',
-  },
-  {
-    no: '#04',
-    title: 'Key Security',
-    description:
-      'Scoped keys, quotas and audit logs keep every credential in check.',
-    sfx: 'CLANK!',
-    icon: KeyRound,
-    tone: 'cyan',
-  },
-  {
-    no: '#05',
-    title: 'Async Tasks',
-    description:
-      'Long-running jobs with polling and callbacks, no more timeouts.',
-    sfx: 'TICK TOCK',
-    icon: Timer,
-    tone: 'magenta',
-  },
-  {
-    no: '#06',
-    title: 'Multi-protocol',
-    description:
-      'Speak OpenAI, Claude, Gemini and more protocols out of the box.',
-    sfx: 'BOOM!',
-    icon: Boxes,
-    tone: 'yellow',
-  },
-]
 
 export function CapabilityWall() {
   const { t } = useTranslation()
