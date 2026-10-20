@@ -25,16 +25,36 @@ For commercial licensing, please contact support@quantumnous.com
  * Everything is scoped to <body data-theme-preset="kt-comic">; other presets
  * render exactly as before.
  *
- * Typography: the comic display fonts (see ./comic/comic-fonts.css) are used
- * only for page titles, card/dialog titles and buttons. Body text, tables,
- * numbers and code keep the app font stack, so long/dynamic text stays
- * readable and glyphs outside the subsets fall back to system fonts.
+ * Typography: every text uses a comic font under this preset, overriding
+ * the user's Font axis choice. Headings, titles and buttons use KTHome
+ * Display (Smiley Sans); body text, including Latin, uses KTHome KuaiLe
+ * (ZCOOL KuaiLe); code, numeric columns and prices use KTHome Mono
+ * (JetBrains Mono). The CJK fonts are full, unicode-range sliced fonts (see
+ * ./comic/comic-fonts.css); missing glyphs fall back to system fonts.
  */
 
 [data-theme-preset='kt-comic'] {
-  --kt-font-title: 'KTHome Display', var(--font-body), system-ui, sans-serif;
-  --kt-font-button: 'KTHome KuaiLe', var(--font-body), system-ui, sans-serif;
+  --kt-font-body: 'KTHome KuaiLe', system-ui, sans-serif;
+  --kt-font-title: 'KTHome Display', var(--kt-font-body);
+  --kt-font-button: 'KTHome Display', var(--kt-font-body);
+  --kt-font-mono:
+    'KTHome Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --kt-line: 2.5px;
+}
+/* (0,2,0) beats the Font axis blocks in theme-presets.css. */
+[data-theme-preset='kt-comic'][data-theme-font],
+[data-theme-preset='kt-comic']:not([data-theme-font]) {
+  --font-ui-sans: var(--kt-font-body);
+  --font-body: var(--kt-font-body);
+  --font-sans: var(--kt-font-body);
+  --font-serif: var(--kt-font-body);
+  --font-mono: var(--kt-font-mono);
+  font-family: var(--kt-font-body);
+}
+[data-theme-preset='kt-comic'] :is(code, kbd, pre, samp, .font-mono),
+[data-theme-preset='kt-comic'] .tabular-nums,
+[data-theme-preset='kt-comic'] [data-slot='table-cell'].font-mono {
+  font-family: var(--kt-font-mono);
 }
 
 /* ── Typography ─────────────────────────────────────────────────────── */
@@ -43,7 +63,8 @@ For commercial licensing, please contact support@quantumnous.com
 [data-theme-preset='kt-comic'] [data-slot='dialog-title'],
 [data-theme-preset='kt-comic'] [data-slot='alert-dialog-title'],
 [data-theme-preset='kt-comic'] [data-slot='sheet-title'],
-[data-theme-preset='kt-comic'] [data-slot='section-title'] {
+[data-theme-preset='kt-comic'] [data-slot='section-title'],
+[data-theme-preset='kt-comic'] :is(h1, h2, h3, h4) {
   font-family: var(--kt-font-title);
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -153,6 +174,10 @@ For commercial licensing, please contact support@quantumnous.com
   color: #000;
   transform: translate(-1px, -1px);
 }
+[data-theme-preset='kt-comic'] [data-slot='button'] {
+  font-family: var(--kt-font-button);
+}
+
 /* ── Cards, dialogs, popovers ───────────────────────────────────────── */
 [data-theme-preset='kt-comic'] [data-slot='card'] {
   border: var(--kt-line) solid var(--kt-outline);
@@ -428,4 +453,9 @@ For commercial licensing, please contact support@quantumnous.com
     :is([data-slot='button'], .kt-avatar-trigger, header a[href='/sign-in']) {
     transition: none;
   }
+}
+
+/* Docs code blocks keep the monospace face. */
+[data-theme-preset='kt-comic'] [data-docs] .dc-code * {
+  font-family: var(--kt-font-mono);
 }

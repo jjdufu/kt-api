@@ -54,6 +54,23 @@
           }
         } catch (e) {}
         document.body.setAttribute('data-theme-preset', preset)
+        // KT Comic: preload the first-screen font slices (generated list,
+        // see scripts/build-comic-fonts.py). Other presets fetch nothing.
+        if (preset === 'kt-comic') {
+          var fonts = [
+            /*kt-comic-preload*/ '/fonts/kt-comic/display/000-84398194.woff2',
+            '/fonts/kt-comic/kuaile/000-9433feee.woff2' /*end*/,
+          ]
+          for (var i = 0; i < fonts.length; i++) {
+            var l = document.createElement('link')
+            l.rel = 'preload'
+            l.as = 'font'
+            l.type = 'font/woff2'
+            l.crossOrigin = 'anonymous'
+            l.href = fonts[i]
+            document.head.appendChild(l)
+          }
+        }
       })()
     </script>
     <div id="root" translate="no" class="notranslate"></div>
