@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import '@/styles/comic/comic-base.css'
 import './home-comic.css'
 
 export { CapabilityWall } from './capability-wall'
@@ -24,3 +25,8 @@ export { ComicHero } from './comic-hero'
 export { ComicStrip } from './comic-strip'
 export { ModelMarquee } from './model-marquee'
 export { NeonStats } from './neon-stats'
+
+// Building blocks reused by other comic-styled pages (about).
+export { Burst, ComicBackdrop, Skyline, SpeechBubble } from './decorations'
+export { ComicButton, Reveal, SectionHeading } from './primitives'
+export { useDocsHref } from './use-docs-href'

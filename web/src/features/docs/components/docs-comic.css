@@ -1,0 +1,260 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * Comic restyle for the public API docs. Scoped to [data-docs]; tokens and
+ * fonts come from src/styles/comic/comic-base.css. The display fonts are
+ * used for headings only - body copy, tables and code keep the app fonts so
+ * long reference text stays readable.
+ */
+
+[data-docs] .dc-page {
+  position: relative;
+  background-color: var(--hc-bg);
+  background-image: radial-gradient(var(--hc-dot) 1px, transparent 1.4px);
+  background-size: 10px 10px;
+  background-attachment: fixed;
+}
+
+/* ---------- hero ---------- */
+[data-docs] .dc-hero {
+  position: relative;
+  padding: 1.75rem 1.75rem 1.5rem;
+  background: var(--hc-paper);
+  border: 4px solid var(--hc-panel-border);
+  box-shadow: 9px 9px 0 var(--hc-magenta);
+  clip-path: polygon(0 0, 100% 3%, 99.4% 100%, 0.4% 97%);
+  overflow: hidden;
+}
+[data-docs] .dc-hero::after {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  background: repeating-conic-gradient(
+    from 0deg at 85% 30%,
+    var(--hc-line) 0deg 1.4deg,
+    transparent 1.4deg 6deg
+  );
+  pointer-events: none;
+}
+[data-docs] .dc-hero > * {
+  position: relative;
+  z-index: 1;
+}
+[data-docs] .dc-kicker {
+  display: inline-block;
+  font-family: var(--hc-font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.7rem;
+  color: #000;
+  background: var(--hc-yellow);
+  border: 3px solid #000;
+  transform: rotate(-2deg);
+  box-shadow: 4px 4px 0 var(--hc-cyan);
+}
+[data-docs] .dc-h1 {
+  font-family: var(--hc-font-cjk);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: var(--hc-head-fill);
+  -webkit-text-stroke: 2px var(--hc-head-stroke);
+  paint-order: stroke fill;
+  text-shadow:
+    -4px -3px 0 var(--hc-cyan),
+    4px 4px 0 var(--hc-magenta);
+}
+[data-docs] .dc-hero-desc {
+  max-width: 48rem;
+  color: var(--hc-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- table of contents ---------- */
+[data-docs] .dc-toc {
+  padding: 1rem 0.75rem;
+  background: var(--hc-paper);
+  border: 3px solid var(--hc-panel-border);
+  box-shadow: 5px 5px 0 var(--hc-cyan);
+}
+[data-docs] .dc-toc-label {
+  font-family: var(--hc-font-accent);
+  letter-spacing: 0.06em;
+  color: var(--hc-text);
+}
+[data-docs] .dc-toc-link {
+  border: 2px solid transparent;
+  border-radius: 0.35rem;
+  color: var(--hc-muted);
+}
+[data-docs] .dc-toc-link:hover {
+  color: var(--hc-text);
+  background: color-mix(in srgb, var(--hc-cyan) 12%, transparent);
+}
+[data-docs] .dc-toc-link[data-active] {
+  color: #000;
+  background: var(--hc-yellow);
+  border-color: #000;
+  box-shadow: 3px 3px 0 var(--hc-magenta);
+  font-weight: 600;
+}
+
+/* ---------- headings ---------- */
+[data-docs] .dc-h2 {
+  font-family: var(--hc-font-cjk);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1.1;
+  color: var(--hc-text);
+  text-shadow:
+    2px 2px 0 var(--hc-magenta),
+    -1.5px -1.5px 0 var(--hc-cyan);
+}
+[data-docs] .dc-h2::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--hc-yellow);
+  border: 3px solid #000;
+  transform: rotate(45deg);
+}
+[data-docs] .dc-h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--hc-font-cjk);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 2.3vw, 1.75rem);
+  line-height: 1.15;
+  color: var(--hc-text);
+}
+[data-docs] .dc-num {
+  display: inline-flex;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.4rem;
+  font-family: var(--hc-font-accent);
+  font-size: 0.95rem;
+  color: #000;
+  background: var(--hc-cyan);
+  border: 3px solid #000;
+  transform: rotate(-4deg);
+}
+[data-docs] .dc-h4 {
+  display: inline-block;
+  padding-bottom: 0.15rem;
+  border-bottom: 3px solid var(--hc-magenta);
+}
+
+/* ---------- endpoint panels ---------- */
+[data-docs] .dc-endpoint {
+  background: var(--hc-paper);
+  border: 3px solid var(--hc-panel-border);
+  border-radius: 0.35rem;
+  box-shadow: 7px 7px 0 var(--hc-shadow);
+}
+.dark [data-docs] .dc-endpoint {
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--hc-cyan) 70%, #000);
+}
+[data-docs] .dc-method {
+  font-family: var(--hc-font-accent);
+  font-size: 0.75rem;
+  border: 2px solid #000;
+  border-radius: 0.3rem;
+  color: #000;
+  box-shadow: 2px 2px 0 #000;
+}
+[data-docs] .dc-method[data-method='POST'] {
+  background: var(--hc-yellow);
+}
+[data-docs] .dc-method[data-method='GET'] {
+  background: var(--hc-cyan);
+}
+[data-docs] .dc-method[data-method='DELETE'] {
+  background: var(--hc-magenta);
+  color: #fff;
+}
+[data-docs] .dc-path {
+  font-family: var(--hc-font-mono);
+  font-weight: 600;
+}
+
+/* ---------- tables ---------- */
+[data-docs] [data-slot='table-container'] {
+  background: var(--hc-paper);
+  border: 3px solid var(--hc-panel-border);
+  border-radius: 0.35rem;
+  box-shadow: 5px 5px 0 var(--hc-yellow);
+}
+[data-docs] [data-slot='table-header'] {
+  background: color-mix(in srgb, var(--hc-cyan) 16%, var(--hc-paper));
+}
+[data-docs] [data-slot='table-head'] {
+  font-weight: 700;
+  color: var(--hc-text);
+}
+[data-docs] [data-slot='table-row'] {
+  border-color: color-mix(in srgb, var(--hc-panel-border) 25%, transparent);
+}
+
+/* ---------- code ---------- */
+[data-docs] .dc-code > * {
+  border: 3px solid var(--hc-panel-border) !important;
+  border-radius: 0.45rem !important;
+  box-shadow: 6px 6px 0 var(--hc-cyan);
+  overflow: hidden;
+}
+[data-docs] .dc-code {
+  margin-right: 6px;
+}
+[data-docs] .dc-inline-code {
+  font-family: var(--hc-font-mono);
+  color: var(--hc-text);
+  background: color-mix(in srgb, var(--hc-yellow) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hc-panel-border) 35%, transparent);
+}
+
+/* ---------- notes ---------- */
+[data-docs] .dc-note {
+  position: relative;
+  color: var(--hc-text);
+  background: var(--hc-paper);
+  border: 3px solid var(--hc-panel-border);
+  border-left-width: 8px;
+  border-left-color: var(--hc-magenta);
+  border-radius: 0.6rem;
+  box-shadow: 4px 4px 0 var(--hc-shadow);
+}
+.dark [data-docs] .dc-note {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--hc-magenta) 60%, #000);
+}
+
+@media (max-width: 767px) {
+  [data-docs] .dc-hero {
+    padding: 1.25rem 1rem;
+    box-shadow: 6px 6px 0 var(--hc-magenta);
+  }
+  [data-docs] .dc-h1 {
+    -webkit-text-stroke-width: 1.5px;
+  }
+}

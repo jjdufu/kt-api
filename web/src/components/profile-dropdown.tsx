@@ -38,6 +38,8 @@ import { getUserAvatarFallback, getUserAvatarStyle } from '@/lib/avatar'
 import { ROLE } from '@/lib/roles'
 import { useAuthStore } from '@/stores/auth-store'
 
+import './profile-dropdown.css'
+
 const avatarFallbackClassName = 'font-semibold text-white'
 
 export function ProfileDropdown() {
@@ -60,7 +62,12 @@ export function ProfileDropdown() {
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger
-          render={<Button variant='ghost' className='relative size-6 p-0' />}
+          render={
+            <Button
+              variant='ghost'
+              className='kt-avatar-trigger relative size-6 p-0'
+            />
+          }
         >
           <Avatar className='size-6'>
             <AvatarFallback
@@ -71,9 +78,13 @@ export function ProfileDropdown() {
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' sideOffset={8} className='w-56'>
-          <div className='flex items-center gap-2 px-1.5 py-1.5'>
-            <Avatar className='size-8'>
+        <DropdownMenuContent
+          align='end'
+          sideOffset={10}
+          className='kt-user-menu w-56'
+        >
+          <div className='kt-user-menu-head flex items-center gap-2 px-1.5 py-1.5'>
+            <Avatar className='kt-user-menu-avatar size-8'>
               <AvatarFallback
                 className={`${avatarFallbackClassName} text-xs`}
                 style={avatarFallbackStyle}

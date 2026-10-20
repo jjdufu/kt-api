@@ -7340,6 +7340,22 @@
     "Your story starts with one request": "Câu chuyện của bạn bắt đầu từ một yêu cầu",
     "Sign up free and ship your first call in minutes.": "Đăng ký miễn phí và thực hiện cuộc gọi đầu tiên trong vài phút.",
     "Sign in to your account to get started.": "Đăng nhập tài khoản để bắt đầu.",
-    "开天大模型": "KTAPI"
+    "开天大模型": "KTAPI",
+    "About KTAPI": "Về KTAPI",
+    "KTAPI is a large-model gateway for builders and creators: one key, one endpoint, every model you need.": "KTAPI là cổng mô hình lớn dành cho nhà phát triển và nhà sáng tạo: một khóa, một endpoint, mọi mô hình bạn cần.",
+    "What is KTAPI": "KTAPI là gì",
+    "Open the sky with one request": "Mở bầu trời chỉ với một yêu cầu",
+    "One gateway": "Một cổng duy nhất",
+    "KTAPI puts every major model behind one OpenAI-compatible endpoint, so switching models is a one-line change.": "Mọi mô hình lớn sau một endpoint tương thích OpenAI, đổi mô hình chỉ cần sửa một dòng.",
+    "Built for creators": "Sinh ra cho nhà sáng tạo",
+    "Text, images, video and assets share the same keys, billing and logs, so you spend time creating instead of wiring vendors together.": "Văn bản, hình ảnh, video và tài nguyên dùng chung khóa, thanh toán và nhật ký, để bạn dành thời gian sáng tạo thay vì kết nối nhà cung cấp.",
+    "Clear and in control": "Rõ ràng và chủ động",
+    "Usage-based billing, per-key quotas and detailed logs show exactly where every request and every credit went.": "Thanh toán theo mức dùng, hạn mức theo khóa và nhật ký chi tiết cho biết chính xác từng yêu cầu, từng tín dụng đi đâu.",
+    "Jump In": "Bắt đầu thôi",
+    "Where to go next": "Tiếp theo đi đâu",
+    "Usage, balance and logs at a glance.": "Mức dùng, số dư và nhật ký trong nháy mắt.",
+    "Create and manage keys for your apps.": "Tạo và quản lý khóa cho ứng dụng của bạn.",
+    "Endpoints, parameters and examples.": "Endpoint, tham số và ví dụ.",
+    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI được xây dựng trên QuantumNous/new-api và cấp phép theo AGPL-3.0."
   }
 }

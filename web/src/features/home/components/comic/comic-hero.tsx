@@ -18,7 +18,8 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
-import heroGirl from '../../assets/hero-girl.webp'
+import heroGirl from '@/assets/comic/hero-girl.webp'
+
 import { ComicTerminal } from './comic-terminal'
 import { Burst, ComicBackdrop, Skyline, SpeechBubble } from './decorations'
 import { ComicButton } from './primitives'

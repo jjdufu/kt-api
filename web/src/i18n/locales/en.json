@@ -7340,6 +7340,22 @@
     "Your story starts with one request": "Your story starts with one request",
     "Sign up free and ship your first call in minutes.": "Sign up free and ship your first call in minutes.",
     "Sign in to your account to get started.": "Sign in to your account to get started.",
-    "开天大模型": "KTAPI"
+    "开天大模型": "KTAPI",
+    "About KTAPI": "About KTAPI",
+    "KTAPI is a large-model gateway for builders and creators: one key, one endpoint, every model you need.": "KTAPI is a large-model gateway for builders and creators: one key, one endpoint, every model you need.",
+    "What is KTAPI": "What is KTAPI",
+    "Open the sky with one request": "Open the sky with one request",
+    "One gateway": "One gateway",
+    "KTAPI puts every major model behind one OpenAI-compatible endpoint, so switching models is a one-line change.": "KTAPI puts every major model behind one OpenAI-compatible endpoint, so switching models is a one-line change.",
+    "Built for creators": "Built for creators",
+    "Text, images, video and assets share the same keys, billing and logs, so you spend time creating instead of wiring vendors together.": "Text, images, video and assets share the same keys, billing and logs, so you spend time creating instead of wiring vendors together.",
+    "Clear and in control": "Clear and in control",
+    "Usage-based billing, per-key quotas and detailed logs show exactly where every request and every credit went.": "Usage-based billing, per-key quotas and detailed logs show exactly where every request and every credit went.",
+    "Jump In": "Jump In",
+    "Where to go next": "Where to go next",
+    "Usage, balance and logs at a glance.": "Usage, balance and logs at a glance.",
+    "Create and manage keys for your apps.": "Create and manage keys for your apps.",
+    "Endpoints, parameters and examples.": "Endpoints, parameters and examples.",
+    "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.": "KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0."
   }
 }
