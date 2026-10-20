@@ -26,7 +26,14 @@ import { useTheme } from '@/context/theme-provider'
 import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
-import { CTA, Features, Hero, HowItWorks, Stats } from './components'
+import {
+  CapabilityWall,
+  ComicCTA,
+  ComicHero,
+  ComicStrip,
+  ModelMarquee,
+  NeonStats,
+} from './components/comic'
 import { useHomePageContent } from './hooks'
 
 export function Home() {
@@ -120,14 +127,20 @@ export function Home() {
     )
   }
 
+  // Default comic home page. All of its styles are scoped to [data-home].
   return (
-    <PublicLayout showMainContainer={false}>
-      <Hero isAuthenticated={isAuthenticated} />
-      <Stats />
-      <Features />
-      <HowItWorks />
-      <CTA isAuthenticated={isAuthenticated} />
-      <Footer />
-    </PublicLayout>
+    <div data-home=''>
+      <PublicLayout showMainContainer={false}>
+        <main className='hc-main'>
+          <ComicHero isAuthenticated={isAuthenticated} />
+          <CapabilityWall />
+          <ComicStrip />
+          <NeonStats />
+          <ModelMarquee />
+          {!isAuthenticated && <ComicCTA />}
+        </main>
+        <Footer />
+      </PublicLayout>
+    </div>
   )
 }

@@ -16,8 +16,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-export { CTA } from './sections/cta'
-export { Features } from './sections/features'
-export { Hero } from './sections/hero'
-export { HowItWorks } from './sections/how-it-works'
-export { Stats } from './sections/stats'
+import './home-comic.css'
+
+export { CapabilityWall } from './capability-wall'
+export { ComicCTA } from './comic-cta'
+export { ComicHero } from './comic-hero'
+export { ComicStrip } from './comic-strip'
+export { ModelMarquee } from './model-marquee'
+export { NeonStats } from './neon-stats'
