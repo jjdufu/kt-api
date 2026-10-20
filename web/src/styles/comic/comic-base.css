@@ -17,39 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 /*
- * Shared comic / manga cyberpunk foundation: self-hosted OFL font subsets
- * (see src/assets/comic/fonts/README.md) and the colour tokens used by the
+ * Shared comic / manga cyberpunk foundation: the colour tokens used by the
  * home, about ([data-home]), docs ([data-docs]) and auth ([data-auth])
  * pages. Imported only by those pages, so other routes never load it and
  * browsers fetch a font file only when a scoped element actually uses it.
  */
 
-@font-face {
-  font-family: 'KTHome Display';
-  src: url('../../assets/comic/fonts/kthome-display.woff2') format('woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'KTHome KuaiLe';
-  src: url('../../assets/comic/fonts/zcool-kuaile.woff2') format('woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'KTHome Bangers';
-  src: url('../../assets/comic/fonts/bangers.woff2') format('woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'KTHome Bungee';
-  src: url('../../assets/comic/fonts/bungee.woff2') format('woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'KTHome Mono';
-  src: url('../../assets/comic/fonts/jetbrains-mono.woff2') format('woff2');
-  font-weight: 100 800;
-  font-display: swap;
-}
+/* @font-face rules live in ./comic-fonts.css (loaded globally, fetched lazily). */
 
 /* ---------- tokens ---------- */
 [data-home],

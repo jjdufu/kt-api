@@ -29,3 +29,15 @@ and rerun, for example:
 Latin fonts (Bangers, Bungee, JetBrains Mono) use
 `--unicodes=U+0020-007E,U+00A0-00FF,U+2018-201D,U+2022,U+2026,U+2190-2193`.
 Missing glyphs (e.g. kana, Cyrillic) fall back to system fonts.
+
+## Console extension (KT Comic theme preset)
+
+`kthome-display-console.woff2` and `zcool-kuaile-console.woff2` contain only
+the extra CJK glyphs in `glyphs-console.txt`: characters of short (≤ 10
+character) zh / zh-TW console UI strings that are not already in the base
+subsets. `src/styles/comic/comic-fonts.css` declares them under the same
+families with a matching `unicode-range`, so they are fetched only when a
+page actually renders one of those characters in a comic font (titles and
+buttons under the KT Comic preset). Regenerate them with the same
+pyftsubset flags, `--text-file=glyphs-console.txt`, and rename the Smiley
+name table to "KTHome Display" as above.
