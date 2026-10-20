@@ -27,6 +27,12 @@ export { ModelMarquee } from './model-marquee'
 export { NeonStats } from './neon-stats'
 
 // Building blocks reused by other comic-styled pages (about).
-export { Burst, ComicBackdrop, Skyline, SpeechBubble } from './decorations'
+export {
+  Burst,
+  ComicBackdrop,
+  PageBackdrop,
+  Skyline,
+  SpeechBubble,
+} from './decorations'
 export { ComicButton, Reveal, SectionHeading } from './primitives'
 export { useDocsHref } from './use-docs-href'

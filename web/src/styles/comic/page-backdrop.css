@@ -1,0 +1,138 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * One fixed, continuous page backdrop for home and about (every preset).
+ * <PageBackdrop/> sits first inside [data-home]; the layout and all
+ * sections above it are transparent, so the page reads as one surface.
+ */
+[data-home] {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--hc-bg);
+}
+[data-home] > div:not(.hc-page-backdrop) {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+}
+[data-home] .hc-page-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+[data-home] :is(.hc-hero, .hc-section, .hc-section-night),
+body:not([data-theme-preset='kt-comic'])
+  [data-home]
+  :is(.hc-hero, .hc-section, .hc-section-night, .hc-section:nth-of-type(odd)) {
+  background: transparent !important;
+}
+/* The header sits in flow (sticky), so heroes no longer pad for it. */
+[data-home] .hc-hero {
+  padding-top: 3.5rem;
+  overflow: visible;
+}
+[data-home] .ab-hero {
+  padding-top: 4rem;
+}
+@media (max-width: 1023px) {
+  [data-home] :is(.hc-hero, .ab-hero) {
+    padding-top: 2.5rem;
+  }
+}
+
+/* KT Comic: quiet speed lines + halftone, skyline silhouette at the bottom
+ * fading upward. */
+[data-home] .hc-page-backdrop .hc-speedlines {
+  opacity: 0.55;
+}
+[data-home] .hc-page-backdrop .hc-page-skyline {
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 42vh;
+  opacity: 0.22;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 25%, transparent);
+  mask-image: linear-gradient(to top, #000 0%, #000 25%, transparent);
+}
+.dark [data-home] .hc-page-backdrop .hc-page-skyline {
+  opacity: 0.3;
+}
+
+/* Other presets: dot grid + soft glow, no comic layers. */
+body:not([data-theme-preset='kt-comic']) [data-home] {
+  background-color: var(--background);
+}
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-page-backdrop > * {
+  display: none;
+}
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-page-backdrop {
+  background:
+    radial-gradient(
+      60rem 32rem at 50% -8rem,
+      color-mix(in oklch, var(--primary) 16%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40rem 28rem at 100% 100%,
+      color-mix(in oklch, var(--primary) 8%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+        color-mix(in oklch, var(--foreground) 14%, transparent) 1px,
+        transparent 1.4px
+      )
+      0 0 / 22px 22px;
+}
+
+/* Stats band: a contained card inside the content column, not a full-bleed
+ * band. ::before (formerly the top divider) draws the card; ::after is off. */
+[data-home] .hc-section-night::after {
+  display: none;
+}
+[data-home] .hc-section-night > * {
+  position: relative;
+  z-index: 1;
+}
+[data-home] .hc-section-night::before {
+  top: 1.5rem;
+  bottom: 1.5rem;
+  height: auto;
+  z-index: 0;
+  border: 4px solid var(--hc-panel-border) !important;
+  border-radius: 0.75rem;
+  background: var(--hc-night);
+  box-shadow: 8px 8px 0 var(--hc-shadow);
+}
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::before {
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem;
+  background: color-mix(in oklch, var(--card) 88%, transparent);
+  box-shadow:
+    0 1px 2px color-mix(in oklch, var(--foreground) 6%, transparent),
+    0 12px 32px -12px color-mix(in oklch, var(--foreground) 18%, transparent);
+  backdrop-filter: blur(6px);
+}
+@media (max-width: 767px) {
+  [data-home] .hc-section-night::before {
+    top: 0.75rem;
+    bottom: 0.75rem;
+  }
+}

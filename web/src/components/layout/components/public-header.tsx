@@ -35,14 +35,10 @@ import { useAuthStore } from '@/stores/auth-store'
 import { defaultTopNavLinks } from '../config/top-nav.config'
 import type { TopNavLink } from '../types'
 import { HeaderLogo } from './header-logo'
+import { SiteHeader, isNavLinkActive } from './site-header'
 
 const AUTH_PROMPT_SECONDS = 5
 
-/** Home matches exactly; other links also match their sub-routes. */
-function isNavLinkActive(pathname: string, href: string) {
-  if (href === '/') return pathname === '/'
-  return pathname === href || pathname.startsWith(`${href}/`)
-}
 
 type AuthPromptTarget = {
   title: string
@@ -197,12 +193,9 @@ export function PublicHeader(props: PublicHeaderProps) {
     <>
       {/* Full-width bar pinned to the top on every public page, with the
           console header's gutters. No floating pill / shrink on scroll. */}
-      <header
-        data-slot='public-header'
-        className='bg-background/85 supports-[backdrop-filter]:bg-background/70 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl'
-      >
-        <div className='w-full'>
-          <nav className='flex h-14 items-center justify-between gap-2 px-3 sm:px-4'>
+      <SiteHeader variant='public'>
+        <div className='h-full w-full'>
+          <nav className='flex h-full items-center justify-between gap-2'>
             {/* Logo */}
             <div className='flex min-w-0 flex-1 items-center gap-1 lg:min-w-36'>
               <Link
@@ -233,7 +226,7 @@ export function PublicHeader(props: PublicHeaderProps) {
                   return (
                     <a
                       key={`${link.title}:${link.href}`}
-                      data-slot='public-nav-link'
+                      data-slot='site-nav-link'
                       href={link.href}
                       title={t(link.title)}
                       target='_blank'
@@ -253,7 +246,7 @@ export function PublicHeader(props: PublicHeaderProps) {
                 return (
                   <Link
                     key={`${link.title}:${link.href}`}
-                    data-slot='public-nav-link'
+                    data-slot='site-nav-link'
                     data-active={isActive ? '' : undefined}
                     aria-current={isActive ? 'page' : undefined}
                     to={link.href}
@@ -337,7 +330,7 @@ export function PublicHeader(props: PublicHeaderProps) {
             </div>
           </nav>
         </div>
-      </header>
+      </SiteHeader>
 
       {/* Mobile full-screen overlay */}
       <div

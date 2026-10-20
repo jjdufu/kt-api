@@ -33,6 +33,7 @@ import {
   ComicStrip,
   ModelMarquee,
   NeonStats,
+  PageBackdrop,
 } from './components/comic'
 import { useHomePageContent } from './hooks'
 
@@ -130,6 +131,7 @@ export function Home() {
   // Default comic home page. All of its styles are scoped to [data-home].
   return (
     <div data-home=''>
+      <PageBackdrop />
       <PublicLayout showMainContainer={false}>
         <main className='hc-main'>
           <ComicHero isAuthenticated={isAuthenticated} />

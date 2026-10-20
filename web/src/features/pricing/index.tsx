@@ -151,7 +151,7 @@ export function Pricing() {
   if (isLoading) {
     return (
       <PublicLayout showMainContainer={false}>
-        <div className='mx-auto w-full max-w-[1800px] px-3 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-10 xl:px-8'>
+        <div className='mx-auto w-full max-w-[1800px] px-3 pt-6 pb-8 sm:px-6 sm:pt-8 sm:pb-10 xl:px-8'>
           <LoadingSkeleton viewMode={viewMode} />
         </div>
       </PublicLayout>
@@ -176,7 +176,7 @@ export function Pricing() {
               'linear-gradient(to bottom, black 40%, transparent 100%)',
           }}
         />
-        <PageTransition className='relative mx-auto w-full max-w-[1800px] px-3 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-10 xl:px-8'>
+        <PageTransition className='relative mx-auto w-full max-w-[1800px] px-3 pt-6 pb-8 sm:px-6 sm:pt-8 sm:pb-10 xl:px-8'>
           <header className='mx-auto mb-5 max-w-3xl pt-5 text-center sm:mb-10 sm:pt-10'>
             <h1 className='text-[clamp(2rem,5.5vw,3.5rem)] leading-[1.15] font-bold tracking-tight'>
               {t('Model Square')}
@@ -221,7 +221,7 @@ export function Pricing() {
               models={models || []}
               hasActiveFilters={hasActiveFilters}
               onClearFilters={clearFilters}
-              className='hover-scrollbar sticky top-20 hidden max-h-[calc(100dvh-6rem)] self-start overflow-y-auto xl:block'
+              className='hover-scrollbar sticky top-[calc(var(--app-header-height)+1rem)] hidden max-h-[calc(100dvh-var(--app-header-height)-2rem)] self-start overflow-y-auto xl:block'
             />
 
             <main className='min-w-0 space-y-4'>

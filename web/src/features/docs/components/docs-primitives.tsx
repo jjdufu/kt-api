@@ -181,7 +181,7 @@ export function DocsPageLayout(props: {
   return (
     <div data-docs=''>
       <PublicLayout showMainContainer={false}>
-        <div className='dc-page bg-background text-foreground pt-20'>
+        <div className='dc-page bg-background text-foreground'>
           <div className='mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 md:px-6'>
             <aside className='hidden w-60 shrink-0 md:block'>
               <div className='sticky top-24'>

@@ -171,6 +171,21 @@ export function ComicBackdrop({ className }: { className?: string }) {
   )
 }
 
+/**
+ * One fixed, continuous backdrop behind the whole home / about page (all
+ * presets). KT Comic: speed lines + halftone with a faint skyline silhouette
+ * at the bottom fading upward. Other presets hide the comic layers and use
+ * a dot grid + soft glow (page-backdrop.css). Sections stay transparent.
+ */
+export function PageBackdrop() {
+  return (
+    <div className='hc-page-backdrop' aria-hidden='true'>
+      <ComicBackdrop />
+      <Skyline className='hc-page-skyline' />
+    </div>
+  )
+}
+
 type BubbleProps = {
   children: ReactNode
   className?: string

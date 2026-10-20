@@ -19,9 +19,9 @@ For commercial licensing, please contact support@quantumnous.com
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
-import heroGirl from '@/assets/comic/hero-girl.webp'
 import { BrandLogo } from '@/components/brand-logo'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Skyline } from '@/features/home/components/comic/decorations'
 
 import '@/styles/comic/comic-base.css'
 import './auth-comic.css'
@@ -37,16 +37,18 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
   return (
     <div data-auth='' className='ka-root relative grid h-svh max-w-none'>
-      <div className='ka-backdrop' aria-hidden='true' />
-      <img
-        src={heroGirl}
-        alt=''
-        aria-hidden='true'
-        className='ka-girl'
-        width={640}
-        height={887}
-        decoding='async'
-      />
+      {/* Full-screen scene: KT Comic draws a neon city with an elevated
+          train line; other presets show the home page's grid + glow. */}
+      <div className='ka-backdrop' aria-hidden='true'>
+        <div className='ka-scene'>
+          <Skyline className='ka-skyline ka-skyline-far' />
+          <Skyline className='ka-skyline ka-skyline-near' />
+          <div className='ka-rail'>
+            <div className='ka-train' />
+          </div>
+        </div>
+        <div className='ka-scrim' />
+      </div>
       <Link
         to='/'
         className='ka-brand absolute top-4 left-4 z-10 flex items-center gap-2 transition-opacity hover:opacity-80 sm:top-8 sm:left-8'

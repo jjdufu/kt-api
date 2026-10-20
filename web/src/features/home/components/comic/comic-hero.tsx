@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 import heroGirl from '@/assets/comic/hero-girl.webp'
 
 import { ComicTerminal } from './comic-terminal'
-import { Burst, ComicBackdrop, Skyline, SpeechBubble } from './decorations'
+import { Burst, SpeechBubble } from './decorations'
 import { ComicButton } from './primitives'
 import { useDocsHref } from './use-docs-href'
 
@@ -57,8 +57,6 @@ export function ComicHero({ isAuthenticated }: ComicHeroProps) {
 
   return (
     <section className='hc-hero'>
-      <ComicBackdrop />
-      <Skyline className='hc-hero-skyline' />
       <div className='hc-hero-inner'>
         <div className='hc-hero-copy'>
           <h1 className='hc-headline' aria-label={headline}>

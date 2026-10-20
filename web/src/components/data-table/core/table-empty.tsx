@@ -17,7 +17,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -28,6 +27,7 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { TableRow, TableCell } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 interface TableEmptyProps {
   /**
@@ -59,65 +59,81 @@ interface TableEmptyProps {
  * Generic table empty state component
  * Displays a centered empty state message when table has no data
  */
+/** The empty-state block itself (icon, title, description, action). */
+export function TableEmptyContent({
+  title,
+  description,
+  icon,
+  children,
+}: Omit<TableEmptyProps, 'colSpan'>) {
+  const { t } = useTranslation()
+  const resolvedTitle = title ?? t('No Data')
+  const resolvedDescription =
+    description ?? t('No records found. Try adjusting your filters.')
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant='icon'>
+          {icon || <Database className='size-6' />}
+        </EmptyMedia>
+        <EmptyTitle>{resolvedTitle}</EmptyTitle>
+        <EmptyDescription>{resolvedDescription}</EmptyDescription>
+      </EmptyHeader>
+      {children}
+    </Empty>
+  )
+}
+
 /**
- * Keeps the empty state centred in the *visible* part of a horizontally
- * scrolling table: sticks to the scroll container's left edge and takes the
- * container's client width (tracked with a ResizeObserver), instead of
- * centring across the full width of a wide table.
+ * Body spacer for an empty table: reserves the height while the visible
+ * empty state is drawn by {@link TableEmptyOverlay} outside the <table>.
  */
-function ViewportCentered(props: { children: React.ReactNode }) {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const [width, setWidth] = React.useState<number | undefined>(undefined)
-  React.useLayoutEffect(() => {
-    const scroller = ref.current?.closest<HTMLElement>(
-      "[data-slot='table-container']"
-    )
-    if (!scroller) return
-    const update = () => setWidth(scroller.clientWidth)
-    update()
-    if (typeof ResizeObserver === 'undefined') return
-    const observer = new ResizeObserver(update)
-    observer.observe(scroller)
-    return () => observer.disconnect()
-  }, [])
+export function TableEmptySpacer(props: {
+  colSpan: number
+  className?: string
+}) {
+  return (
+    <TableRow aria-hidden='true' className='hover:bg-transparent'>
+      <TableCell
+        colSpan={props.colSpan}
+        className={cn('h-[400px] p-0', props.className)}
+      />
+    </TableRow>
+  )
+}
+
+/**
+ * Empty state drawn as an absolute layer in the table's NON-scrolling outer
+ * wrapper (which must be `relative`), below the header. Because it is not
+ * inside the horizontally scrolling area it stays centred in the visible
+ * box however wide the table is or wherever it is scrolled.
+ */
+export function TableEmptyOverlay(props: {
+  children: React.ReactNode
+  className?: string
+}) {
   return (
     <div
-      ref={ref}
-      data-slot='table-empty-viewport'
-      className='sticky left-0 flex h-full items-center justify-center'
-      style={width ? { width } : undefined}
+      data-slot='table-empty-overlay'
+      className={cn(
+        'pointer-events-none absolute inset-x-0 bottom-0 top-(--table-empty-top,2.5rem) grid place-items-center p-4 [&>*]:pointer-events-auto',
+        props.className
+      )}
     >
       {props.children}
     </div>
   )
 }
 
-export function TableEmpty({
-  colSpan,
-  title,
-  description,
-  icon,
-  children,
-}: TableEmptyProps) {
-  const { t } = useTranslation()
-  const resolvedTitle = title ?? t('No Data')
-  const resolvedDescription =
-    description ?? t('No records found. Try adjusting your filters.')
+/**
+ * @deprecated kept for callers that render rows themselves; draws the empty
+ * state inside the table (moves with horizontal scroll).
+ */
+export function TableEmpty({ colSpan, ...rest }: TableEmptyProps) {
   return (
     <TableRow>
       <TableCell colSpan={colSpan} className='h-[400px] p-0'>
-        <ViewportCentered>
-          <Empty>
-            <EmptyHeader>
-              <EmptyMedia variant='icon'>
-                {icon || <Database className='size-6' />}
-              </EmptyMedia>
-              <EmptyTitle>{resolvedTitle}</EmptyTitle>
-              <EmptyDescription>{resolvedDescription}</EmptyDescription>
-            </EmptyHeader>
-            {children}
-          </Empty>
-        </ViewportCentered>
+        <TableEmptyContent {...rest} />
       </TableCell>
     </TableRow>
   )
