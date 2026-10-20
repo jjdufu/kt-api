@@ -142,3 +142,19 @@ describe('Lobe icons', () => {
     )
   })
 })
+
+it('generated variant table matches the installed @lobehub/icons toc', async () => {
+  const { toc } = await import('@lobehub/icons/es/toc')
+  const { LOBE_ICON_FLAGS, LOBE_ICON_VARIANT_MASKS } =
+    await import('../lobe-icon-variants.gen')
+  const expected: Record<string, number> = {}
+  for (const icon of toc) {
+    let mask = 0
+    LOBE_ICON_FLAGS.forEach((flag, i) => {
+      if ((icon.param as Record<string, boolean>)[flag]) mask |= 1 << i
+    })
+    expected[icon.id] = mask
+  }
+  // Stale? Run `bun run icons:variants`.
+  expect(LOBE_ICON_VARIANT_MASKS).toEqual(expected)
+})
