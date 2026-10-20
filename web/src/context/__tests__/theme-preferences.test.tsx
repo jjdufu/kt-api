@@ -29,7 +29,7 @@ import { initializeFrontendCache } from '@/lib/frontend-cache'
 
 const savedPreferences = {
   'newapi:theme:v1:mode': 'dark',
-  'newapi:theme:v1:preset': 'simple',
+  'newapi:theme:v1:preset': 'default',
   'newapi:theme:v1:font': 'serif',
   'newapi:theme:v1:radius': 'lg',
   'newapi:theme:v1:scale': 'sm',
@@ -49,14 +49,14 @@ function ThemeControls() {
       <button type='button' onClick={() => customization.setFont('default')}>
         Auto font
       </button>
-      <button type='button' onClick={() => customization.setPreset('simple')}>
-        Underground preset
+      <button type='button' onClick={() => customization.setPreset('default')}>
+        Default preset
       </button>
       <button
         type='button'
         onClick={() => {
           theme.setTheme('dark')
-          customization.setPreset('simple')
+          customization.setPreset('default')
           customization.setFont('serif')
           customization.setRadius('lg')
           customization.setScale('sm')
@@ -136,7 +136,7 @@ describe('theme preference persistence', () => {
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
     expect(document.documentElement).toHaveClass('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
     expect(document.body).toHaveAttribute('data-theme-font', 'serif')
     expect(document.body).toHaveAttribute('data-theme-radius', 'lg')
     expect(document.body).toHaveAttribute('data-theme-scale', 'sm')
@@ -228,7 +228,7 @@ describe('theme preference persistence', () => {
     await user.click(screen.getByRole('button', { name: 'Customize' }))
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
 
     await user.click(screen.getByRole('button', { name: 'Reset' }))
 
@@ -247,7 +247,7 @@ describe('theme preference persistence', () => {
     render(<ThemeFixture />)
 
     expect(screen.getByLabelText('Theme mode')).toHaveTextContent('dark')
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
     for (const [key, value] of Object.entries(savedPreferences)) {
       expect(localStorage.getItem(key)).toBe(value)
     }
@@ -264,6 +264,7 @@ describe('theme preset default', () => {
   })
 
   it.each([
+    'simple',
     'underground',
     'anthropic',
     'rose-garden',
@@ -278,13 +279,13 @@ describe('theme preset default', () => {
     expect(document.body).not.toHaveAttribute('data-theme-large-font')
   })
 
-  it('migrates simple-large to Simple with the large-font toggle on', () => {
+  it('migrates simple-large to Default with the large-font toggle on', () => {
     localStorage.setItem('newapi:theme:v1:preset', 'simple-large')
     render(<ThemeFixture />)
 
-    expect(document.body).toHaveAttribute('data-theme-preset', 'simple')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
     expect(document.body).toHaveAttribute('data-theme-large-font', '')
-    expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('simple')
+    expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('default')
     expect(localStorage.getItem('newapi:theme:v1:large-font')).toBe('1')
   })
 })
@@ -301,7 +302,7 @@ describe('theme font selection', () => {
     expect(document.body).toHaveAttribute('data-theme-font', 'sans')
     expect(localStorage.getItem('newapi:theme:v1:font')).toBe('sans')
 
-    await user.click(screen.getByRole('button', { name: 'Underground preset' }))
+    await user.click(screen.getByRole('button', { name: 'Default preset' }))
 
     expect(document.body).toHaveAttribute('data-theme-font', 'sans')
   })
