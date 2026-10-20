@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.8](https://github.com/jjdufu/kt-api/compare/v0.0.7...v0.0.8) (2026-10-20)
+
+
+### Features
+
+* **web:** comic cyberpunk home page ([44a1fad](https://github.com/jjdufu/kt-api/commit/44a1fad142c3223639b61bf0b1a20560705276fa))
+* **web:** comic cyberpunk home page ([d419732](https://github.com/jjdufu/kt-api/commit/d419732af333e163f952b6f4b0aa2443900b259c))
+
 ## [0.0.7](https://github.com/jjdufu/kt-api/compare/v0.0.6...v0.0.7) (2026-10-19)
 
 
