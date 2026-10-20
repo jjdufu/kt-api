@@ -196,6 +196,19 @@ export function clearAuthentication(
   }
 }
 
+let signingOut = false
+
+/**
+ * Set while the user deliberately signs out, so the 401s of requests that
+ * were still in flight neither toast "Session expired" nor redirect.
+ */
+export function isSigningOut(): boolean {
+  return signingOut
+}
+export function setSigningOut(value: boolean): void {
+  signingOut = value
+}
+
 export function clearAuthenticatedClientState(
   queryClient: QueryClient,
   synchronizeTabs = true

@@ -24,7 +24,10 @@ import { toast } from 'sonner'
 
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { logout } from '@/features/auth/api'
-import { clearAuthenticatedClientState } from '@/lib/auth-session'
+import {
+  clearAuthenticatedClientState,
+  setSigningOut,
+} from '@/lib/auth-session'
 import { handleServerError } from '@/lib/handle-server-error'
 
 interface SignOutDialogProps {
@@ -47,12 +50,18 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
         return
       }
 
+      // Silence 401s from requests still in flight, stop them, then clear.
+      setSigningOut(true)
+      await queryClient.cancelQueries()
       clearAuthenticatedClientState(queryClient)
-      toast.success(t('Signed out'))
-      void navigate({ to: '/sign-in', replace: true })
+      toast.dismiss()
+      toast.success(t('Signed out'), { id: 'auth-signed-out' })
+      await navigate({ to: '/sign-in', replace: true })
     } catch (error: unknown) {
       handleServerError(error, t('Failed to sign out session'))
     } finally {
+      // Late responses can still land after navigation; keep them quiet briefly.
+      globalThis.setTimeout(() => setSigningOut(false), 3000)
       setIsSigningOut(false)
     }
   }

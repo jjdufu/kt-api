@@ -1,3 +1,4 @@
+import { Database } from 'lucide-react'
 /*
 Copyright (C) 2023-2026 QuantumNous
 
@@ -16,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Database } from 'lucide-react'
+import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -58,6 +59,39 @@ interface TableEmptyProps {
  * Generic table empty state component
  * Displays a centered empty state message when table has no data
  */
+/**
+ * Keeps the empty state centred in the *visible* part of a horizontally
+ * scrolling table: sticks to the scroll container's left edge and takes the
+ * container's client width (tracked with a ResizeObserver), instead of
+ * centring across the full width of a wide table.
+ */
+function ViewportCentered(props: { children: React.ReactNode }) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [width, setWidth] = React.useState<number | undefined>(undefined)
+  React.useLayoutEffect(() => {
+    const scroller = ref.current?.closest<HTMLElement>(
+      "[data-slot='table-container']"
+    )
+    if (!scroller) return
+    const update = () => setWidth(scroller.clientWidth)
+    update()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(update)
+    observer.observe(scroller)
+    return () => observer.disconnect()
+  }, [])
+  return (
+    <div
+      ref={ref}
+      data-slot='table-empty-viewport'
+      className='sticky left-0 flex h-full items-center justify-center'
+      style={width ? { width } : undefined}
+    >
+      {props.children}
+    </div>
+  )
+}
+
 export function TableEmpty({
   colSpan,
   title,
@@ -72,16 +106,18 @@ export function TableEmpty({
   return (
     <TableRow>
       <TableCell colSpan={colSpan} className='h-[400px] p-0'>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant='icon'>
-              {icon || <Database className='size-6' />}
-            </EmptyMedia>
-            <EmptyTitle>{resolvedTitle}</EmptyTitle>
-            <EmptyDescription>{resolvedDescription}</EmptyDescription>
-          </EmptyHeader>
-          {children}
-        </Empty>
+        <ViewportCentered>
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant='icon'>
+                {icon || <Database className='size-6' />}
+              </EmptyMedia>
+              <EmptyTitle>{resolvedTitle}</EmptyTitle>
+              <EmptyDescription>{resolvedDescription}</EmptyDescription>
+            </EmptyHeader>
+            {children}
+          </Empty>
+        </ViewportCentered>
       </TableCell>
     </TableRow>
   )

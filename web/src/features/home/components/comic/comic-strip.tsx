@@ -68,7 +68,7 @@ export function ComicStrip() {
             const Icon = s.icon
             return (
               <li key={s.title} className='hc-strip-item'>
-                <Reveal className='hc-strip-reveal' delay={i * 0.12} tilt={0}>
+                <Reveal className='hc-strip-reveal' delay={0} tilt={0}>
                   <div className='hc-strip-panel'>
                     <span className='hc-strip-no'>{i + 1}</span>
                     <span className='hc-strip-sfx' aria-hidden='true'>

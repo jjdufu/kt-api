@@ -392,3 +392,11 @@ body:not([data-theme-preset='kt-comic'])
   color: var(--primary-foreground) !important;
   font-family: var(--font-body) !important;
 }
+
+/* Divider lines from site-layout.css are hairlines outside KT Comic. */
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-hero::after,
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::before,
+body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::after {
+  border-width: 1px;
+  border-color: var(--border);
+}
