@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.0.16](https://github.com/jjdufu/kt-api/compare/v0.0.15...v0.0.16) (2026-10-20)
+
+
+### Features
+
+* **dashboard:** 在总 token 旁显示缓存用量 ([#7773](https://github.com/jjdufu/kt-api/issues/7773)) ([e07b5a0](https://github.com/jjdufu/kt-api/commit/e07b5a00e88f582ef4cb8cac1dddb719354674cc))
+* 支持阿里多模态向量化模型 qwen3-vl-embedding ([#5179](https://github.com/jjdufu/kt-api/issues/5179)) ([39f43a6](https://github.com/jjdufu/kt-api/commit/39f43a63a19ac5d1e02118eb652f03fb82f46d94))
+
+
+### Bug Fixes
+
+* DeepSeek 美元钱包为零时回退到人民币余额 ([#7917](https://github.com/jjdufu/kt-api/issues/7917)) ([881610b](https://github.com/jjdufu/kt-api/commit/881610b4627346f8a65f400f1ca0349d4e819d92))
+* **kling:** 插件升级到 1.1.1 ([8010cfd](https://github.com/jjdufu/kt-api/commit/8010cfd956c83d5f95554b8eb63bc4e1d3cb13ef))
+* **kling:** 支持单个 API Key ([#7897](https://github.com/jjdufu/kt-api/issues/7897)) ([9bc29fb](https://github.com/jjdufu/kt-api/commit/9bc29fbd265f3d0615fa69189e015f226fbdbbcb))
+* **limiter:** Redis 清空后恢复限流脚本 ([#6486](https://github.com/jjdufu/kt-api/issues/6486)) ([bc3f465](https://github.com/jjdufu/kt-api/commit/bc3f4655351b5c185af389c0898f41b23f5616e6))
+* **relay:** Claude 流式请求在准备和重试期间持续保活 ([#7857](https://github.com/jjdufu/kt-api/issues/7857)) ([797ce9c](https://github.com/jjdufu/kt-api/commit/797ce9cc5dda7888341a0d96c9d68172b9bd46fc))
+* **relaykit:** 为 Claude 合并相邻助手消息时保留工具调用 ([#7921](https://github.com/jjdufu/kt-api/issues/7921)) ([b311278](https://github.com/jjdufu/kt-api/commit/b31127896e6956dae001d268185d1a70b4a4802f))
+* **task:** 修复任务提交与轮询的请求头覆盖 ([#7918](https://github.com/jjdufu/kt-api/issues/7918)) ([f31c966](https://github.com/jjdufu/kt-api/commit/f31c96664b0c5bf2dd8a1e76bb765d96677f3325))
+* **task:** 查询重定向时仅向允许的主机发送凭据 ([c48c735](https://github.com/jjdufu/kt-api/commit/c48c7351accb90e73cb5bac5ff358dec086cf2d7))
+* **task:** 每次重试重新计价，并在提交前预留额度 ([90f6c5c](https://github.com/jjdufu/kt-api/commit/90f6c5cca0431a0095afb9d4ebd851242e6093d5))
+* 同步上游 new-api 13 个修复与功能（不含 Resend），适配缓存用量主题样式 ([56d3dbc](https://github.com/jjdufu/kt-api/commit/56d3dbc70ea5c9f91de0e2c1508c266f64df6571))
+
 ## [0.0.15](https://github.com/jjdufu/kt-api/compare/v0.0.14...v0.0.15) (2026-10-20)
 
 
