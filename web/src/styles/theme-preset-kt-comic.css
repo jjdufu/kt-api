@@ -520,3 +520,53 @@ For commercial licensing, please contact support@quantumnous.com
   color: var(--foreground) !important;
   box-shadow: none !important;
 }
+
+/* ── Dashboard stat strip (incl. cache read / write) ────────────────── */
+/* Thin neon hairline instead of a heavy comic outline; titles use the
+ * console display face, numbers stay on KTHome Mono via .font-mono. */
+[data-theme-preset='kt-comic'] [data-slot='dashboard-stat-strip'] {
+  border: 1px solid color-mix(in srgb, var(--kt-cyan) 35%, var(--border));
+  box-shadow: none;
+}
+[data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat']
+  > div:first-child
+  > div:last-child {
+  font-family: var(--kt-font-title);
+  letter-spacing: 0.08em;
+}
+[data-theme-preset='kt-comic'] [data-slot='dashboard-stat'] .font-mono {
+  letter-spacing: -0.01em;
+}
+[data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat']:is(
+    [data-stat-key='cacheRead'],
+    [data-stat-key='cacheCreation']
+  ) {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--kt-cyan) 7%, transparent),
+      transparent 70%
+    ),
+    var(--card);
+}
+[data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+  .font-mono {
+  color: color-mix(in srgb, var(--kt-cyan) 55%, var(--foreground));
+}
+[data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat'][data-stat-key='cacheCreation']
+  .font-mono {
+  color: color-mix(in srgb, var(--kt-magenta) 55%, var(--foreground));
+}
+.dark[data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+  .font-mono,
+.dark
+  [data-theme-preset='kt-comic']
+  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+  .font-mono {
+  text-shadow: 0 0 8px color-mix(in srgb, var(--kt-cyan) 35%, transparent);
+}
