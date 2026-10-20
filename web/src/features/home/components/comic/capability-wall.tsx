@@ -28,7 +28,7 @@ export function CapabilityWall() {
       <div className='hc-container'>
         <SectionHeading
           kicker={t('Core Capabilities')}
-          title={t('Six panels of superpowers')}
+          title={t('Everything you need to run AI in production')}
         />
         <div className='hc-wall'>
           {CAPABILITIES.map((c, i) => {
