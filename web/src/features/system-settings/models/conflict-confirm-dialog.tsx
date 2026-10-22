@@ -16,48 +16,48 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
 
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { StaticDataTable } from '@/components/data-table'
-import { ErrorState } from '@/components/error-state'
-import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { StaticDataTable } from "@/components/data-table";
+import { ErrorState } from "@/components/error-state";
+import { Button } from "@/components/ui/button";
 
 export type ConflictItem = {
-  channel: string
-  model: string
-  current: string
-  newVal: string
-  adjustment?: string
-  siteVal?: string
-}
+  channel: string;
+  model: string;
+  current: string;
+  newVal: string;
+  adjustment?: string;
+  siteVal?: string;
+};
 type ConflictConfirmDialogProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  conflicts: ConflictItem[]
-  onConfirm: () => void
-  isLoading?: boolean
-  error?: string
-  onReload?: () => void
-  exchangeRateSummary?: string
-}
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  conflicts: ConflictItem[];
+  onConfirm: () => void;
+  isLoading?: boolean;
+  error?: string;
+  onReload?: () => void;
+  exchangeRateSummary?: string;
+};
 export function ConflictConfirmDialog(props: ConflictConfirmDialogProps) {
-  const { t } = useTranslation()
-  const conflicts = props.conflicts
+  const { t } = useTranslation();
+  const conflicts = props.conflicts;
   return (
     <ConfirmDialog
       open={props.open}
       onOpenChange={props.onOpenChange}
-      title={t('Preview price changes')}
-      desc={t('Review and confirm the selected prices.')}
-      className='max-h-[min(90dvh,var(--dialog-available-height))] overflow-y-auto data-[size=default]:max-w-[calc(100%-2rem)] data-[size=default]:sm:max-w-4xl'
-      confirmText={t('Confirm Changes')}
+      title={t("Preview price changes")}
+      desc={t("Review and confirm the selected prices.")}
+      className="kt-console-dialog max-h-[min(90dvh,var(--dialog-available-height))] overflow-y-auto data-[size=default]:max-w-[calc(100%-2rem)] data-[size=default]:sm:max-w-4xl"
+      confirmText={t("Confirm Changes")}
       isLoading={props.isLoading}
       handleConfirm={props.onConfirm}
       disabled={Boolean(props.error)}
     >
       {props.exchangeRateSummary && (
-        <p className='text-muted-foreground text-sm'>
+        <p className="text-muted-foreground text-sm">
           {props.exchangeRateSummary}
         </p>
       )}
@@ -65,53 +65,53 @@ export function ConflictConfirmDialog(props: ConflictConfirmDialogProps) {
         <ErrorState
           description={props.error}
           action={
-            <Button variant='outline' onClick={props.onReload}>
-              {t('Reload pricing')}
+            <Button variant="outline" onClick={props.onReload}>
+              {t("Reload pricing")}
             </Button>
           }
         />
       )}
       <StaticDataTable
-        className='max-h-96 overflow-y-auto'
-        tableClassName='min-w-[640px]'
+        className="max-h-96 overflow-y-auto"
+        tableClassName="min-w-[640px]"
         data={conflicts}
         columns={[
           {
-            id: 'channel',
-            header: t('Price source'),
-            cellClassName: 'font-medium',
+            id: "channel",
+            header: t("Price source"),
+            cellClassName: "font-medium",
             cell: (conflict) => conflict.channel,
           },
           {
-            id: 'model',
-            header: t('Model'),
-            cellClassName: 'font-mono text-sm',
+            id: "model",
+            header: t("Model"),
+            cellClassName: "font-mono text-sm",
             cell: (conflict) => conflict.model,
           },
           {
-            id: 'current',
-            header: t('Current Billing'),
+            id: "current",
+            header: t("Current Billing"),
             cell: (conflict) => (
-              <pre className='text-sm whitespace-pre-wrap'>
+              <pre className="text-sm whitespace-pre-wrap">
                 {conflict.current}
               </pre>
             ),
           },
           {
-            id: 'new',
-            header: t('Final saved price'),
+            id: "new",
+            header: t("Final saved price"),
             cell: (conflict) => (
-              <div className='space-y-2'>
+              <div className="space-y-2">
                 {conflict.adjustment && (
-                  <p className='text-muted-foreground text-xs'>
+                  <p className="text-muted-foreground text-xs">
                     {conflict.adjustment}
                   </p>
                 )}
-                <pre className='text-sm whitespace-pre-wrap'>
+                <pre className="text-sm whitespace-pre-wrap">
                   {conflict.newVal}
                 </pre>
                 {conflict.siteVal && (
-                  <pre className='text-muted-foreground text-xs whitespace-pre-wrap'>
+                  <pre className="text-muted-foreground text-xs whitespace-pre-wrap">
                     {conflict.siteVal}
                   </pre>
                 )}
@@ -121,5 +121,5 @@ export function ConflictConfirmDialog(props: ConflictConfirmDialogProps) {
         ]}
       />
     </ConfirmDialog>
-  )
+  );
 }

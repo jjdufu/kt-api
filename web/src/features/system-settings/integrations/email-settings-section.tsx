@@ -16,12 +16,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-import { PasswordInput } from '@/components/password-input'
+import { PasswordInput } from "@/components/password-input";
 import {
   Form,
   FormControl,
@@ -30,14 +30,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Switch } from '@/components/ui/switch'
-import { getCurrencyDisplay, getCurrencyLabel } from '@/lib/currency'
-import { parseQuotaFromDollars, quotaUnitsToDollars } from '@/lib/format'
-import { handleServerError } from '@/lib/handle-server-error'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import { getCurrencyDisplay, getCurrencyLabel } from "@/lib/currency";
+import { parseQuotaFromDollars, quotaUnitsToDollars } from "@/lib/format";
+import { handleServerError } from "@/lib/handle-server-error";
 
 import {
   SettingsControlChildren,
@@ -45,80 +45,80 @@ import {
   SettingsForm,
   SettingsSwitchContent,
   SettingsSwitchItem,
-} from '../components/settings-form-layout'
-import { SettingsPageFormActions } from '../components/settings-page-context'
-import { SettingsSection } from '../components/settings-section'
-import { useResetForm } from '../hooks/use-reset-form'
-import { useUpdateOption } from '../hooks/use-update-option'
+} from "../components/settings-form-layout";
+import { SettingsPageFormActions } from "../components/settings-page-context";
+import { SettingsSection } from "../components/settings-section";
+import { useResetForm } from "../hooks/use-reset-form";
+import { useUpdateOption } from "../hooks/use-update-option";
 import {
   createEmailSchema,
   parseResendSender,
   type EmailFormValues,
-} from './email-settings-schema'
+} from "./email-settings-schema";
 
 type EmailSettingsSectionProps = {
-  defaultValues: Omit<EmailFormValues, 'ResendSenderName'>
-}
+  defaultValues: Omit<EmailFormValues, "ResendSenderName">;
+};
 
-type SmtpSecurityMode = 'none' | 'ssl_tls' | 'starttls'
+type SmtpSecurityMode = "none" | "ssl_tls" | "starttls";
 
 function getSmtpSecurityMode(values: {
-  SMTPSSLEnabled: boolean
-  SMTPStartTLSEnabled: boolean
+  SMTPSSLEnabled: boolean;
+  SMTPStartTLSEnabled: boolean;
 }): SmtpSecurityMode {
-  if (values.SMTPSSLEnabled) return 'ssl_tls'
-  if (values.SMTPStartTLSEnabled) return 'starttls'
-  return 'none'
+  if (values.SMTPSSLEnabled) return "ssl_tls";
+  if (values.SMTPStartTLSEnabled) return "starttls";
+  return "none";
 }
 
 export function EmailSettingsSection({
   defaultValues,
 }: EmailSettingsSectionProps) {
-  const { t } = useTranslation()
-  const updateOption = useUpdateOption()
-  const emailSchema = createEmailSchema(t)
+  const { t } = useTranslation();
+  const updateOption = useUpdateOption();
+  const emailSchema = createEmailSchema(t);
   const initialValues = useMemo(
     () => ({
       ...defaultValues,
       ...parseResendSender(defaultValues.ResendFrom),
       QuotaRemindThreshold: String(
-        quotaUnitsToDollars(Number(defaultValues.QuotaRemindThreshold) || 0)
+        quotaUnitsToDollars(Number(defaultValues.QuotaRemindThreshold) || 0),
       ),
     }),
-    [defaultValues]
-  )
+    [defaultValues],
+  );
 
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),
     defaultValues: initialValues,
-  })
+  });
 
   const [provider, smtpSSL, smtpStartTLS, quotaRemindEnabled] = useWatch({
     control: form.control,
     name: [
-      'EmailProvider',
-      'SMTPSSLEnabled',
-      'SMTPStartTLSEnabled',
-      'QuotaRemindEnabled',
+      "EmailProvider",
+      "SMTPSSLEnabled",
+      "SMTPStartTLSEnabled",
+      "QuotaRemindEnabled",
     ],
-  })
-  const tokensOnly = getCurrencyDisplay().meta.kind === 'tokens'
-  const isSaving = form.formState.isSubmitting || updateOption.isPending
-  useResetForm(form, isSaving ? undefined : initialValues)
+  });
+  const tokensOnly = getCurrencyDisplay().meta.kind === "tokens";
+  const isSaving = form.formState.isSubmitting || updateOption.isPending;
+  useResetForm(form, isSaving ? undefined : initialValues);
 
   const onSubmit = async (values: EmailFormValues) => {
-    const securityMode = getSmtpSecurityMode(values)
+    const securityMode = getSmtpSecurityMode(values);
     const sanitized = {
       SMTPServer: values.SMTPServer.trim(),
       SMTPPort: values.SMTPPort.trim(),
       SMTPAccount: values.SMTPAccount.trim(),
       SMTPFrom: values.SMTPFrom.trim(),
       SMTPToken: values.SMTPToken.trim(),
-      SMTPSSLEnabled: securityMode === 'ssl_tls',
-      SMTPStartTLSEnabled: securityMode === 'starttls',
+      SMTPSSLEnabled: securityMode === "ssl_tls",
+      SMTPStartTLSEnabled: securityMode === "starttls",
       SMTPInsecureSkipVerify: values.SMTPInsecureSkipVerify,
       SMTPForceAuthLogin: values.SMTPForceAuthLogin,
-    }
+    };
 
     const initial = {
       SMTPServer: defaultValues.SMTPServer.trim(),
@@ -130,144 +130,148 @@ export function EmailSettingsSection({
       SMTPStartTLSEnabled: defaultValues.SMTPStartTLSEnabled,
       SMTPInsecureSkipVerify: defaultValues.SMTPInsecureSkipVerify,
       SMTPForceAuthLogin: defaultValues.SMTPForceAuthLogin,
-    }
+    };
 
-    const updates: Array<{ key: string; value: string | boolean }> = []
+    const updates: Array<{ key: string; value: string | boolean }> = [];
 
-    if (values.EmailProvider === 'resend') {
-      const from = values.ResendFrom.trim()
-      const name = values.ResendSenderName.trim()
+    if (values.EmailProvider === "resend") {
+      const from = values.ResendFrom.trim();
+      const name = values.ResendSenderName.trim();
       if (
         from !== initialValues.ResendFrom ||
         name !== initialValues.ResendSenderName
       ) {
         // Quote display names so commas, quotes and angle brackets stay text,
         // not mailbox syntax. The server also validates the combined address.
-        const escapedName = name.replaceAll('\\', '\\\\').replaceAll('"', '\\"')
-        const sender = name ? `"${escapedName}" <${from}>` : from
-        updates.push({ key: 'ResendFrom', value: sender })
+        const escapedName = name
+          .replaceAll("\\", "\\\\")
+          .replaceAll('"', '\\"');
+        const sender = name ? `"${escapedName}" <${from}>` : from;
+        updates.push({ key: "ResendFrom", value: sender });
       }
-      const key = values.ResendApiKey.trim()
-      if (key) updates.push({ key: 'ResendApiKey', value: key })
+      const key = values.ResendApiKey.trim();
+      if (key) updates.push({ key: "ResendApiKey", value: key });
     } else {
       if (sanitized.SMTPServer !== initial.SMTPServer) {
-        updates.push({ key: 'SMTPServer', value: sanitized.SMTPServer })
+        updates.push({ key: "SMTPServer", value: sanitized.SMTPServer });
       }
 
       if (sanitized.SMTPPort !== initial.SMTPPort) {
-        updates.push({ key: 'SMTPPort', value: sanitized.SMTPPort })
+        updates.push({ key: "SMTPPort", value: sanitized.SMTPPort });
       }
 
       if (sanitized.SMTPAccount !== initial.SMTPAccount) {
-        updates.push({ key: 'SMTPAccount', value: sanitized.SMTPAccount })
+        updates.push({ key: "SMTPAccount", value: sanitized.SMTPAccount });
       }
 
       if (sanitized.SMTPFrom !== initial.SMTPFrom) {
-        updates.push({ key: 'SMTPFrom', value: sanitized.SMTPFrom })
+        updates.push({ key: "SMTPFrom", value: sanitized.SMTPFrom });
       }
 
       if (sanitized.SMTPToken && sanitized.SMTPToken !== initial.SMTPToken) {
-        updates.push({ key: 'SMTPToken', value: sanitized.SMTPToken })
+        updates.push({ key: "SMTPToken", value: sanitized.SMTPToken });
       }
 
       if (sanitized.SMTPSSLEnabled !== initial.SMTPSSLEnabled) {
         updates.push({
-          key: 'SMTPSSLEnabled',
+          key: "SMTPSSLEnabled",
           value: sanitized.SMTPSSLEnabled,
-        })
+        });
       }
 
       if (sanitized.SMTPStartTLSEnabled !== initial.SMTPStartTLSEnabled) {
         updates.push({
-          key: 'SMTPStartTLSEnabled',
+          key: "SMTPStartTLSEnabled",
           value: sanitized.SMTPStartTLSEnabled,
-        })
+        });
       }
 
       if (sanitized.SMTPInsecureSkipVerify !== initial.SMTPInsecureSkipVerify) {
         updates.push({
-          key: 'SMTPInsecureSkipVerify',
+          key: "SMTPInsecureSkipVerify",
           value: sanitized.SMTPInsecureSkipVerify,
-        })
+        });
       }
 
       if (sanitized.SMTPForceAuthLogin !== initial.SMTPForceAuthLogin) {
         updates.push({
-          key: 'SMTPForceAuthLogin',
+          key: "SMTPForceAuthLogin",
           value: sanitized.SMTPForceAuthLogin,
-        })
+        });
       }
     }
 
     if (values.QuotaRemindEnabled !== defaultValues.QuotaRemindEnabled) {
       updates.push({
-        key: 'QuotaRemindEnabled',
+        key: "QuotaRemindEnabled",
         value: values.QuotaRemindEnabled,
-      })
+      });
     }
 
-    const threshold = values.QuotaRemindThreshold.trim()
+    const threshold = values.QuotaRemindThreshold.trim();
     if (threshold !== initialValues.QuotaRemindThreshold) {
       updates.push({
-        key: 'QuotaRemindThreshold',
+        key: "QuotaRemindThreshold",
         value: String(parseQuotaFromDollars(Number(threshold || 0))),
-      })
+      });
     }
 
     // Save credentials first. A failed configuration write must not activate
     // the new provider; only the final selector write changes delivery.
     if (values.EmailProvider !== defaultValues.EmailProvider) {
-      updates.push({ key: 'EmailProvider', value: values.EmailProvider })
+      updates.push({ key: "EmailProvider", value: values.EmailProvider });
     }
 
     try {
       for (const update of updates) {
-        await updateOption.mutateAsync(update)
-        if (update.key === 'ResendApiKey') {
-          form.setValue('ResendKeyConfigured', true)
+        await updateOption.mutateAsync(update);
+        if (update.key === "ResendApiKey") {
+          form.setValue("ResendKeyConfigured", true);
         }
       }
-      form.setValue('ResendApiKey', '')
+      form.setValue("ResendApiKey", "");
     } catch (error) {
-      handleServerError(error)
+      handleServerError(error);
     }
-  }
+  };
 
   return (
-    <SettingsSection title={t('Email & Notifications')}>
+    <SettingsSection title={t("Email & Notifications")}>
       <Form {...form}>
-        <SettingsForm onSubmit={form.handleSubmit(onSubmit)} autoComplete='off'>
+        <SettingsForm onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
           <SettingsPageFormActions
             onSave={form.handleSubmit(onSubmit)}
             isSaving={isSaving}
           />
           <FormField
             control={form.control}
-            name='EmailProvider'
+            name="EmailProvider"
             render={({ field }) => (
-              <FormItem data-settings-form-span='full'>
-                <FormLabel>{t('Email sending method')}</FormLabel>
+              <FormItem data-settings-form-span="full">
+                <FormLabel>{t("Email sending method")}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     value={field.value}
                     onValueChange={field.onChange}
                     disabled={isSaving}
-                    className='grid-cols-1 gap-3 sm:grid-cols-2'
+                    className="grid-cols-1 gap-3 sm:grid-cols-2"
                   >
                     <Label
-                      className='flex cursor-pointer items-center gap-3 rounded-lg border p-4'
-                      htmlFor='email-provider-smtp'
+                      data-slot="email-provider-option"
+                      className="has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5 flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition-colors"
+                      htmlFor="email-provider-smtp"
                     >
-                      <RadioGroupItem value='smtp' id='email-provider-smtp' />
+                      <RadioGroupItem value="smtp" id="email-provider-smtp" />
                       SMTP
                     </Label>
                     <Label
-                      className='flex cursor-pointer items-center gap-3 rounded-lg border p-4'
-                      htmlFor='email-provider-resend'
+                      data-slot="email-provider-option"
+                      className="has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5 flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition-colors"
+                      htmlFor="email-provider-resend"
                     >
                       <RadioGroupItem
-                        value='resend'
-                        id='email-provider-resend'
+                        value="resend"
+                        id="email-provider-resend"
                       />
                       Resend API
                     </Label>
@@ -275,32 +279,32 @@ export function EmailSettingsSection({
                 </FormControl>
                 <FormDescription>
                   {t(
-                    'Only the selected method sends email. The other method keeps its settings.'
+                    "Only the selected method sends email. The other method keeps its settings.",
                   )}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {provider === 'resend' ? (
+          {provider === "resend" ? (
             <>
               <FormField
                 control={form.control}
-                name='ResendFrom'
+                name="ResendFrom"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Sender email address')}</FormLabel>
+                    <FormLabel>{t("Sender email address")}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        autoComplete='off'
+                        autoComplete="off"
                         disabled={isSaving}
-                        type='email'
-                        placeholder='noreply@example.com'
+                        type="email"
+                        placeholder="noreply@example.com"
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('The domain must be verified in Resend')}
+                      {t("The domain must be verified in Resend")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -308,21 +312,21 @@ export function EmailSettingsSection({
               />
               <FormField
                 control={form.control}
-                name='ResendSenderName'
+                name="ResendSenderName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Sender name')}</FormLabel>
+                    <FormLabel>{t("Sender name")}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        autoComplete='off'
+                        autoComplete="off"
                         disabled={isSaving}
-                        placeholder='New API'
+                        placeholder="New API"
                       />
                     </FormControl>
                     <FormDescription>
                       {t(
-                        'The name recipients see. Leave blank to use the site name.'
+                        "The name recipients see. Leave blank to use the site name.",
                       )}
                     </FormDescription>
                     <FormMessage />
@@ -331,20 +335,20 @@ export function EmailSettingsSection({
               />
               <FormField
                 control={form.control}
-                name='ResendApiKey'
+                name="ResendApiKey"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Resend API key')}</FormLabel>
+                    <FormLabel>{t("Resend API key")}</FormLabel>
                     <FormControl>
                       <PasswordInput
                         {...field}
-                        autoComplete='new-password'
+                        autoComplete="new-password"
                         disabled={isSaving}
-                        placeholder={t('Enter new token to update')}
+                        placeholder={t("Enter new token to update")}
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('Leave blank to keep the existing key')}
+                      {t("Leave blank to keep the existing key")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -355,38 +359,38 @@ export function EmailSettingsSection({
             <>
               <FormField
                 control={form.control}
-                name='SMTPServer'
+                name="SMTPServer"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('SMTP Host')}</FormLabel>
+                    <FormLabel>{t("SMTP Host")}</FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete='off'
-                        placeholder={t('smtp.example.com')}
+                        autoComplete="off"
+                        placeholder={t("smtp.example.com")}
                         {...field}
                         onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('Hostname or IP of your SMTP provider')}
+                      {t("Hostname or IP of your SMTP provider")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div className='grid gap-6 md:grid-cols-2'>
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name='SMTPPort'
+                  name="SMTPPort"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('Port')}</FormLabel>
+                      <FormLabel>{t("Port")}</FormLabel>
                       <FormControl>
                         <Input
-                          autoComplete='off'
-                          type='number'
-                          placeholder='587'
+                          autoComplete="off"
+                          type="number"
+                          placeholder="587"
                           {...field}
                           onChange={(event) =>
                             field.onChange(event.target.value)
@@ -394,7 +398,7 @@ export function EmailSettingsSection({
                         />
                       </FormControl>
                       <FormDescription>
-                        {t('Common ports include 25, 465, and 587')}
+                        {t("Common ports include 25, 465, and 587")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -402,7 +406,7 @@ export function EmailSettingsSection({
                 />
 
                 <FormItem>
-                  <FormLabel>{t('SMTP encryption')}</FormLabel>
+                  <FormLabel>{t("SMTP encryption")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={getSmtpSecurityMode({
@@ -410,72 +414,72 @@ export function EmailSettingsSection({
                         SMTPStartTLSEnabled: smtpStartTLS,
                       })}
                       onValueChange={(value) => {
-                        const mode = value as SmtpSecurityMode
-                        form.setValue('SMTPSSLEnabled', mode === 'ssl_tls', {
+                        const mode = value as SmtpSecurityMode;
+                        form.setValue("SMTPSSLEnabled", mode === "ssl_tls", {
                           shouldDirty: true,
-                        })
+                        });
                         form.setValue(
-                          'SMTPStartTLSEnabled',
-                          mode === 'starttls',
+                          "SMTPStartTLSEnabled",
+                          mode === "starttls",
                           {
                             shouldDirty: true,
-                          }
-                        )
+                          },
+                        );
                       }}
-                      className='gap-3'
+                      className="gap-3"
                     >
-                      <div className='flex items-center gap-2'>
-                        <RadioGroupItem value='none' id='smtp-security-none' />
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="none" id="smtp-security-none" />
                         <Label
-                          htmlFor='smtp-security-none'
-                          className='cursor-pointer font-normal'
+                          htmlFor="smtp-security-none"
+                          className="cursor-pointer font-normal"
                         >
-                          {t('No encryption')}
+                          {t("No encryption")}
                         </Label>
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div className="flex items-center gap-2">
                         <RadioGroupItem
-                          value='ssl_tls'
-                          id='smtp-security-ssl-tls'
+                          value="ssl_tls"
+                          id="smtp-security-ssl-tls"
                         />
                         <Label
-                          htmlFor='smtp-security-ssl-tls'
-                          className='cursor-pointer font-normal'
+                          htmlFor="smtp-security-ssl-tls"
+                          className="cursor-pointer font-normal"
                         >
-                          {t('SSL/TLS')}
+                          {t("SSL/TLS")}
                         </Label>
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div className="flex items-center gap-2">
                         <RadioGroupItem
-                          value='starttls'
-                          id='smtp-security-starttls'
+                          value="starttls"
+                          id="smtp-security-starttls"
                         />
                         <Label
-                          htmlFor='smtp-security-starttls'
-                          className='cursor-pointer font-normal'
+                          htmlFor="smtp-security-starttls"
+                          className="cursor-pointer font-normal"
                         >
-                          {t('STARTTLS')}
+                          {t("STARTTLS")}
                         </Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
                   <FormDescription>
-                    {t('Choose one SMTP transport security mode')}
+                    {t("Choose one SMTP transport security mode")}
                   </FormDescription>
                 </FormItem>
 
                 <FormField
                   control={form.control}
-                  name='SMTPInsecureSkipVerify'
+                  name="SMTPInsecureSkipVerify"
                   render={({ field }) => (
                     <SettingsSwitchItem>
                       <SettingsSwitchContent>
                         <FormLabel>
-                          {t('Skip SMTP TLS certificate verification')}
+                          {t("Skip SMTP TLS certificate verification")}
                         </FormLabel>
                         <FormDescription>
                           {t(
-                            'Allow self-signed or hostname-mismatched SMTP certificates'
+                            "Allow self-signed or hostname-mismatched SMTP certificates",
                           )}
                         </FormDescription>
                       </SettingsSwitchContent>
@@ -491,14 +495,14 @@ export function EmailSettingsSection({
 
                 <FormField
                   control={form.control}
-                  name='SMTPForceAuthLogin'
+                  name="SMTPForceAuthLogin"
                   render={({ field }) => (
                     <SettingsSwitchItem>
                       <SettingsSwitchContent>
-                        <FormLabel>{t('Force AUTH LOGIN')}</FormLabel>
+                        <FormLabel>{t("Force AUTH LOGIN")}</FormLabel>
                         <FormDescription>
                           {t(
-                            'Force SMTP authentication using AUTH LOGIN method'
+                            "Force SMTP authentication using AUTH LOGIN method",
                           )}
                         </FormDescription>
                       </SettingsSwitchContent>
@@ -515,21 +519,21 @@ export function EmailSettingsSection({
 
               <FormField
                 control={form.control}
-                name='SMTPAccount'
+                name="SMTPAccount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Username')}</FormLabel>
+                    <FormLabel>{t("Username")}</FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete='off'
-                        placeholder={t('noreply@example.com')}
+                        autoComplete="off"
+                        placeholder={t("noreply@example.com")}
                         {...field}
                         onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormDescription>
                       {t(
-                        'Account used when authenticating with the SMTP server'
+                        "Account used when authenticating with the SMTP server",
                       )}
                     </FormDescription>
                     <FormMessage />
@@ -539,20 +543,20 @@ export function EmailSettingsSection({
 
               <FormField
                 control={form.control}
-                name='SMTPFrom'
+                name="SMTPFrom"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('From Address')}</FormLabel>
+                    <FormLabel>{t("From Address")}</FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete='off'
-                        placeholder={t('New API &lt;noreply@example.com&gt;')}
+                        autoComplete="off"
+                        placeholder={"New API <noreply@example.com>"}
                         {...field}
                         onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('Display name and email used in outgoing messages')}
+                      {t("Display name and email used in outgoing messages")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -561,21 +565,21 @@ export function EmailSettingsSection({
 
               <FormField
                 control={form.control}
-                name='SMTPToken'
+                name="SMTPToken"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('Password / Access Token')}</FormLabel>
+                    <FormLabel>{t("Password / Access Token")}</FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete='off'
-                        type='password'
-                        placeholder={t('Enter new token to update')}
+                        autoComplete="off"
+                        type="password"
+                        placeholder={t("Enter new token to update")}
                         {...field}
                         onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormDescription>
-                      {t('Leave blank to keep the existing credential')}
+                      {t("Leave blank to keep the existing credential")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -586,14 +590,14 @@ export function EmailSettingsSection({
           <SettingsControlGroup>
             <FormField
               control={form.control}
-              name='QuotaRemindEnabled'
+              name="QuotaRemindEnabled"
               render={({ field }) => (
                 <SettingsSwitchItem>
                   <SettingsSwitchContent>
-                    <FormLabel>{t('Low balance reminder')}</FormLabel>
+                    <FormLabel>{t("Low balance reminder")}</FormLabel>
                     <FormDescription>
                       {t(
-                        'Remind users through their chosen notification method when their balance drops below the threshold'
+                        "Remind users through their chosen notification method when their balance drops below the threshold",
                       )}
                     </FormDescription>
                   </SettingsSwitchContent>
@@ -611,16 +615,16 @@ export function EmailSettingsSection({
               <SettingsControlChildren>
                 <FormField
                   control={form.control}
-                  name='QuotaRemindThreshold'
+                  name="QuotaRemindThreshold"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        {t('Default reminder threshold')} ({getCurrencyLabel()})
+                        {t("Default reminder threshold")} ({getCurrencyLabel()})
                       </FormLabel>
                       <FormControl>
                         <Input
-                          autoComplete='off'
-                          type='number'
+                          autoComplete="off"
+                          type="number"
                           min={0}
                           step={tokensOnly ? 1 : 0.000001}
                           {...field}
@@ -639,5 +643,5 @@ export function EmailSettingsSection({
         </SettingsForm>
       </Form>
     </SettingsSection>
-  )
+  );
 }

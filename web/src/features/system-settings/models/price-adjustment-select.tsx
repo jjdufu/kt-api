@@ -16,85 +16,85 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { ArrowLeftRight } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { ArrowLeftRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-import { DataTableRowActionMenu } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
+import { DataTableRowActionMenu } from "@/components/data-table";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 import {
   isValidPricingCurrency,
   type PricingCurrency,
-} from '@/features/model-pricing/currency'
+} from "@/features/model-pricing/currency";
 
-import type { PriceAdjustment } from './upstream-price-adjustment'
+import type { PriceAdjustment } from "./upstream-price-adjustment";
 
 export function PriceAdjustmentSelect(props: {
-  value: PriceAdjustment | null
-  currency: PricingCurrency | null
-  label: string
-  disabled?: boolean
-  compact?: boolean
-  onChange: (value: PriceAdjustment) => void
+  value: PriceAdjustment | null;
+  currency: PricingCurrency | null;
+  label: string;
+  disabled?: boolean;
+  compact?: boolean;
+  onChange: (value: PriceAdjustment) => void;
 }) {
-  const { t } = useTranslation()
-  const available = isValidPricingCurrency(props.currency)
+  const { t } = useTranslation();
+  const available = isValidPricingCurrency(props.currency);
   const rate = isValidPricingCurrency(props.currency)
     ? String(props.currency.exchangeRate)
-    : '—'
+    : "—";
   const items = [
-    { value: 'keep', label: t('Keep source price') },
+    { value: "keep", label: t("Keep source price") },
     {
-      value: 'divide',
-      label: t('Divide by exchange rate (÷ {{rate}})', { rate }),
+      value: "divide",
+      label: t("Divide by exchange rate (÷ {{rate}})", { rate }),
     },
     {
-      value: 'multiply',
-      label: t('Multiply by exchange rate (× {{rate}})', { rate }),
+      value: "multiply",
+      label: t("Multiply by exchange rate (× {{rate}})", { rate }),
     },
-  ]
+  ];
   if (props.compact) {
-    const adjusted = props.value === 'multiply' || props.value === 'divide'
-    const current = items.find((item) => item.value === props.value)
+    const adjusted = props.value === "multiply" || props.value === "divide";
+    const current = items.find((item) => item.value === props.value);
     return (
       <DataTableRowActionMenu
         ariaLabel={props.label}
-        contentClassName='w-auto min-w-56'
+        contentClassName="w-auto min-w-56"
         trigger={
           <Button
-            variant={adjusted ? 'secondary' : 'ghost'}
-            size={adjusted ? 'sm' : 'icon-sm'}
-            className='shrink-0 tabular-nums'
+            variant={adjusted ? "secondary" : "ghost"}
+            size={adjusted ? "sm" : "icon-sm"}
+            className="shrink-0 tabular-nums"
             disabled={props.disabled}
             title={current?.label}
           >
-            <ArrowLeftRight aria-hidden='true' className='size-4' />
+            <ArrowLeftRight aria-hidden="true" className="size-4" />
             {adjusted && (
               <span>
-                {props.value === 'divide' ? '÷' : '×'} {rate}
+                {props.value === "divide" ? "÷" : "×"} {rate}
               </span>
             )}
           </Button>
         }
       >
         <DropdownMenuRadioGroup
-          value={props.value ?? 'keep'}
+          value={props.value ?? "keep"}
           onValueChange={(value) => {
             if (
-              value === 'keep' ||
-              (available && (value === 'divide' || value === 'multiply'))
+              value === "keep" ||
+              (available && (value === "divide" || value === "multiply"))
             ) {
-              props.onChange(value)
+              props.onChange(value);
             }
           }}
         >
@@ -103,14 +103,14 @@ export function PriceAdjustmentSelect(props: {
               closeOnClick
               key={item.value}
               value={item.value}
-              disabled={item.value !== 'keep' && !available}
+              disabled={item.value !== "keep" && !available}
             >
               {item.label}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
       </DataTableRowActionMenu>
-    )
+    );
   }
   return (
     <Select
@@ -119,15 +119,16 @@ export function PriceAdjustmentSelect(props: {
       disabled={props.disabled}
       onValueChange={(value) => {
         if (
-          value === 'keep' ||
-          (available && (value === 'divide' || value === 'multiply'))
+          value === "keep" ||
+          (available && (value === "divide" || value === "multiply"))
         ) {
-          props.onChange(value)
+          props.onChange(value);
         }
       }}
     >
       <SelectTrigger
-        className='w-full max-w-64 min-w-0'
+        data-kt="price-adjustment"
+        className="w-full max-w-64 min-w-0"
         aria-label={props.label}
       >
         <SelectValue placeholder={props.label} />
@@ -137,12 +138,12 @@ export function PriceAdjustmentSelect(props: {
           <SelectItem
             key={item.value}
             value={item.value}
-            disabled={item.value !== 'keep' && !available}
+            disabled={item.value !== "keep" && !available}
           >
             {item.label}
           </SelectItem>
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }
