@@ -19,8 +19,9 @@ For commercial licensing, please contact support@quantumnous.com
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Section, SectionHeading } from '@/features/marketing/primitives'
+
 import { getDefaultStats } from '../../constants'
-import { SectionHeading } from './primitives'
 
 function CountUp({ end, suffix }: { end: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -73,27 +74,23 @@ export function NeonStats() {
   const { t } = useTranslation()
   const stats = getDefaultStats(t)
   return (
-    <section className='hc-section hc-section-night'>
-      <div className='hc-container'>
-        <SectionHeading
-          kicker={t('By the Numbers')}
-          title={t('Platform at a glance')}
-        />
-        <div className='hc-neon-grid'>
-          {stats.map((s, i) => (
-            <div key={s.description}>
-              <div
-                className={`hc-neon-sign hc-neon-${TONES[i % TONES.length]}`}
-              >
-                <span className='hc-neon-value'>
-                  <CountUp end={Number(s.value)} suffix={s.suffix} />
-                </span>
-                <span className='hc-neon-label'>{s.description}</span>
-              </div>
+    <Section className='hc-section-night'>
+      <SectionHeading
+        kicker={t('By the Numbers')}
+        title={t('Platform at a glance')}
+      />
+      <div className='hc-neon-grid'>
+        {stats.map((s, i) => (
+          <div key={s.description}>
+            <div className={`hc-neon-sign hc-neon-${TONES[i % TONES.length]}`}>
+              <span className='hc-neon-value'>
+                <CountUp end={Number(s.value)} suffix={s.suffix} />
+              </span>
+              <span className='hc-neon-label'>{s.description}</span>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   )
 }

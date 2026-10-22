@@ -34,7 +34,6 @@ export type Capability = {
   no: string
   title: string
   description: string
-  sfx: string
   icon: LucideIcon
   tone: 'cyan' | 'magenta' | 'yellow'
 }
@@ -45,7 +44,6 @@ export const CAPABILITIES: Capability[] = [
     title: 'Unified API',
     description:
       'One OpenAI-compatible endpoint for chat, images, video and more.',
-    sfx: 'ZAP!',
     icon: Plug,
     tone: 'cyan',
   },
@@ -54,7 +52,6 @@ export const CAPABILITIES: Capability[] = [
     title: 'Multi-model Routing',
     description:
       'Send each request to the right model and channel, with automatic failover.',
-    sfx: 'WHOOSH!',
     icon: Route,
     tone: 'magenta',
   },
@@ -62,7 +59,6 @@ export const CAPABILITIES: Capability[] = [
     no: '#03',
     title: 'Pay as You Go',
     description: 'Pay only for what you use, with every call itemized.',
-    sfx: 'KA-CHING!',
     icon: Coins,
     tone: 'yellow',
   },
@@ -71,7 +67,6 @@ export const CAPABILITIES: Capability[] = [
     title: 'Key Security',
     description:
       'Scoped keys, quotas and audit logs keep every credential in check.',
-    sfx: 'CLANK!',
     icon: KeyRound,
     tone: 'cyan',
   },
@@ -80,7 +75,6 @@ export const CAPABILITIES: Capability[] = [
     title: 'Async Tasks',
     description:
       'Long-running jobs with polling and callbacks, no more timeouts.',
-    sfx: 'TICK TOCK',
     icon: Timer,
     tone: 'magenta',
   },
@@ -89,7 +83,6 @@ export const CAPABILITIES: Capability[] = [
     title: 'Multi-protocol',
     description:
       'Speak OpenAI, Claude, Gemini and more protocols out of the box.',
-    sfx: 'BOOM!',
     icon: Boxes,
     tone: 'yellow',
   },
@@ -99,7 +92,6 @@ export type Step = {
   title: string
   description: string
   icon: LucideIcon
-  sfx: string
   /** Optional in-app target; the step's bubble becomes a link. */
   to?: string
 }
@@ -109,19 +101,16 @@ export const STEPS: Step[] = [
     title: 'Sign In',
     description: 'Sign in to your account to get started.',
     icon: LogIn,
-    sfx: 'POP!',
     to: '/sign-in',
   },
   {
     title: 'Get a Key',
     description: 'Generate an API key in the console.',
     icon: KeyRound,
-    sfx: 'CLICK!',
   },
   {
     title: 'Send a Request',
     description: 'Set the gateway as your SDK base URL.',
     icon: Send,
-    sfx: 'ZOOM!',
   },
 ]

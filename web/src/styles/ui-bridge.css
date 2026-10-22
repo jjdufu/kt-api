@@ -1,0 +1,234 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * UI bridge — maps the semantic tokens (./tokens/*.css) onto the shadcn
+ * component slots, grouped by slot family. Presets only set token values.
+ *
+ * Gate: the Default preset keeps stock shadcn rendering untouched (its token
+ * defaults mirror shadcn anyway), so every rule is scoped to a non-default
+ * preset. Rules are unlayered, so they out-rank Tailwind's layered utilities
+ * without !important. Dropdown-style components opt in through the shared
+ * class hooks in components/ui/menu-styles.ts; the rest are matched by their
+ * upstream `data-slot` attribute, so no other ui/* file is touched.
+ */
+
+/* ── Popups ─────────────────────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    .ui-menu-popup,
+    [data-slot='context-menu-content'],
+    [data-slot='context-menu-sub-content'],
+    [data-slot='menubar-content'],
+    [data-slot='menubar-sub-content'],
+    [data-slot='hover-card-content']
+  ) {
+  background: var(--surface-popup-bg);
+  color: var(--surface-popup-fg);
+  border: var(--surface-popup-border-width) solid var(--surface-popup-border);
+  border-radius: var(--surface-popup-radius);
+  box-shadow: var(--surface-popup-shadow);
+}
+/* A Command list embedded in a popup inherits the popup frame. */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  .ui-menu-popup
+  [data-slot='command'] {
+  background: transparent;
+}
+
+/* ── Popup items (menu, checkbox / radio, select, combobox, command,
+ *    context menu, menubar) ─────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    .ui-menu-item,
+    [data-slot='context-menu-item'],
+    [data-slot='context-menu-checkbox-item'],
+    [data-slot='context-menu-radio-item'],
+    [data-slot='context-menu-sub-trigger'],
+    [data-slot='menubar-item'],
+    [data-slot='menubar-checkbox-item'],
+    [data-slot='menubar-radio-item'],
+    [data-slot='menubar-sub-trigger']
+  ) {
+  border: var(--item-border-width) solid transparent;
+  font-weight: var(--item-font-weight);
+}
+/* Highlighted (hover / keyboard). The foreground is forced on every
+ * descendant and icon so upstream `**:text-accent-foreground` rules can
+ * never paint white text on the yellow bar. cmdk marks its active item
+ * with data-selected="true". */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    .ui-menu-item:not([data-slot='command-item'])[data-highlighted],
+    .ui-menu-item:not([data-slot='command-item']):focus-visible,
+    [data-slot='command-item'][data-selected='true'],
+    [data-slot^='context-menu-'][data-highlighted],
+    [data-slot^='menubar-'][data-highlighted],
+    [data-slot$='-sub-trigger'][data-popup-open]
+  ):not([data-variant='destructive']) {
+  background: var(--item-highlight-bg);
+  border-color: var(--item-highlight-border);
+  box-shadow: var(--item-highlight-shadow);
+  color: var(--item-highlight-fg);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    .ui-menu-item:not([data-slot='command-item'])[data-highlighted],
+    .ui-menu-item:not([data-slot='command-item']):focus-visible,
+    [data-slot='command-item'][data-selected='true'],
+    [data-slot^='context-menu-'][data-highlighted],
+    [data-slot^='menubar-'][data-highlighted],
+    [data-slot$='-sub-trigger'][data-popup-open]
+  ):not([data-variant='destructive'])
+  :is(*, svg) {
+  color: var(--item-highlight-fg);
+}
+/* Chosen but not hovered: only the checkmark tells it apart. */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  .ui-menu-item:not([data-slot='command-item'])[data-selected]:not(
+    [data-highlighted]
+  ) {
+  background: var(--item-selected-bg);
+  color: var(--item-selected-fg);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    .ui-menu-separator,
+    [data-slot='context-menu-separator'],
+    [data-slot='menubar-separator']
+  ) {
+  height: var(--item-separator-size);
+  background: var(--item-separator);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(.ui-menu-label, [cmdk-group-heading]) {
+  color: var(--item-label-fg);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='tooltip-content'] {
+  border: var(--item-border-width) solid var(--surface-popup-border);
+  box-shadow: var(--item-highlight-shadow);
+}
+
+/* ── Dialogs, alert dialogs, sheets, drawers ────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is([data-slot='dialog-content'], [data-slot='alert-dialog-content']) {
+  border: var(--dialog-border-width) solid var(--dialog-border);
+  box-shadow: var(--dialog-shadow);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is([data-slot='sheet-content'], [data-slot='drawer-content']) {
+  border-color: var(--dialog-border);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='sheet-content'][data-side='right'] {
+  border-left-width: var(--dialog-border-width);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='sheet-content'][data-side='left'] {
+  border-right-width: var(--dialog-border-width);
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default'])) [data-slot='card'] {
+  border: var(--card-border-width) solid var(--card-border);
+  box-shadow: var(--card-shadow);
+}
+
+/* ── Form controls ──────────────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    [data-slot='input'],
+    [data-slot='textarea'],
+    [data-slot='select-trigger'],
+    [data-slot='combobox-trigger'],
+    [data-slot='input-group']
+  ) {
+  border-width: var(--control-border-width);
+  border-color: var(--control-border);
+}
+/* Inputs inside an input group draw no frame of their own. */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='input-group']
+  :is([data-slot='input'], [data-slot='input-group-control']) {
+  border-width: 0;
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  :is(
+    [data-slot='input'],
+    [data-slot='textarea'],
+    [data-slot='select-trigger'],
+    [data-slot='combobox-trigger']
+  ):focus-visible,
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='input-group']:has(:focus-visible) {
+  border-color: var(--control-focus-border);
+  box-shadow: var(--control-focus-shadow);
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────── */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='tabs-list'] {
+  border: var(--tabs-list-border-width) solid var(--tabs-list-border);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='tabs-trigger']:is([data-active], [aria-selected='true']) {
+  color: var(--tabs-active-fg);
+  background: var(--tabs-active-bg);
+  border: var(--tabs-active-border-width) solid var(--tabs-active-border);
+  box-shadow: var(--tabs-active-shadow);
+}
+
+/* ── Tables ─────────────────────────────────────────────────────────── */
+/* One frame per table: a standalone table-container draws it, unless it
+ * already sits in a bordered wrapper, an embedded `.border-0` wrapper or
+ * another table. */
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='table-container']:not(
+    :is(.border, .border-0, [data-slot='table-container'])
+      [data-slot='table-container']
+  ),
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  .border:not(.border-0):has(> [data-slot='table-container']) {
+  border: var(--table-frame-width) solid var(--table-frame-border);
+  background: var(--card);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='table-container']:not(
+    :is(.border, .border-0, [data-slot='table-container'])
+      [data-slot='table-container']
+  ) {
+  border-radius: 0.5rem;
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='table-header'] {
+  background: var(--table-head-bg);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='table-head'] {
+  color: var(--table-head-fg);
+  font-weight: var(--table-head-weight);
+}
+:is([data-theme-preset]:not([data-theme-preset='default']))
+  [data-slot='table-row']:hover {
+  background: var(--table-row-hover);
+}

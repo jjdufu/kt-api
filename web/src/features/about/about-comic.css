@@ -46,19 +46,6 @@ For commercial licensing, please contact support@quantumnous.com
   background: color-mix(in srgb, var(--hc-bg) 82%, transparent);
   border-left: 6px solid var(--hc-cyan);
 }
-[data-home] .ab-hello {
-  position: absolute;
-  right: 1.25rem;
-  top: 1rem;
-  width: 9rem;
-  transform: rotate(10deg);
-}
-[data-home] .ab-skyline {
-  left: auto;
-  right: 0;
-  width: 60%;
-  opacity: 0.75;
-}
 
 [data-home] .ab-pillars {
   display: grid;
@@ -155,14 +142,5 @@ For commercial licensing, please contact support@quantumnous.com
 @media (max-width: 767px) {
   [data-home] .ab-hero {
     padding-top: 5.5rem;
-  }
-  [data-home] .ab-hello {
-    width: 5.5rem;
-    top: -1rem;
-    right: 0.5rem;
-  }
-  [data-home] .ab-skyline {
-    width: 100%;
-    height: 28%;
   }
 }

@@ -182,9 +182,6 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* Comic SFX words and bursts read as noise on the cleaner page. */
-[data-home] :is(.hc-card-sfx, .hc-strip-sfx, .hc-burst) {
-  display: none !important;
-}
 
 /* ── Stats: solid, readable cards (both modes) ───────────────────────── */
 [data-home] .hc-section-night {

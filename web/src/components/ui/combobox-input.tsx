@@ -24,6 +24,8 @@ import { useTranslation } from 'react-i18next'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
+import { menuItemClass, menuPopupClass } from './menu-styles'
+
 export type ComboboxInputOption = {
   value: string
   label: string
@@ -296,6 +298,7 @@ export function ComboboxInput({
               width: dropdown.width,
             }}
             className={cn(
+              menuPopupClass,
               'bg-popover text-popover-foreground z-100 rounded-md border shadow-md',
               popupClassName
             )}
@@ -313,8 +316,9 @@ export function ComboboxInput({
                     id={`${listId}-${index}`}
                     role='option'
                     aria-selected={value === option.value}
-                    data-highlighted={index === highlightedIndex}
+                    data-highlighted={index === highlightedIndex || undefined}
                     className={cn(
+                      menuItemClass,
                       'relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none',
                       index === highlightedIndex &&
                         'bg-accent text-accent-foreground',

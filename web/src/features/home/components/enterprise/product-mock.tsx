@@ -48,9 +48,9 @@ export function ProductMock() {
         {/* window chrome */}
         <div className='bg-muted/40 flex h-10 items-center gap-3 border-b px-4'>
           <div className='flex gap-1.5'>
-            <span className='size-2.5 rounded-full bg-[#ff5f57]' />
-            <span className='size-2.5 rounded-full bg-[#febc2e]' />
-            <span className='size-2.5 rounded-full bg-[#28c840]' />
+            <span className='size-2.5 rounded-full bg-(--window-dot-close)' />
+            <span className='size-2.5 rounded-full bg-(--window-dot-min)' />
+            <span className='size-2.5 rounded-full bg-(--window-dot-max)' />
           </div>
           <div className='bg-background text-muted-foreground mx-auto flex h-6 w-full max-w-64 items-center justify-center rounded-md border px-3 font-mono text-[11px]'>
             {origin || 'localhost'}/dashboard
@@ -143,7 +143,7 @@ export function ProductMock() {
         </div>
       </div>
       {/* terminal card */}
-      <div className='absolute -bottom-10 -left-6 hidden w-[22rem] overflow-hidden rounded-lg border border-white/10 bg-[#0b0d12] font-mono text-[11px] leading-relaxed text-zinc-300 shadow-2xl md:block lg:-left-10'>
+      <div className='absolute -bottom-10 -left-6 hidden w-[22rem] overflow-hidden rounded-lg border border-white/10 bg-(--code-surface) font-mono text-[11px] leading-relaxed text-zinc-300 shadow-2xl md:block lg:-left-10'>
         <div className='flex items-center gap-1.5 border-b border-white/10 px-3 py-2'>
           <span className='size-2 rounded-full bg-white/20' />
           <span className='size-2 rounded-full bg-white/20' />

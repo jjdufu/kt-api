@@ -119,15 +119,6 @@ describe('index.html preset boot script', () => {
     }
   )
 
-  it('migrates simple-large to default and turns large font on', () => {
-    localStorage.setItem(THEME_STORAGE_KEYS.preset, 'simple-large')
-    new Function(presetScript)()
-    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
-    expect(document.body).toHaveAttribute('data-theme-large-font', '')
-    expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('default')
-    expect(localStorage.getItem(THEME_STORAGE_KEYS.largeFont)).toBe('1')
-  })
-
   it('applies a stored large-font preference with any preset', () => {
     localStorage.setItem(THEME_STORAGE_KEYS.largeFont, '1')
     new Function(presetScript)()
@@ -135,14 +126,9 @@ describe('index.html preset boot script', () => {
     expect(document.body).toHaveAttribute('data-theme-large-font', '')
   })
 
-  it.each(['simple', 'underground', 'anthropic', 'ocean-breeze'])(
-    'migrates removed preset %s to default',
-    (legacy) => {
-      localStorage.setItem(THEME_STORAGE_KEYS.preset, legacy)
-      new Function(presetScript)()
-      expect(document.body).toHaveAttribute('data-theme-preset', 'default')
-      expect(localStorage.getItem(THEME_STORAGE_KEYS.preset)).toBe('default')
-      expect(localStorage.getItem(THEME_STORAGE_KEYS.largeFont)).toBeNull()
-    }
-  )
+  it.each(['simple', 'bogus'])('ignores unknown preset %s', (value) => {
+    localStorage.setItem(THEME_STORAGE_KEYS.preset, value)
+    new Function(presetScript)()
+    expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
+  })
 })

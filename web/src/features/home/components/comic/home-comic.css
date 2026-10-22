@@ -175,12 +175,6 @@ For commercial licensing, please contact support@quantumnous.com
   padding: 6.5rem 0 4.5rem;
   border-bottom: 4px solid var(--hc-panel-border);
 }
-[data-home] .hc-hero-skyline {
-  z-index: 0;
-  left: 0;
-  right: 30%;
-  width: 70%;
-}
 [data-home] .hc-hero-inner {
   position: relative;
   z-index: 1;
@@ -300,9 +294,9 @@ For commercial licensing, please contact support@quantumnous.com
   font-family: var(--hc-font-fun);
   font-size: clamp(1.1rem, 2.2vw, 1.6rem);
   line-height: 1.25;
-  color: #111014;
-  background: #fffdf6;
-  border: 3px solid #111014;
+  color: var(--ink);
+  background: var(--paper-card);
+  border: 3px solid var(--ink);
   border-radius: 1.2rem;
   box-shadow: 5px 5px 0 var(--hc-shadow);
 }
@@ -315,9 +309,9 @@ For commercial licensing, please contact support@quantumnous.com
   bottom: -14px;
   width: 22px;
   height: 22px;
-  background: #fffdf6;
-  border-right: 3px solid #111014;
-  border-bottom: 3px solid #111014;
+  background: var(--paper-card);
+  border-right: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
 }
 [data-home] .hc-bubble-left::after {
   left: 2rem;
@@ -393,22 +387,7 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ---------- burst ---------- */
-[data-home] .hc-burst {
-  width: 7.5rem;
-  height: auto;
-  overflow: visible;
-  filter: drop-shadow(4px 4px 0 var(--hc-shadow));
-}
-[data-home] .hc-burst-text {
-  font-family: var(--hc-font-display);
-  font-size: 30px;
-  fill: #000;
-  letter-spacing: 1px;
-}
-[data-home] .hc-hero-zap {
-  margin-left: 0.25rem;
-  animation: hc-pulse 2.4s ease-in-out infinite;
-}
+
 @keyframes hc-pulse {
   0%,
   100% {
@@ -490,7 +469,7 @@ For commercial licensing, please contact support@quantumnous.com
   max-width: 30rem;
   min-width: 0;
   overflow: hidden;
-  border: 3px solid #39ff88;
+  border: 3px solid var(--neon-green-glow);
   border-radius: 0.6rem;
   background: rgba(4, 10, 8, 0.92);
   box-shadow:
@@ -507,7 +486,7 @@ For commercial licensing, please contact support@quantumnous.com
   border-bottom: 2px dashed rgba(57, 255, 136, 0.45);
 }
 [data-home] .hc-terminal-prompt {
-  color: #39ff88;
+  color: var(--neon-green-glow);
   font-weight: 800;
   font-size: 1.1rem;
 }
@@ -520,7 +499,7 @@ For commercial licensing, please contact support@quantumnous.com
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 999px;
-  border: 2px solid #39ff88;
+  border: 2px solid var(--neon-green-glow);
 }
 [data-home] .hc-terminal-body {
   margin: 0;
@@ -535,14 +514,14 @@ For commercial licensing, please contact support@quantumnous.com
   white-space: inherit;
 }
 [data-home] .hc-t-cmd {
-  color: #39ff88;
+  color: var(--neon-green-glow);
   font-weight: 700;
 }
 [data-home] .hc-t-url {
   color: #7df9ff;
 }
 [data-home] .hc-t-flag {
-  color: #ffe600;
+  color: var(--neon-yellow-glow);
 }
 [data-home] .hc-t-str {
   color: #c8ffd9;
@@ -557,7 +536,7 @@ For commercial licensing, please contact support@quantumnous.com
   height: 1.05em;
   margin-left: 1px;
   vertical-align: -0.15em;
-  background: #39ff88;
+  background: var(--neon-green-glow);
   animation: hc-blink 1s steps(1, end) infinite;
 }
 @keyframes hc-blink {
@@ -566,7 +545,7 @@ For commercial licensing, please contact support@quantumnous.com
   }
 }
 [data-home] .hc-t-ok {
-  color: #39ff88;
+  color: var(--neon-green-glow);
   opacity: 0.25;
   transition: opacity 200ms ease;
 }
@@ -664,18 +643,6 @@ For commercial licensing, please contact support@quantumnous.com
   background: var(--hc-tone);
   border: 2px solid #000;
 }
-[data-home] .hc-card-sfx {
-  position: absolute;
-  top: 0.9rem;
-  right: 1rem;
-  font-family: var(--hc-font-display);
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  color: var(--hc-tone);
-  -webkit-text-stroke: 2px var(--hc-ink);
-  paint-order: stroke fill;
-  transform: rotate(8deg);
-  letter-spacing: 0.04em;
-}
 [data-home] .hc-card-icon {
   margin: 1.4rem 0 1rem;
   display: inline-flex;
@@ -712,9 +679,6 @@ For commercial licensing, please contact support@quantumnous.com
 }
 [data-home] .hc-wall-cell-1 .hc-card-desc {
   font-size: 1.1rem;
-}
-[data-home] .hc-wall-cell-1 .hc-card-sfx {
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
 }
 
 /* ---------- comic strip ---------- */
@@ -771,17 +735,6 @@ For commercial licensing, please contact support@quantumnous.com
   color: transparent;
   -webkit-text-stroke: 2px var(--hc-cyan);
   opacity: 0.8;
-}
-[data-home] .hc-strip-sfx {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-family: var(--hc-font-display);
-  font-size: 1.7rem;
-  color: var(--hc-yellow);
-  -webkit-text-stroke: 2px #000;
-  paint-order: stroke fill;
-  transform: rotate(-8deg);
 }
 [data-home] .hc-strip-art {
   position: relative;
@@ -936,7 +889,7 @@ For commercial licensing, please contact support@quantumnous.com
   position: relative;
   overflow: hidden;
   padding: 1.4rem 0;
-  background: #0b0b12;
+  background: var(--night);
   border-top: 4px solid #000;
   border-bottom: 4px solid #000;
   transform: rotate(-1.5deg);
@@ -951,7 +904,7 @@ For commercial licensing, please contact support@quantumnous.com
   height: 0.85rem;
   background: repeating-linear-gradient(
     90deg,
-    #f7f3ea 0 0.9rem,
+    var(--paper) 0 0.9rem,
     transparent 0.9rem 1.9rem
   );
   background-position: 0.5rem 0;
@@ -987,10 +940,10 @@ For commercial licensing, please contact support@quantumnous.com
   gap: 0.4rem;
   width: 8.5rem;
   height: 6.25rem;
-  background: #f7f3ea;
+  background: var(--paper);
   border: 3px solid #000;
   border-radius: 0.35rem;
-  color: #111014;
+  color: var(--ink);
 }
 [data-home] .hc-frame-label {
   font-family: var(--hc-font-accent);
@@ -1015,13 +968,6 @@ For commercial licensing, please contact support@quantumnous.com
 }
 [data-home] .hc-cta .hc-backdrop {
   z-index: 0;
-}
-[data-home] .hc-cta-pow {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.5rem;
-  width: 6.5rem;
-  transform: rotate(10deg);
 }
 [data-home] .hc-cta-title {
   position: relative;
@@ -1057,11 +1003,6 @@ For commercial licensing, please contact support@quantumnous.com
     max-width: 40rem;
     margin: 0 auto;
     width: 100%;
-  }
-  [data-home] .hc-hero-skyline {
-    width: 100%;
-    right: 0;
-    height: 30%;
   }
 }
 @media (max-width: 767px) {
@@ -1118,14 +1059,6 @@ For commercial licensing, please contact support@quantumnous.com
     padding: 0 1.3rem;
     font-size: 1.15rem;
   }
-  [data-home] .hc-burst {
-    width: 5.5rem;
-  }
-  [data-home] .hc-cta-pow {
-    width: 4.5rem;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
 }
 @media (max-width: 400px) {
   [data-home] .hc-container,
@@ -1140,7 +1073,6 @@ For commercial licensing, please contact support@quantumnous.com
 @media (prefers-reduced-motion: reduce) {
   [data-home] .hc-speedlines,
   [data-home] .hc-panel-lines,
-  [data-home] .hc-hero-zap,
   [data-home] .hc-neon-value,
   [data-home] .hc-film-track,
   [data-home] .hc-t-caret {

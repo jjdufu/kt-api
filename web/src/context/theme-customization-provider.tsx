@@ -29,10 +29,9 @@ import {
   CONTENT_LAYOUT_VALUES,
   type ContentLayout,
   DEFAULT_THEME_CUSTOMIZATION,
-  LARGE_FONT_PRESETS,
   resolveThemeFont,
   THEME_FONT_VALUES,
-  migrateThemePreset,
+  THEME_PRESET_VALUES,
   THEME_RADIUS_VALUES,
   THEME_SCALE_VALUES,
   type ThemeCustomization,
@@ -47,29 +46,12 @@ import {
   writeThemePreference,
 } from '@/lib/theme-storage'
 
-/**
- * Read the stored preset, migrating removed presets (including the old
- * neutral `default`) to MIGRATED_THEME_PRESET and writing the result back so
- * the boot script in index.html agrees on the next load.
- */
 function readInitialPreset(): ThemePreset {
-  let raw: string | null = null
-  try {
-    raw =
-      typeof window === 'undefined'
-        ? null
-        : window.localStorage.getItem(THEME_STORAGE_KEYS.preset)
-  } catch {
-    raw = null
-  }
-  const migrated = migrateThemePreset(raw)
-  if (migrated === null) return DEFAULT_THEME_CUSTOMIZATION.preset
-  if (migrated !== raw) {
-    writeThemePreference(THEME_STORAGE_KEYS.preset, migrated)
-    if (raw && LARGE_FONT_PRESETS.has(raw))
-      writeThemePreference(THEME_STORAGE_KEYS.largeFont, '1')
-  }
-  return migrated
+  return readThemePreference<ThemePreset>(
+    THEME_STORAGE_KEYS.preset,
+    THEME_PRESET_VALUES,
+    DEFAULT_THEME_CUSTOMIZATION.preset
+  )
 }
 
 function readInitialLargeFont(): boolean {
@@ -128,7 +110,6 @@ const ThemeCustomizationContext =
 export function ThemeCustomizationProvider(props: {
   children: React.ReactNode
 }) {
-  // Preset first: its initializer may migrate simple-large → largeFont.
   const [preset, _setPreset] = useState<ThemePreset>(readInitialPreset)
   const [largeFont, _setLargeFont] = useState<boolean>(readInitialLargeFont)
   const [font, _setFont] = useState<ThemeFont>(() =>

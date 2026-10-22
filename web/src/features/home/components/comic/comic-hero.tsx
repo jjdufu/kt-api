@@ -20,12 +20,12 @@ import { preload } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 
 import heroGirl from '@/assets/comic/hero-girl.webp'
+import { SpeechBubble } from '@/features/marketing/comic-decorations'
+import { CtaLink, HeroBackdrop } from '@/features/marketing/primitives'
+import { useDocsHref } from '@/features/marketing/use-docs-href'
 
 import { ComicTerminal } from './comic-terminal'
-import { HeroFx, SpeechBubble } from './decorations'
 import { splitHeadline } from './headline'
-import { ComicButton } from './primitives'
-import { useDocsHref } from './use-docs-href'
 
 type ComicHeroProps = {
   isAuthenticated: boolean
@@ -41,7 +41,7 @@ export function ComicHero({ isAuthenticated }: ComicHeroProps) {
 
   return (
     <section className='hc-hero'>
-      <HeroFx />
+      <HeroBackdrop />
       <div className='hc-hero-inner'>
         <div className='hc-hero-copy'>
           <h1 className='hc-headline' aria-label={headline}>
@@ -60,12 +60,12 @@ export function ComicHero({ isAuthenticated }: ComicHeroProps) {
             {t('A friend to every creator')}
           </SpeechBubble>
           <div className='hc-hero-actions'>
-            <ComicButton to={isAuthenticated ? '/dashboard' : '/sign-up'}>
+            <CtaLink to={isAuthenticated ? '/dashboard' : '/sign-up'}>
               {t('Start Now')}
-            </ComicButton>
-            <ComicButton to={docsHref} variant='outline'>
+            </CtaLink>
+            <CtaLink to={docsHref} variant='outline'>
               {t('Read the Docs')}
-            </ComicButton>
+            </CtaLink>
           </div>
         </div>
 

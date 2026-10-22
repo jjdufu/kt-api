@@ -27,14 +27,3 @@ export { ComicHero } from './comic-hero'
 export { ComicStrip } from './comic-strip'
 export { ModelMarquee } from './model-marquee'
 export { NeonStats } from './neon-stats'
-
-// Building blocks reused by other comic-styled pages (about).
-export {
-  Burst,
-  ComicBackdrop,
-  HeroFx,
-  Skyline,
-  SpeechBubble,
-} from './decorations'
-export { ComicButton, Reveal, SectionHeading } from './primitives'
-export { useDocsHref } from './use-docs-href'

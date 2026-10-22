@@ -16,7 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { useId, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -24,62 +24,6 @@ import { cn } from '@/lib/utils'
  * Decorative SVG/CSS pieces for the comic home page. Everything here is
  * aria-hidden and purely visual.
  */
-
-type BurstProps = {
-  label: string
-  className?: string
-  points?: number
-}
-
-/** Spiky comic burst ("ZAP!") with a halftone fill and ink outline. */
-export function Burst({ label, className, points = 14 }: BurstProps) {
-  const id = useId().replaceAll(':', '')
-  const outer = 50
-  const inner = 33
-  const coords: string[] = []
-  for (let i = 0; i < points * 2; i += 1) {
-    const r = i % 2 === 0 ? outer : inner + ((i * 7) % 5)
-    const a = (Math.PI * i) / points - Math.PI / 2
-    coords.push(
-      `${(60 + r * Math.cos(a)).toFixed(1)},${(55 + r * Math.sin(a) * 0.9).toFixed(1)}`
-    )
-  }
-  return (
-    <svg
-      viewBox='0 0 120 110'
-      className={cn('hc-burst', className)}
-      aria-hidden='true'
-    >
-      <defs>
-        <pattern
-          id={`dots-${id}`}
-          width='5'
-          height='5'
-          patternUnits='userSpaceOnUse'
-        >
-          <circle cx='2.5' cy='2.5' r='1.1' fill='rgba(0,0,0,0.28)' />
-        </pattern>
-      </defs>
-      <polygon
-        points={coords.join(' ')}
-        fill='var(--hc-yellow)'
-        stroke='#000'
-        strokeWidth='4'
-        strokeLinejoin='round'
-      />
-      <polygon points={coords.join(' ')} fill={`url(#dots-${id})`} />
-      <text
-        x='60'
-        y='66'
-        textAnchor='middle'
-        className='hc-burst-text'
-        transform='rotate(-10 60 55)'
-      >
-        {label}
-      </text>
-    </svg>
-  )
-}
 
 type Building = {
   x: number

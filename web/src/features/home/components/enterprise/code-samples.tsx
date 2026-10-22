@@ -93,7 +93,7 @@ export function CodeSamples() {
   }
 
   return (
-    <div className='overflow-hidden rounded-xl border border-white/10 bg-[#0b0d12] shadow-[0_24px_60px_-24px_rgb(0_0_0/0.35)]'>
+    <div className='overflow-hidden rounded-xl border border-white/10 bg-(--code-surface) shadow-[0_24px_60px_-24px_rgb(0_0_0/0.35)]'>
       <div className='flex items-center justify-between border-b border-white/10 pe-2'>
         <div role='tablist' className='flex'>
           {TABS.map((tab) => (

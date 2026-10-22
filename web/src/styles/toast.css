@@ -19,14 +19,20 @@ For commercial licensing, please contact support@quantumnous.com
 /*
  * Sonner toasts as plain theme cards (no richColors): popover surface and
  * border for every type, only the icon carries the semantic colour. The
- * close button sits at the top right. KT Comic adds its outline, hard
- * shadow and comic font in theme-preset-kt-comic.css.
+ * close button sits at the top right. Frame, shadow and fonts come from the
+ * --toast-* tokens (./tokens).
  */
 [data-sonner-toaster] [data-sonner-toast] {
+  font-family: var(--toast-font) !important;
   background: var(--popover) !important;
   color: var(--popover-foreground) !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: 0 6px 20px -8px rgb(0 0 0 / 0.18) !important;
+  border: var(--toast-border) !important;
+  border-radius: var(--toast-radius) !important;
+  box-shadow: var(--toast-shadow) !important;
+}
+[data-sonner-toast] [data-title] {
+  font-family: var(--toast-title-font);
+  letter-spacing: var(--toast-title-tracking);
 }
 [data-sonner-toast][data-type='success'] [data-icon] {
   color: var(--success) !important;
@@ -46,7 +52,7 @@ For commercial licensing, please contact support@quantumnous.com
   transform: translate(35%, -35%) !important;
   background: var(--popover) !important;
   color: var(--muted-foreground) !important;
-  border: 1px solid var(--border) !important;
+  border: var(--toast-close-border) !important;
 }
 [data-sonner-toast] [data-close-button]:hover {
   color: var(--foreground) !important;

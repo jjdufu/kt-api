@@ -16,44 +16,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import {
-  Zap,
-  Shield,
-  Globe,
-  Code,
-  Gauge,
-  DollarSign,
-  Users,
-  HeartHandshake,
-  type LucideIcon,
-} from 'lucide-react'
-
 /**
- * Map of icon names to Lucide icon components
+ * Shared class hooks for every dropdown-style popup (DropdownMenu, Select,
+ * Combobox, Command, Popover). The look itself lives in
+ * src/styles/ui-bridge.css and is driven by the --surface-popup-* and
+ * --item-* theme tokens (src/styles/tokens), so these upstream shadcn files
+ * only carry one extra class each and stay easy to sync with new-api.
  */
-const ICON_MAP: Record<string, LucideIcon> = {
-  Zap,
-  Shield,
-  Globe,
-  Code,
-  Gauge,
-  DollarSign,
-  Users,
-  HeartHandshake,
-}
-
-/**
- * Get a Lucide icon component by name
- */
-export function getFeatureIcon(
-  iconName: string,
-  className?: string
-): React.ReactNode {
-  const Icon = ICON_MAP[iconName]
-  if (!Icon) {
-    // eslint-disable-next-line no-console
-    console.warn(`Icon "${iconName}" not found in icon map`)
-    return null
-  }
-  return <Icon className={className} />
-}
+export const menuPopupClass = 'ui-menu-popup'
+export const menuItemClass = 'ui-menu-item'
+export const menuLabelClass = 'ui-menu-label'
+export const menuSeparatorClass = 'ui-menu-separator'

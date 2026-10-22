@@ -18,33 +18,31 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
-import { ComicBackdrop } from './decorations'
-import { ComicButton } from './primitives'
-import { useDocsHref } from './use-docs-href'
+import { ComicBackdrop } from '@/features/marketing/comic-decorations'
+import { CtaLink, Section } from '@/features/marketing/primitives'
+import { useDocsHref } from '@/features/marketing/use-docs-href'
 
 /** Closing call to action; rendered for signed-out visitors only. */
 export function ComicCTA() {
   const { t } = useTranslation()
   const docsHref = useDocsHref()
   return (
-    <section className='hc-section'>
-      <div className='hc-container'>
-        <div>
-          <div className='hc-cta'>
-            <ComicBackdrop />
-            <h2 className='hc-cta-title'>{t('Start building with one API')}</h2>
-            <p className='hc-cta-sub'>
-              {t('Sign up free and ship your first call in minutes.')}
-            </p>
-            <div className='hc-hero-actions hc-cta-actions'>
-              <ComicButton to='/sign-up'>{t('Start Now')}</ComicButton>
-              <ComicButton to={docsHref} variant='outline'>
-                {t('Read the Docs')}
-              </ComicButton>
-            </div>
+    <Section>
+      <div>
+        <div className='hc-cta'>
+          <ComicBackdrop />
+          <h2 className='hc-cta-title'>{t('Start building with one API')}</h2>
+          <p className='hc-cta-sub'>
+            {t('Sign up free and ship your first call in minutes.')}
+          </p>
+          <div className='hc-hero-actions hc-cta-actions'>
+            <CtaLink to='/sign-up'>{t('Start Now')}</CtaLink>
+            <CtaLink to={docsHref} variant='outline'>
+              {t('Read the Docs')}
+            </CtaLink>
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
