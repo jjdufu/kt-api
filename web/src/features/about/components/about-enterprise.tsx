@@ -27,7 +27,6 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { useDocsHref } from '@/features/home/components/comic/use-docs-href'
 import { EnterpriseShell } from '@/features/home/components/enterprise/enterprise-home'
 import {
   Container,
@@ -36,7 +35,8 @@ import {
   Kicker,
   Section,
   SectionHeading,
-} from '@/features/home/components/enterprise/primitives'
+} from '@/features/marketing/primitives'
+import { useDocsHref } from '@/features/marketing/use-docs-href'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { PILLARS } from './content'

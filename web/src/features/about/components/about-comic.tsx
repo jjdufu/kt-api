@@ -22,15 +22,16 @@ import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
+import { CapabilityWall, ModelMarquee } from '@/features/home/components/comic'
+import { SpeechBubble } from '@/features/marketing/comic-decorations'
 import {
-  CapabilityWall,
-  ComicButton,
-  HeroFx,
-  ModelMarquee,
+  Container,
+  CtaLink,
+  HeroBackdrop,
+  Section,
   SectionHeading,
-  SpeechBubble,
-  useDocsHref,
-} from '@/features/home/components/comic'
+} from '@/features/marketing/primitives'
+import { useDocsHref } from '@/features/marketing/use-docs-href'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { PILLARS } from './content'
@@ -102,8 +103,8 @@ export function AboutComic() {
       <PublicLayout showMainContainer={false}>
         <main className='hc-main'>
           <section className='hc-hero ab-hero'>
-            <HeroFx />
-            <div className='hc-container ab-hero-inner'>
+            <HeroBackdrop />
+            <Container className='ab-hero-inner'>
               <span className='hc-kicker'>{t('About')}</span>
               <h1 className='hc-headline ab-headline'>
                 <span className='hc-glitch' data-text={t('About KTAPI')}>
@@ -118,66 +119,60 @@ export function AboutComic() {
                   'KTAPI is a large-model gateway for builders and creators: one key, one endpoint, every model you need.'
                 )}
               </p>
-            </div>
+            </Container>
           </section>
 
-          <section className='hc-section'>
-            <div className='hc-container'>
-              <SectionHeading
-                kicker={t('What is KTAPI')}
-                title={t('Open the sky with one request')}
-              />
-              <div className='ab-pillars'>
-                {PILLARS.map((p, i) => {
-                  const Icon = p.icon
-                  return (
-                    <div className='ab-pillar-cell' key={p.title}>
-                      <article
-                        className={`hc-card hc-tone-${p.tone} ab-pillar`}
-                      >
-                        <span className='hc-card-no'>{`#0${i + 1}`}</span>
-                        <span className='hc-card-icon'>
-                          <Icon strokeWidth={2.2} />
-                        </span>
-                        <h3 className='hc-card-title'>{t(p.title)}</h3>
-                        <p className='hc-card-desc'>{t(p.body)}</p>
-                      </article>
-                    </div>
-                  )
-                })}
-              </div>
+          <Section>
+            <SectionHeading
+              kicker={t('What is KTAPI')}
+              title={t('Open the sky with one request')}
+            />
+            <div className='ab-pillars'>
+              {PILLARS.map((p, i) => {
+                const Icon = p.icon
+                return (
+                  <div className='ab-pillar-cell' key={p.title}>
+                    <article className={`hc-card hc-tone-${p.tone} ab-pillar`}>
+                      <span className='hc-card-no'>{`#0${i + 1}`}</span>
+                      <span className='hc-card-icon'>
+                        <Icon strokeWidth={2.2} />
+                      </span>
+                      <h3 className='hc-card-title'>{t(p.title)}</h3>
+                      <p className='hc-card-desc'>{t(p.body)}</p>
+                    </article>
+                  </div>
+                )
+              })}
             </div>
-          </section>
+          </Section>
 
           <CapabilityWall />
           <ModelMarquee />
 
-          <section className='hc-section'>
-            <div className='hc-container'>
-              <SectionHeading
-                kicker={t('Jump In')}
-                title={t('Where to go next')}
-              />
-              <div className='ab-entries'>
-                {entries.map((entry) => (
-                  <EntryCard key={entry.title} entry={entry} />
-                ))}
-              </div>
-              {!isAuthenticated && (
-                <div className='hc-hero-actions ab-actions'>
-                  <ComicButton to='/sign-up'>{t('Start Now')}</ComicButton>
-                  <ComicButton to={docsHref} variant='outline'>
-                    {t('Read the Docs')}
-                  </ComicButton>
-                </div>
-              )}
-              <p className='ab-credit'>
-                {t(
-                  'KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.'
-                )}
-              </p>
+          <Section>
+            <SectionHeading
+              kicker={t('Jump In')}
+              title={t('Where to go next')}
+            />
+            <div className='ab-entries'>
+              {entries.map((entry) => (
+                <EntryCard key={entry.title} entry={entry} />
+              ))}
             </div>
-          </section>
+            {!isAuthenticated && (
+              <div className='hc-hero-actions ab-actions'>
+                <CtaLink to='/sign-up'>{t('Start Now')}</CtaLink>
+                <CtaLink to={docsHref} variant='outline'>
+                  {t('Read the Docs')}
+                </CtaLink>
+              </div>
+            )}
+            <p className='ab-credit'>
+              {t(
+                'KTAPI is built on QuantumNous/new-api and licensed under AGPL-3.0.'
+              )}
+            </p>
+          </Section>
         </main>
         <Footer />
       </PublicLayout>

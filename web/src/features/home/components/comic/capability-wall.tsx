@@ -18,39 +18,35 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
+import { Section, SectionHeading } from '@/features/marketing/primitives'
+
 import { CAPABILITIES } from './content'
-import { SectionHeading } from './primitives'
 
 export function CapabilityWall() {
   const { t } = useTranslation()
   return (
-    <section className='hc-section'>
-      <div className='hc-container'>
-        <SectionHeading
-          kicker={t('Core Capabilities')}
-          title={t('Everything you need to run AI in production')}
-        />
-        <div className='hc-wall'>
-          {CAPABILITIES.map((c, i) => {
-            const Icon = c.icon
-            return (
-              <div key={c.no} className={`hc-wall-cell hc-wall-cell-${i + 1}`}>
-                <article className={`hc-card hc-tone-${c.tone}`}>
-                  <span className='hc-card-no'>{c.no}</span>
-                  <span className='hc-card-sfx' aria-hidden='true'>
-                    {c.sfx}
-                  </span>
-                  <div className='hc-card-icon' aria-hidden='true'>
-                    <Icon strokeWidth={2.5} />
-                  </div>
-                  <h3 className='hc-card-title'>{t(c.title)}</h3>
-                  <p className='hc-card-desc'>{t(c.description)}</p>
-                </article>
-              </div>
-            )
-          })}
-        </div>
+    <Section>
+      <SectionHeading
+        kicker={t('Core Capabilities')}
+        title={t('Everything you need to run AI in production')}
+      />
+      <div className='hc-wall'>
+        {CAPABILITIES.map((c, i) => {
+          const Icon = c.icon
+          return (
+            <div key={c.no} className={`hc-wall-cell hc-wall-cell-${i + 1}`}>
+              <article className={`hc-card hc-tone-${c.tone}`}>
+                <span className='hc-card-no'>{c.no}</span>
+                <div className='hc-card-icon' aria-hidden='true'>
+                  <Icon strokeWidth={2.5} />
+                </div>
+                <h3 className='hc-card-title'>{t(c.title)}</h3>
+                <p className='hc-card-desc'>{t(c.description)}</p>
+              </article>
+            </div>
+          )
+        })}
       </div>
-    </section>
+    </Section>
   )
 }

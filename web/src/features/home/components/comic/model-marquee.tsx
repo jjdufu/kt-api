@@ -18,10 +18,10 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
+import { Section, SectionHeading } from '@/features/marketing/primitives'
 import { getLobeIcon } from '@/lib/lobe-icon'
 
 import { AI_APPLICATIONS, AI_MODELS } from '../../constants'
-import { SectionHeading } from './primitives'
 
 const ICONS = [...AI_MODELS, ...AI_APPLICATIONS]
 
@@ -53,22 +53,20 @@ function Reel({ copy }: { copy: 'a' | 'b' }) {
 export function ModelMarquee() {
   const { t } = useTranslation()
   return (
-    <section className='hc-section'>
-      <div className='hc-container'>
-        <SectionHeading
-          kicker={t('Model Lineup')}
-          title={t('Plugged into the models you love')}
-        />
-        {/* Clipped to the content width with faded edges (site-layout.css). */}
-        <div className='hc-film-clip'>
-          <div className='hc-film'>
-            <div className='hc-film-track'>
-              <Reel copy='a' />
-              <Reel copy='b' />
-            </div>
+    <Section>
+      <SectionHeading
+        kicker={t('Model Lineup')}
+        title={t('Plugged into the models you love')}
+      />
+      {/* Clipped to the content width with faded edges (site-layout.css). */}
+      <div className='hc-film-clip'>
+        <div className='hc-film'>
+          <div className='hc-film-track'>
+            <Reel copy='a' />
+            <Reel copy='b' />
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

@@ -23,6 +23,16 @@ import { useTranslation } from 'react-i18next'
 
 import { BrandLogo } from '@/components/brand-logo'
 import { PublicLayout } from '@/components/layout'
+import {
+  Container,
+  CtaLink,
+  HeroBackdrop,
+  Kicker,
+  Section,
+  SectionHeading,
+  Surface,
+} from '@/features/marketing/primitives'
+import { useDocsHref } from '@/features/marketing/use-docs-href'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { getLobeIcon } from '@/lib/lobe-icon'
@@ -32,17 +42,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { AI_MODELS, getDefaultStats } from '../../constants'
 import { CAPABILITIES, STEPS } from '../comic/content'
 import { splitHeadline } from '../comic/headline'
-import { useDocsHref } from '../comic/use-docs-href'
 import { CodeSamples } from './code-samples'
-import {
-  Container,
-  CtaLink,
-  HeroBackdrop,
-  Kicker,
-  Section,
-  SectionHeading,
-  Surface,
-} from './primitives'
 import { ProductMock } from './product-mock'
 
 /** Page shell shared by the enterprise home and about pages. */

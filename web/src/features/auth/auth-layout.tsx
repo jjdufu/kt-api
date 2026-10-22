@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 import { BrandLogo } from '@/components/brand-logo'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Skyline } from '@/features/home/components/comic/decorations'
+import { Skyline } from '@/features/marketing/comic-decorations'
 
 import '@/styles/comic/comic-base.css'
 import './auth-comic.css'
