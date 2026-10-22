@@ -73,10 +73,10 @@ For commercial licensing, please contact support@quantumnous.com
   fill: #0a0418;
 }
 [data-auth] :is(.hc-neon-cyan, .hc-window-cyan) {
-  fill: #00f0ff;
+  fill: var(--neon-cyan-glow);
 }
 [data-auth] :is(.hc-neon-magenta, .hc-window-magenta) {
-  fill: #ff2bd6;
+  fill: var(--neon-magenta-glow);
 }
 [data-auth] :is(.hc-window-cyan, .hc-window-magenta) {
   opacity: 0.75;

@@ -42,6 +42,12 @@ For commercial licensing, please contact support@quantumnous.com
   --paper-card: #fffdf6;
   --night: #0b0b12;
 
+  /* Marketing mocks: code panel surface and macOS window dots. */
+  --code-surface: #0b0d12;
+  --window-dot-close: #ff5f57;
+  --window-dot-min: #febc2e;
+  --window-dot-max: #28c840;
+
   /* Mode-aware neon accents (presets may remap). */
   --neon-cyan: var(--neon-cyan-ink);
   --neon-magenta: var(--neon-magenta-ink);

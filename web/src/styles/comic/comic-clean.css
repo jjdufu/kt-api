@@ -31,8 +31,7 @@ For commercial licensing, please contact support@quantumnous.com
  */
 
 /* ---------- tokens from the active theme ---------- */
-body:not([data-theme-preset='kt-comic'])
-  :is([data-docs], [data-auth]) {
+body:not([data-theme-preset='kt-comic']) :is([data-docs], [data-auth]) {
   --hc-bg: var(--background);
   --hc-paper: var(--card);
   --hc-ink: var(--foreground);
@@ -59,9 +58,7 @@ body:not([data-theme-preset='kt-comic'])
 }
 
 /* ---------- global flattening ---------- */
-body:not([data-theme-preset='kt-comic'])
-  :is([data-docs], [data-auth])
-  *,
+body:not([data-theme-preset='kt-comic']) :is([data-docs], [data-auth]) *,
 body:not([data-theme-preset='kt-comic'])
   :is([data-docs], [data-auth])
   *::before,
@@ -166,4 +163,3 @@ body:not([data-theme-preset='kt-comic']) [data-docs] .dc-toc-link[data-active] {
 /* Header tweaks on the home layout (sign-in button). */
 
 /* Divider lines from site-layout.css are hairlines outside KT Comic. */
-

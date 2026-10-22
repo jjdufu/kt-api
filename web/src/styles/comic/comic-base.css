@@ -33,29 +33,26 @@ For commercial licensing, please contact support@quantumnous.com
 [data-home],
 [data-docs],
 [data-auth] {
-  --hc-bg: #f7f3ea;
-  --hc-paper: #fffdf6;
-  --hc-ink: #111014;
+  --hc-bg: var(--paper);
+  --hc-paper: var(--paper-card);
+  --hc-ink: var(--ink);
   --hc-text: #16151b;
   --hc-muted: #4a4854;
-  --hc-cyan: #13b5c4;
-  --hc-magenta: #cf2c9f;
-  --hc-yellow: #f2d21b;
+  --hc-cyan: var(--neon-cyan-ink);
+  --hc-magenta: var(--neon-magenta-ink);
+  --hc-yellow: var(--neon-yellow-ink);
   --hc-dot: rgba(17, 16, 20, 0.13);
   --hc-line: rgba(17, 16, 20, 0.07);
-  --hc-panel-border: #111014;
-  --hc-shadow: #111014;
-  --hc-head-fill: #fffdf6;
-  --hc-head-stroke: #111014;
+  --hc-panel-border: var(--ink);
+  --hc-shadow: var(--ink);
+  --hc-head-fill: var(--paper-card);
+  --hc-head-stroke: var(--ink);
   --hc-night: #15141d;
   --hc-skyline: rgba(17, 16, 20, 0.85);
   --hc-glow: 0;
 
-  /* Same set as the KT Comic console (theme-preset-kt-comic.css). */
-  --hc-font-sys:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
-    'Source Han Sans SC', sans-serif;
+  /* Palette and fonts come from ../tokens; --hc-* only names page roles. */
+  --hc-font-sys: var(--font-system);
   --hc-font-display: 'KT Console Display', var(--hc-font-sys);
   --hc-font-cjk: 'KT Console Display', var(--hc-font-sys);
   --hc-font-fun: var(--hc-font-sys);
@@ -69,14 +66,14 @@ For commercial licensing, please contact support@quantumnous.com
 .dark [data-home],
 .dark [data-docs],
 .dark [data-auth] {
-  --hc-bg: #0b0b12;
+  --hc-bg: var(--night);
   --hc-paper: #14131f;
   --hc-ink: #000;
   --hc-text: #f4f3ff;
   --hc-muted: #b4b2c8;
-  --hc-cyan: #00f0ff;
-  --hc-magenta: #ff2bd6;
-  --hc-yellow: #ffe600;
+  --hc-cyan: var(--neon-cyan-glow);
+  --hc-magenta: var(--neon-magenta-glow);
+  --hc-yellow: var(--neon-yellow-glow);
   --hc-dot: rgba(255, 255, 255, 0.075);
   --hc-line: rgba(255, 255, 255, 0.06);
   --hc-panel-border: #f4f3ff;
