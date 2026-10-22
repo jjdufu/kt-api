@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.0.17](https://github.com/jjdufu/kt-api/compare/v0.0.16...v0.0.17) (2026-10-22)
+
+
+### Features
+
+* **billing:** OpenAI 12 小时提示缓存写入按独立价格计费 ([#7965](https://github.com/jjdufu/kt-api/issues/7965)) ([9f4eb8b](https://github.com/jjdufu/kt-api/commit/9f4eb8bd945d094a02c3cff1f5427df40f3b5a52))
+* **email:** 新增 Resend 邮件服务商 ([#7880](https://github.com/jjdufu/kt-api/issues/7880)) ([f2214e2](https://github.com/jjdufu/kt-api/commit/f2214e2a4dae313376144c9b22560216a2f86275))
+* **pricing:** 按站点汇率调整同步来的上游价格 ([e19e340](https://github.com/jjdufu/kt-api/commit/e19e3400d858107b87b8c619d33287d099a896c6))
+* **task:** 原生插件路由接受 multipart 请求体 ([c260ae8](https://github.com/jjdufu/kt-api/commit/c260ae89674dbedacfb8c95c6db0c254c39f4d72))
+* **task:** 向任务插件驱动传递客户端请求头 ([bc9fb0b](https://github.com/jjdufu/kt-api/commit/bc9fb0b6456ae63e6cfa9e7b9e59b014c55e7924))
+* **task:** 普通渠道可在共享插件端点上参与竞争 ([0b77d79](https://github.com/jjdufu/kt-api/commit/0b77d79fa2a32538a484fba692eda2665bca9d70))
+* **web:** 可从使用日志详情复制模型名 ([392b00e](https://github.com/jjdufu/kt-api/commit/392b00e510e6a0fbb053da1f5b79b6e9deaee9b3))
+* **web:** 同步上游 0017 后的页面主题适配（默认 / 开天漫画） ([3294292](https://github.com/jjdufu/kt-api/commit/32942925b07a43601d9e21df9c5e2b42f0210b1f))
+
+
+### Bug Fixes
+
+* **billing:** 对未拆分 5m/1h 的 Claude 缓存写入计费 ([d3753e2](https://github.com/jjdufu/kt-api/commit/d3753e24328eae489fc7d3747f6685069c8f4876))
+* **channels:** 保留高级自定义渠道的请求体透传设置 ([#7971](https://github.com/jjdufu/kt-api/issues/7971)) ([29c987f](https://github.com/jjdufu/kt-api/commit/29c987f5258136e93f65111348337a93606f4a4c))
+* **relay:** Responses 流已送达时正常结束，不再误报断连错误 ([#7956](https://github.com/jjdufu/kt-api/issues/7956)) ([d9db1dd](https://github.com/jjdufu/kt-api/commit/d9db1dd1aba9840d184f8521405207129f422029))
+* **relay:** 保持客户端 JSON Schema 的属性顺序 ([22180a3](https://github.com/jjdufu/kt-api/commit/22180a3669290dc1104a6bcd5b40d951736212eb))
+* **relay:** 大的流式事件不再截断慢速客户端 ([5c9d51c](https://github.com/jjdufu/kt-api/commit/5c9d51c6d0996d5da92576ea58dad6fc7258a843))
+* **task:** 由任务插件自行校验请求 ([7ee9f91](https://github.com/jjdufu/kt-api/commit/7ee9f9108f6ca5e61c4d8e48614978414b3016bc))
+* 同步上游 new-api 0017（Resend 完整合入 + 16 个上游提交），适配两套主题页面 ([d271932](https://github.com/jjdufu/kt-api/commit/d271932d5009079a67ed2319598a9aea64da3361))
+* 将 Go 升级到 1.26.10 以修复 CVE-2026-111943 ([#7942](https://github.com/jjdufu/kt-api/issues/7942)) ([3949c10](https://github.com/jjdufu/kt-api/commit/3949c107b1831125b6e5c44b10cc20056714a691))
+
 ## [0.0.16](https://github.com/jjdufu/kt-api/compare/v0.0.15...v0.0.16) (2026-10-20)
 
 
