@@ -33,9 +33,9 @@ For commercial licensing, please contact support@quantumnous.com
  */
 
 @font-face {
-  font-family: 'KT Console Display';
-  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-500-normal.woff2')
-    format('woff2');
+  font-family: "KT Console Display";
+  src: url("../assets/fonts/chakra-petch/chakra-petch-latin-500-normal.woff2")
+    format("woff2");
   font-weight: 400 500;
   font-display: swap;
   unicode-range:
@@ -43,9 +43,9 @@ For commercial licensing, please contact support@quantumnous.com
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'KT Console Display';
-  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-600-normal.woff2')
-    format('woff2');
+  font-family: "KT Console Display";
+  src: url("../assets/fonts/chakra-petch/chakra-petch-latin-600-normal.woff2")
+    format("woff2");
   font-weight: 600;
   font-display: swap;
   unicode-range:
@@ -53,9 +53,9 @@ For commercial licensing, please contact support@quantumnous.com
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'KT Console Display';
-  src: url('../assets/fonts/chakra-petch/chakra-petch-latin-700-normal.woff2')
-    format('woff2');
+  font-family: "KT Console Display";
+  src: url("../assets/fonts/chakra-petch/chakra-petch-latin-700-normal.woff2")
+    format("woff2");
   font-weight: 700 900;
   font-display: swap;
   unicode-range:
@@ -64,21 +64,21 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* One formal cyber set for every page. */
-[data-theme-preset='kt-comic'] {
+[data-theme-preset="kt-comic"] {
   --kt-font-system:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
-    'Source Han Sans SC', sans-serif;
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    "Source Han Sans SC", sans-serif;
   --kt-font-body: var(--kt-font-system);
-  --kt-font-title: 'KT Console Display', var(--kt-font-system);
-  --kt-font-button: 'KT Console Display', var(--kt-font-system);
+  --kt-font-title: "KT Console Display", var(--kt-font-system);
+  --kt-font-button: "KT Console Display", var(--kt-font-system);
   --kt-font-mono:
-    'KTHome Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    "KTHome Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --kt-line: 2.5px;
 }
 /* (0,2,0) beats the Font axis blocks in theme-presets.css. */
-[data-theme-preset='kt-comic'][data-theme-font],
-[data-theme-preset='kt-comic']:not([data-theme-font]) {
+[data-theme-preset="kt-comic"][data-theme-font],
+[data-theme-preset="kt-comic"]:not([data-theme-font]) {
   --font-ui-sans: var(--kt-font-body);
   --font-body: var(--kt-font-body);
   --font-sans: var(--kt-font-body);
@@ -86,25 +86,25 @@ For commercial licensing, please contact support@quantumnous.com
   --font-mono: var(--kt-font-mono);
   font-family: var(--kt-font-body);
 }
-[data-theme-preset='kt-comic'] :is(code, kbd, pre, samp, .font-mono),
-[data-theme-preset='kt-comic'] .tabular-nums,
-[data-theme-preset='kt-comic'] [data-slot='table-cell'].font-mono {
+[data-theme-preset="kt-comic"] :is(code, kbd, pre, samp, .font-mono),
+[data-theme-preset="kt-comic"] .tabular-nums,
+[data-theme-preset="kt-comic"] [data-slot="table-cell"].font-mono {
   font-family: var(--kt-font-mono);
 }
 
 /* ── Typography ─────────────────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='page-title'],
-[data-theme-preset='kt-comic'] [data-slot='card-title'],
-[data-theme-preset='kt-comic'] [data-slot='dialog-title'],
-[data-theme-preset='kt-comic'] [data-slot='alert-dialog-title'],
-[data-theme-preset='kt-comic'] [data-slot='sheet-title'],
-[data-theme-preset='kt-comic'] [data-slot='section-title'],
-[data-theme-preset='kt-comic'] :is(h1, h2, h3, h4) {
+[data-theme-preset="kt-comic"] [data-slot="page-title"],
+[data-theme-preset="kt-comic"] [data-slot="card-title"],
+[data-theme-preset="kt-comic"] [data-slot="dialog-title"],
+[data-theme-preset="kt-comic"] [data-slot="alert-dialog-title"],
+[data-theme-preset="kt-comic"] [data-slot="sheet-title"],
+[data-theme-preset="kt-comic"] [data-slot="section-title"],
+[data-theme-preset="kt-comic"] :is(h1, h2, h3, h4) {
   font-family: var(--kt-font-title);
   font-weight: 400;
   letter-spacing: 0.01em;
 }
-[data-theme-preset='kt-comic'] [data-slot='page-title'] {
+[data-theme-preset="kt-comic"] [data-slot="page-title"] {
   font-size: 1.45rem;
   line-height: 1.2;
   text-shadow:
@@ -113,30 +113,30 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ── Sidebar & header ───────────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='sidebar-inner'] {
+[data-theme-preset="kt-comic"] [data-slot="sidebar-inner"] {
   background-image: radial-gradient(
     color-mix(in srgb, var(--foreground) 9%, transparent) 1px,
     transparent 1.3px
   );
   background-size: 9px 9px;
 }
-[data-theme-preset='kt-comic'] [data-slot='sidebar-menu-button'][data-active] {
+[data-theme-preset="kt-comic"] [data-slot="sidebar-menu-button"][data-active] {
   border: 2px solid #000;
   box-shadow: 3px 3px 0 var(--kt-magenta);
   font-weight: 700;
 }
-[data-theme-preset='kt-comic'] [data-slot='sidebar-group-label'] {
+[data-theme-preset="kt-comic"] [data-slot="sidebar-group-label"] {
   font-weight: 700;
   letter-spacing: 0.06em;
 }
-[data-theme-preset='kt-comic'] [data-slot='site-header'] {
+[data-theme-preset="kt-comic"] [data-slot="site-header"] {
   border-bottom: var(--kt-line) solid var(--kt-outline);
   background: color-mix(in srgb, var(--background) 92%, transparent);
   backdrop-filter: blur(6px);
 }
 
 /* Public header (components/layout/components/public-header.tsx) */
-[data-theme-preset='kt-comic'] [data-slot='site-nav-link'] {
+[data-theme-preset="kt-comic"] [data-slot="site-nav-link"] {
   font-family: var(--kt-font-title);
   font-size: 0.95rem;
   font-weight: 400;
@@ -149,32 +149,32 @@ For commercial licensing, please contact support@quantumnous.com
     box-shadow 110ms ease,
     background-color 110ms ease;
 }
-[data-theme-preset='kt-comic'] [data-slot='site-nav-link']:hover,
-[data-theme-preset='kt-comic'] [data-slot='site-nav-link']:focus-visible {
+[data-theme-preset="kt-comic"] [data-slot="site-nav-link"]:hover,
+[data-theme-preset="kt-comic"] [data-slot="site-nav-link"]:focus-visible {
   color: #000;
   background: var(--kt-yellow);
   border-color: #000;
   box-shadow: 2px 2px 0 var(--kt-shadow);
   transform: translate(-1px, -1px);
 }
-[data-theme-preset='kt-comic'] [data-slot='site-nav-link'][data-active] {
+[data-theme-preset="kt-comic"] [data-slot="site-nav-link"][data-active] {
   color: #000;
   background: var(--kt-yellow);
   border-color: #000;
   box-shadow: 3px 3px 0 var(--kt-magenta);
 }
-.dark [data-theme-preset='kt-comic'] [data-slot='site-nav-link'][data-active] {
+.dark [data-theme-preset="kt-comic"] [data-slot="site-nav-link"][data-active] {
   box-shadow: 3px 3px 0 var(--kt-cyan);
 }
 /* Header icon buttons (theme switch, notifications, menu): small outlined
  * squares with a hard shadow. */
-[data-theme-preset='kt-comic']
-  [data-slot='site-header']
-  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
-    [class~='size-7'],
-    [class~='size-8'],
-    [class~='size-9'],
-    [class~='w-9']
+[data-theme-preset="kt-comic"]
+  [data-slot="site-header"]
+  :is([data-slot="button"], [data-slot$="-trigger"]):not(.kt-avatar-trigger):is(
+    [class~="size-7"],
+    [class~="size-8"],
+    [class~="size-9"],
+    [class~="w-9"]
   ) {
   width: 2.125rem;
   height: 2.125rem;
@@ -185,68 +185,68 @@ For commercial licensing, please contact support@quantumnous.com
   box-shadow: 2px 2px 0 var(--kt-shadow);
 }
 .dark
-  [data-theme-preset='kt-comic']
-  [data-slot='site-header']
-  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
-    [class~='size-7'],
-    [class~='size-8'],
-    [class~='size-9'],
-    [class~='w-9']
+  [data-theme-preset="kt-comic"]
+  [data-slot="site-header"]
+  :is([data-slot="button"], [data-slot$="-trigger"]):not(.kt-avatar-trigger):is(
+    [class~="size-7"],
+    [class~="size-8"],
+    [class~="size-9"],
+    [class~="w-9"]
   ) {
   box-shadow: 2px 2px 0 var(--kt-cyan);
 }
-[data-theme-preset='kt-comic']
-  [data-slot='site-header']
-  :is([data-slot='button'], [data-slot$='-trigger']):not(.kt-avatar-trigger):is(
-    [class~='size-7'],
-    [class~='size-8'],
-    [class~='size-9'],
-    [class~='w-9']
+[data-theme-preset="kt-comic"]
+  [data-slot="site-header"]
+  :is([data-slot="button"], [data-slot$="-trigger"]):not(.kt-avatar-trigger):is(
+    [class~="size-7"],
+    [class~="size-8"],
+    [class~="size-9"],
+    [class~="w-9"]
   ):hover {
   background: var(--kt-yellow);
   color: #000;
   transform: translate(-1px, -1px);
 }
-[data-theme-preset='kt-comic'] [data-slot='button'] {
+[data-theme-preset="kt-comic"] [data-slot="button"] {
   font-family: var(--kt-font-button);
 }
 
 /* ── Cards, dialogs, popovers ───────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='card'] {
+[data-theme-preset="kt-comic"] [data-slot="card"] {
   border: var(--kt-line) solid var(--kt-outline);
   box-shadow: 5px 5px 0 var(--kt-shadow);
   --tw-ring-shadow: 0 0 #0000;
 }
-.dark [data-theme-preset='kt-comic'] [data-slot='card'] {
+.dark [data-theme-preset="kt-comic"] [data-slot="card"] {
   box-shadow: 5px 5px 0 color-mix(in srgb, var(--kt-cyan) 55%, #000);
 }
-[data-theme-preset='kt-comic'] [data-slot='dialog-content'],
-[data-theme-preset='kt-comic'] [data-slot='alert-dialog-content'] {
+[data-theme-preset="kt-comic"] [data-slot="dialog-content"],
+[data-theme-preset="kt-comic"] [data-slot="alert-dialog-content"] {
   border: 3px solid var(--kt-outline);
   box-shadow: 9px 9px 0 var(--kt-magenta);
   --tw-ring-shadow: 0 0 #0000;
 }
-[data-theme-preset='kt-comic'] [data-slot='sheet-content'] {
+[data-theme-preset="kt-comic"] [data-slot="sheet-content"] {
   border-color: var(--kt-outline);
   border-width: 0 0 0 3px;
 }
-[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-content'],
-[data-theme-preset='kt-comic'] [data-slot='popover-content'],
-[data-theme-preset='kt-comic'] [data-slot='select-content'] {
+[data-theme-preset="kt-comic"] [data-slot="dropdown-menu-content"],
+[data-theme-preset="kt-comic"] [data-slot="popover-content"],
+[data-theme-preset="kt-comic"] [data-slot="select-content"] {
   border: var(--kt-line) solid var(--kt-outline);
   box-shadow: 5px 5px 0 var(--kt-cyan);
   --tw-ring-shadow: 0 0 #0000;
 }
-[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-item']:focus,
-[data-theme-preset='kt-comic']
-  [data-slot='dropdown-menu-item'][data-highlighted],
-[data-theme-preset='kt-comic'] [data-slot='select-item'][data-highlighted] {
+[data-theme-preset="kt-comic"] [data-slot="dropdown-menu-item"]:focus,
+[data-theme-preset="kt-comic"]
+  [data-slot="dropdown-menu-item"][data-highlighted],
+[data-theme-preset="kt-comic"] [data-slot="select-item"][data-highlighted] {
   background: var(--kt-yellow);
   color: #000;
 }
-[data-theme-preset='kt-comic'] [data-slot='dropdown-menu-item']:focus svg,
-[data-theme-preset='kt-comic']
-  [data-slot='dropdown-menu-item'][data-highlighted]
+[data-theme-preset="kt-comic"] [data-slot="dropdown-menu-item"]:focus svg,
+[data-theme-preset="kt-comic"]
+  [data-slot="dropdown-menu-item"][data-highlighted]
   svg {
   color: #000;
 }
@@ -255,12 +255,12 @@ For commercial licensing, please contact support@quantumnous.com
 /* Solid variants (default / secondary / outline / destructive) get the ink
  * outline + hard shadow; ghost and link buttons stay flat. Variants are
  * recognised by their class tokens from components/ui/button.tsx. */
-[data-theme-preset='kt-comic']
-  [data-slot='button']:is(
-    [class~='bg-primary'],
-    [class~='bg-secondary'],
-    [class~='border-border'],
-    [class~='bg-destructive/10']
+[data-theme-preset="kt-comic"]
+  [data-slot="button"]:is(
+    [class~="bg-primary"],
+    [class~="bg-secondary"],
+    [class~="border-border"],
+    [class~="bg-destructive/10"]
   ) {
   font-family: var(--kt-font-button);
   font-weight: 400;
@@ -272,62 +272,62 @@ For commercial licensing, please contact support@quantumnous.com
     background-color 110ms ease;
 }
 .dark
-  [data-theme-preset='kt-comic']
-  [data-slot='button']:is(
-    [class~='bg-secondary'],
-    [class~='border-border'],
-    [class~='bg-destructive/10']
+  [data-theme-preset="kt-comic"]
+  [data-slot="button"]:is(
+    [class~="bg-secondary"],
+    [class~="border-border"],
+    [class~="bg-destructive/10"]
   ) {
   border-color: var(--kt-outline);
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--kt-cyan) 60%, #000);
 }
-.dark [data-theme-preset='kt-comic'] [data-slot='button'][class~='bg-primary'] {
+.dark [data-theme-preset="kt-comic"] [data-slot="button"][class~="bg-primary"] {
   box-shadow: 3px 3px 0 #8a7a00;
 }
-[data-theme-preset='kt-comic']
-  [data-slot='button']:is(
-    [class~='bg-primary'],
-    [class~='bg-secondary'],
-    [class~='border-border'],
-    [class~='bg-destructive/10']
+[data-theme-preset="kt-comic"]
+  [data-slot="button"]:is(
+    [class~="bg-primary"],
+    [class~="bg-secondary"],
+    [class~="border-border"],
+    [class~="bg-destructive/10"]
   ):hover:not(:disabled) {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 var(--kt-shadow);
 }
-[data-theme-preset='kt-comic']
-  [data-slot='button'][class~='bg-primary']:hover:not(:disabled) {
+[data-theme-preset="kt-comic"]
+  [data-slot="button"][class~="bg-primary"]:hover:not(:disabled) {
   background: var(--primary);
 }
-[data-theme-preset='kt-comic']
-  [data-slot='button']:is(
-    [class~='bg-primary'],
-    [class~='bg-secondary'],
-    [class~='border-border'],
-    [class~='bg-destructive/10']
+[data-theme-preset="kt-comic"]
+  [data-slot="button"]:is(
+    [class~="bg-primary"],
+    [class~="bg-secondary"],
+    [class~="border-border"],
+    [class~="bg-destructive/10"]
   ):active:not(:disabled) {
   transform: translate(3px, 3px);
   box-shadow: 0 0 0 transparent;
 }
-[data-theme-preset='kt-comic'] [data-slot='button']:focus-visible {
+[data-theme-preset="kt-comic"] [data-slot="button"]:focus-visible {
   outline: 2.5px dashed var(--kt-magenta);
   outline-offset: 2px;
 }
 
 /* ── Inputs ─────────────────────────────────────────────────────────── */
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   :is(
-    [data-slot='input'],
-    [data-slot='textarea'],
-    [data-slot='select-trigger']
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"]
   ) {
   border-width: 2px;
   border-color: var(--input);
 }
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   :is(
-    [data-slot='input'],
-    [data-slot='textarea'],
-    [data-slot='select-trigger']
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"]
   ):focus-visible {
   border-color: var(--kt-cyan);
   box-shadow: 3px 3px 0 var(--kt-cyan);
@@ -335,21 +335,21 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ── Tabs & badges ──────────────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-slot='tabs-list'] {
+[data-theme-preset="kt-comic"] [data-slot="tabs-list"] {
   border: 2px solid var(--kt-outline);
   background: var(--muted);
 }
-[data-theme-preset='kt-comic'] [data-slot='tabs-trigger'] {
+[data-theme-preset="kt-comic"] [data-slot="tabs-trigger"] {
   font-weight: 600;
 }
-[data-theme-preset='kt-comic']
-  [data-slot='tabs-trigger']:is([data-active], [aria-selected='true']) {
+[data-theme-preset="kt-comic"]
+  [data-slot="tabs-trigger"]:is([data-active], [aria-selected="true"]) {
   color: #000;
   background: var(--kt-yellow);
   border: 2px solid #000;
   box-shadow: 2px 2px 0 #000;
 }
-[data-theme-preset='kt-comic'] [data-slot='badge'] {
+[data-theme-preset="kt-comic"] [data-slot="badge"] {
   border-width: 1.5px;
   border-color: color-mix(in srgb, var(--foreground) 55%, transparent);
   font-weight: 700;
@@ -360,33 +360,33 @@ For commercial licensing, please contact support@quantumnous.com
  * the frame, so the inner table-container only gets an outline when it is
  * standalone: not inside a bordered wrapper, an embedded `.border-0`
  * wrapper, or another table. */
-[data-theme-preset='kt-comic']
-  [data-slot='table-container']:not(
-    :is(.border, .border-0, [data-slot='table-container'])
-      [data-slot='table-container']
+[data-theme-preset="kt-comic"]
+  [data-slot="table-container"]:not(
+    :is(.border, .border-0, [data-slot="table-container"])
+      [data-slot="table-container"]
   ) {
   border: 2px solid var(--kt-outline);
   border-radius: 0.5rem;
   background: var(--card);
 }
-[data-theme-preset='kt-comic']
-  .border:not(.border-0):has(> [data-slot='table-container']) {
+[data-theme-preset="kt-comic"]
+  .border:not(.border-0):has(> [data-slot="table-container"]) {
   border: 2px solid var(--kt-outline);
   background: var(--card);
 }
-[data-theme-preset='kt-comic'] [data-slot='table-header'] {
+[data-theme-preset="kt-comic"] [data-slot="table-header"] {
   background: color-mix(in srgb, var(--kt-cyan) 8%, var(--card));
 }
-[data-theme-preset='kt-comic'] [data-slot='table-head'] {
+[data-theme-preset="kt-comic"] [data-slot="table-head"] {
   color: var(--foreground) !important;
   font-weight: 700;
 }
-[data-theme-preset='kt-comic'] [data-slot='table-row']:hover {
+[data-theme-preset="kt-comic"] [data-slot="table-row"]:hover {
   background: color-mix(in srgb, var(--kt-yellow) 12%, transparent);
 }
 
 /* ── Avatar button & user menu (components/profile-dropdown.tsx) ─────── */
-[data-theme-preset='kt-comic'] .kt-avatar-trigger {
+[data-theme-preset="kt-comic"] .kt-avatar-trigger {
   width: 2rem;
   height: 2rem;
   border-radius: 999px;
@@ -398,38 +398,38 @@ For commercial licensing, please contact support@quantumnous.com
     transform 120ms ease,
     box-shadow 120ms ease;
 }
-.dark [data-theme-preset='kt-comic'] .kt-avatar-trigger {
+.dark [data-theme-preset="kt-comic"] .kt-avatar-trigger {
   box-shadow: 3px 3px 0 var(--kt-cyan);
 }
-[data-theme-preset='kt-comic'] .kt-avatar-trigger [data-slot='avatar'] {
+[data-theme-preset="kt-comic"] .kt-avatar-trigger [data-slot="avatar"] {
   width: 100%;
   height: 100%;
 }
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   .kt-avatar-trigger
-  [data-slot='avatar-fallback'] {
+  [data-slot="avatar-fallback"] {
   font-size: 0.8rem;
   font-weight: 800;
   border: 2px solid #fff;
 }
-[data-theme-preset='kt-comic'] .kt-avatar-trigger:hover {
+[data-theme-preset="kt-comic"] .kt-avatar-trigger:hover {
   transform: translate(-1px, -1px) rotate(-4deg);
 }
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   .kt-avatar-trigger:is(:active, [data-popup-open]) {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--kt-magenta);
 }
-[data-theme-preset='kt-comic'] .kt-user-menu {
+[data-theme-preset="kt-comic"] .kt-user-menu {
   border: 3px solid var(--kt-outline);
   border-radius: 0.6rem;
   box-shadow: 6px 6px 0 var(--kt-magenta);
   padding: 0.35rem;
 }
-.dark [data-theme-preset='kt-comic'] .kt-user-menu {
+.dark [data-theme-preset="kt-comic"] .kt-user-menu {
   box-shadow: 6px 6px 0 var(--kt-cyan);
 }
-[data-theme-preset='kt-comic'] .kt-user-menu-head {
+[data-theme-preset="kt-comic"] .kt-user-menu-head {
   border-radius: 0.4rem;
   background-image: radial-gradient(
     color-mix(in srgb, var(--kt-magenta) 35%, transparent) 1px,
@@ -437,29 +437,29 @@ For commercial licensing, please contact support@quantumnous.com
   );
   background-size: 7px 7px;
 }
-[data-theme-preset='kt-comic'] .kt-user-menu-avatar {
+[data-theme-preset="kt-comic"] .kt-user-menu-avatar {
   border: 2px solid var(--kt-outline);
   box-shadow: 2px 2px 0 var(--kt-yellow);
 }
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   .kt-user-menu
-  [data-slot='dropdown-menu-separator'] {
+  [data-slot="dropdown-menu-separator"] {
   height: 2px;
   background: var(--kt-outline);
 }
-[data-theme-preset='kt-comic'] .kt-user-menu [data-slot='dropdown-menu-item'] {
+[data-theme-preset="kt-comic"] .kt-user-menu [data-slot="dropdown-menu-item"] {
   border: 2px solid transparent;
   font-weight: 600;
 }
-[data-theme-preset='kt-comic']
+[data-theme-preset="kt-comic"]
   .kt-user-menu
-  [data-slot='dropdown-menu-item']:is(:focus, [data-highlighted]) {
+  [data-slot="dropdown-menu-item"]:is(:focus, [data-highlighted]) {
   border-color: #000;
   box-shadow: 2px 2px 0 #000;
 }
 
 /* ── Public header sign-in button (docs, about, pricing …) ──────────── */
-[data-theme-preset='kt-comic'] header a[href='/sign-in'] {
+[data-theme-preset="kt-comic"] header a[href="/sign-in"] {
   font-family: var(--kt-font-button);
   height: 2.25rem;
   padding: 0 1rem;
@@ -472,29 +472,29 @@ For commercial licensing, please contact support@quantumnous.com
     transform 110ms ease,
     box-shadow 110ms ease;
 }
-[data-theme-preset='kt-comic'] header a[href='/sign-in']:hover {
+[data-theme-preset="kt-comic"] header a[href="/sign-in"]:hover {
   transform: translate(-1px, -1px);
   background: var(--kt-yellow);
 }
-[data-theme-preset='kt-comic'] header a[href='/sign-in']:active {
+[data-theme-preset="kt-comic"] header a[href="/sign-in"]:active {
   transform: translate(3px, 3px);
   box-shadow: 0 0 0 transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-theme-preset='kt-comic']
-    :is([data-slot='button'], .kt-avatar-trigger, header a[href='/sign-in']) {
+  [data-theme-preset="kt-comic"]
+    :is([data-slot="button"], .kt-avatar-trigger, header a[href="/sign-in"]) {
     transition: none;
   }
 }
 
 /* Docs code blocks keep the monospace face. */
-[data-theme-preset='kt-comic'] [data-docs] .dc-code * {
+[data-theme-preset="kt-comic"] [data-docs] .dc-code * {
   font-family: var(--kt-font-mono);
 }
 
 /* ── Toasts (sonner) ────────────────────────────────────────────────── */
-[data-theme-preset='kt-comic'] [data-sonner-toaster] [data-sonner-toast] {
+[data-theme-preset="kt-comic"] [data-sonner-toaster] [data-sonner-toast] {
   font-family: var(--kt-font-body) !important;
   background: var(--card) !important;
   color: var(--foreground) !important;
@@ -502,16 +502,16 @@ For commercial licensing, please contact support@quantumnous.com
   border-radius: 0.5rem !important;
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--kt-magenta) 55%, transparent) !important;
 }
-.dark [data-theme-preset='kt-comic'] [data-sonner-toaster] [data-sonner-toast] {
+.dark [data-theme-preset="kt-comic"] [data-sonner-toaster] [data-sonner-toast] {
   border-color: color-mix(in srgb, var(--kt-cyan) 55%, transparent) !important;
   box-shadow: 0 0 14px color-mix(in srgb, var(--kt-cyan) 22%, transparent) !important;
 }
-[data-theme-preset='kt-comic'] [data-sonner-toast] [data-title] {
+[data-theme-preset="kt-comic"] [data-sonner-toast] [data-title] {
   font-family: var(--kt-font-title) !important;
   font-weight: 400 !important;
   letter-spacing: 0.02em !important;
 }
-[data-theme-preset='kt-comic'] [data-sonner-toast] [data-close-button] {
+[data-theme-preset="kt-comic"] [data-sonner-toast] [data-close-button] {
   width: 1.4rem !important;
   height: 1.4rem !important;
   border-radius: 0.2rem !important;
@@ -524,24 +524,24 @@ For commercial licensing, please contact support@quantumnous.com
 /* ── Dashboard stat strip (incl. cache read / write) ────────────────── */
 /* Thin neon hairline instead of a heavy comic outline; titles use the
  * console display face, numbers stay on KTHome Mono via .font-mono. */
-[data-theme-preset='kt-comic'] [data-slot='dashboard-stat-strip'] {
+[data-theme-preset="kt-comic"] [data-slot="dashboard-stat-strip"] {
   border: 1px solid color-mix(in srgb, var(--kt-cyan) 35%, var(--border));
   box-shadow: none;
 }
-[data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat']
+[data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"]
   > div:first-child
   > div:last-child {
   font-family: var(--kt-font-title);
   letter-spacing: 0.08em;
 }
-[data-theme-preset='kt-comic'] [data-slot='dashboard-stat'] .font-mono {
+[data-theme-preset="kt-comic"] [data-slot="dashboard-stat"] .font-mono {
   letter-spacing: -0.01em;
 }
-[data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat']:is(
-    [data-stat-key='cacheRead'],
-    [data-stat-key='cacheCreation']
+[data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"]:is(
+    [data-stat-key="cacheRead"],
+    [data-stat-key="cacheCreation"]
   ) {
   background:
     linear-gradient(
@@ -551,22 +551,103 @@ For commercial licensing, please contact support@quantumnous.com
     ),
     var(--card);
 }
-[data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+[data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"][data-stat-key="cacheRead"]
   .font-mono {
   color: color-mix(in srgb, var(--kt-cyan) 55%, var(--foreground));
 }
-[data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat'][data-stat-key='cacheCreation']
+[data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"][data-stat-key="cacheCreation"]
   .font-mono {
   color: color-mix(in srgb, var(--kt-magenta) 55%, var(--foreground));
 }
-.dark[data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+.dark[data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"][data-stat-key="cacheRead"]
   .font-mono,
 .dark
-  [data-theme-preset='kt-comic']
-  [data-slot='dashboard-stat'][data-stat-key='cacheRead']
+  [data-theme-preset="kt-comic"]
+  [data-slot="dashboard-stat"][data-stat-key="cacheRead"]
   .font-mono {
   text-shadow: 0 0 8px color-mix(in srgb, var(--kt-cyan) 35%, transparent);
+}
+
+/* ── Console surfaces from upstream sync 0017 ───────────────────────── */
+/* Email provider switch (SMTP / Resend), pricing-sync rate adjustment,
+ * price confirm dialog, usage-log details, response-model observation,
+ * channel drawer and passthrough warning: thin neon hairlines, no hard
+ * comic shadow, console title face and mono numbers. */
+[data-theme-preset="kt-comic"] [data-slot="email-provider-option"] {
+  border: 1px solid color-mix(in srgb, var(--kt-cyan) 30%, var(--border));
+  border-radius: 0.375rem;
+  box-shadow: none;
+  font-family: var(--kt-font-title);
+  letter-spacing: 0.06em;
+}
+[data-theme-preset="kt-comic"]
+  [data-slot="email-provider-option"]:has([data-state="checked"]) {
+  border-color: var(--kt-cyan);
+  background: color-mix(in srgb, var(--kt-cyan) 8%, var(--card));
+}
+.dark
+  [data-theme-preset="kt-comic"]
+  [data-slot="email-provider-option"]:has([data-state="checked"]),
+.dark[data-theme-preset="kt-comic"]
+  [data-slot="email-provider-option"]:has([data-state="checked"]) {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--kt-cyan) 22%, transparent);
+}
+
+[data-theme-preset="kt-comic"] [data-kt="price-adjustment"],
+[data-theme-preset="kt-comic"] [data-kt="price-batch-adjust"] > * {
+  border: 1px solid color-mix(in srgb, var(--kt-cyan) 35%, var(--border));
+  box-shadow: none;
+  font-family: var(--kt-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+[data-theme-preset="kt-comic"] [data-kt="price-batch-adjust"] > * + * {
+  border-left-width: 0;
+}
+
+[data-theme-preset="kt-comic"] .kt-console-dialog,
+[data-theme-preset="kt-comic"] [data-kt="channel-drawer"] {
+  border: 1px solid color-mix(in srgb, var(--kt-cyan) 40%, var(--border));
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+}
+.dark [data-theme-preset="kt-comic"] .kt-console-dialog,
+.dark[data-theme-preset="kt-comic"] .kt-console-dialog,
+.dark [data-theme-preset="kt-comic"] [data-kt="channel-drawer"],
+.dark[data-theme-preset="kt-comic"] [data-kt="channel-drawer"] {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--kt-cyan) 12%, transparent),
+    0 0 24px color-mix(in srgb, var(--kt-cyan) 14%, transparent);
+}
+[data-theme-preset="kt-comic"] .kt-console-dialog .font-mono,
+[data-theme-preset="kt-comic"] [data-slot="response-model-details"] .font-mono {
+  letter-spacing: -0.01em;
+}
+[data-theme-preset="kt-comic"]
+  .kt-console-dialog
+  :is(.border, .rounded-md.border) {
+  border-color: color-mix(in srgb, var(--kt-cyan) 22%, var(--border));
+  box-shadow: none;
+}
+[data-theme-preset="kt-comic"] [data-kt="price-batch-adjust"] {
+  border: 0;
+  border-radius: 0.375rem;
+  box-shadow: none;
+}
+[data-theme-preset="kt-comic"] [data-kt="price-batch-adjust"] > *:hover {
+  box-shadow: none;
+  border-color: var(--kt-cyan);
+}
+/* Outrank the comic solid-button outline + hard shadow inside the group. */
+[data-theme-preset="kt-comic"]
+  [data-kt="price-batch-adjust"][data-kt]
+  > [data-slot="button"][data-slot],
+[data-theme-preset="kt-comic"]
+  [data-kt="price-batch-adjust"][data-kt]
+  > [data-slot="button"][data-slot]:is(:hover, :active, :focus-visible) {
+  border: 1px solid color-mix(in srgb, var(--kt-cyan) 40%, var(--border));
+  box-shadow: none;
+  transform: none;
+  font-family: var(--kt-font-mono);
 }
