@@ -41,27 +41,13 @@
          DEFAULT_THEME_CUSTOMIZATION / THEME_STORAGE_KEYS.preset. -->
     <script>
       ;(function () {
-        // Removed presets migrate to default; simple-large also turns the
-        // large-font toggle on. Keep in sync with migrateThemePreset() in
-        // lib/theme-customization.
-        var preset = 'kt-comic'
-        var keep = { 'kt-comic': 1, default: 1 }
-        var large = false
+        var p = 'kt-comic'
         try {
-          var key = 'newapi:theme:v1:preset'
-          var lkey = 'newapi:theme:v1:large-font'
-          var stored = localStorage.getItem(key)
-          if (stored) {
-            preset = keep[stored] ? stored : 'default'
-            if (preset !== stored) {
-              localStorage.setItem(key, preset)
-              if (stored === 'simple-large') localStorage.setItem(lkey, '1')
-            }
-          }
-          large = localStorage.getItem(lkey) === '1'
+          if (localStorage.getItem('newapi:theme:v1:preset') === 'default') p = 'default'
+          if (localStorage.getItem('newapi:theme:v1:large-font') === '1')
+            document.body.setAttribute('data-theme-large-font', '')
         } catch (e) {}
-        if (large) document.body.setAttribute('data-theme-large-font', '')
-        document.body.setAttribute('data-theme-preset', preset)
+        document.body.setAttribute('data-theme-preset', p)
       })()
     </script>
     <div id="root" translate="no" class="notranslate"></div>

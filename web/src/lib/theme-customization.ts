@@ -89,22 +89,6 @@ export const THEME_PRESET_VALUES = new Set(
   THEME_PRESETS.map((p) => p.value)
 ) as ReadonlySet<ThemePreset>
 
-/**
- * Preset a stored-but-removed value is migrated to. Fresh visitors without a
- * stored value still get DEFAULT_THEME_CUSTOMIZATION.preset (kt-comic).
- * `simple-large` → `default` also turns the large-font toggle on (see
- * LARGE_FONT_PRESETS). Keep in sync with the boot script in index.html.
- */
-export const MIGRATED_THEME_PRESET: ThemePreset = 'default'
-/** Former presets that implied large type; migrating them enables largeFont. */
-export const LARGE_FONT_PRESETS: ReadonlySet<string> = new Set(['simple-large'])
-
-export function migrateThemePreset(raw: string | null): ThemePreset | null {
-  if (raw === null || raw === '') return null
-  if (THEME_PRESET_VALUES.has(raw as ThemePreset)) return raw as ThemePreset
-  return MIGRATED_THEME_PRESET
-}
-
 export const THEME_FONT_VALUES: ReadonlySet<ThemeFont> = new Set([
   'default',
   'sans',

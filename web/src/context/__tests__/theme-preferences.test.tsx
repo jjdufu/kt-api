@@ -187,17 +187,9 @@ describe('theme preference persistence', () => {
       render(<ThemeFixture />)
 
       expect(screen.getByLabelText('Theme mode')).toHaveTextContent('system')
-      // An empty value counts as "no choice"; an unknown one is a removed
-      // preset and migrates to Default.
-      expect(document.body).toHaveAttribute(
-        'data-theme-preset',
-        value === '' ? 'kt-comic' : 'default'
-      )
-      // Default's auto font is Public Sans.
-      expect(document.body).toHaveAttribute(
-        'data-theme-font',
-        value === '' ? 'system' : 'sans'
-      )
+      // Empty and unknown values both fall back to KT Comic.
+      expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
+      expect(document.body).toHaveAttribute('data-theme-font', 'system')
       expect(document.body).not.toHaveAttribute('data-theme-radius')
       expect(document.body).not.toHaveAttribute('data-theme-scale')
       expect(document.body).toHaveAttribute('data-theme-content-layout', 'full')
@@ -263,30 +255,12 @@ describe('theme preset default', () => {
     expect(localStorage.getItem('newapi:theme:v1:preset')).toBeNull()
   })
 
-  it.each([
-    'simple',
-    'underground',
-    'anthropic',
-    'rose-garden',
-    'lavender-dream',
-    'bogus',
-  ])('migrates removed preset %s to Default and writes it back', (legacy) => {
-    localStorage.setItem('newapi:theme:v1:preset', legacy)
+  it('ignores an unknown stored preset', () => {
+    localStorage.setItem('newapi:theme:v1:preset', 'bogus')
     render(<ThemeFixture />)
 
-    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
-    expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('default')
+    expect(document.body).toHaveAttribute('data-theme-preset', 'kt-comic')
     expect(document.body).not.toHaveAttribute('data-theme-large-font')
-  })
-
-  it('migrates simple-large to Default with the large-font toggle on', () => {
-    localStorage.setItem('newapi:theme:v1:preset', 'simple-large')
-    render(<ThemeFixture />)
-
-    expect(document.body).toHaveAttribute('data-theme-preset', 'default')
-    expect(document.body).toHaveAttribute('data-theme-large-font', '')
-    expect(localStorage.getItem('newapi:theme:v1:preset')).toBe('default')
-    expect(localStorage.getItem('newapi:theme:v1:large-font')).toBe('1')
   })
 })
 
