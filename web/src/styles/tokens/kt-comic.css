@@ -1,0 +1,202 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/* ── 开天漫画 / KT Comic ─────────────────────────────────────────────── */
+/*
+ * The site's own comic / manga cyberpunk look (matches the public home page).
+ * Light = paper #f7f3ea with black ink; dark = ink #0b0b12 with neon cyan
+ * #00f0ff, magenta #ff2bd6 and yellow #ffe600. Primary actions are yellow
+ * with black text. Component looks come from the semantic tokens below via ../ui-bridge.css;
+ * console-only flourishes live in ../theme-preset-kt-comic.css.
+ */
+[data-theme-preset='kt-comic'] {
+  --neon-cyan: var(--neon-cyan-ink);
+  --neon-magenta: var(--neon-magenta-ink);
+  --neon-yellow: var(--neon-yellow-ink);
+  --neon-outline: var(--ink);
+  --neon-shadow: var(--ink);
+
+  --background: #f7f3ea;
+  --foreground: #111014;
+  --card: #fffdf6;
+  --card-foreground: #111014;
+  --popover: #fffdf6;
+  --popover-foreground: #111014;
+  --primary: #f2d21b;
+  --primary-foreground: #111014;
+  --secondary: #d7f3f5;
+  --secondary-foreground: #111014;
+  --muted: #efe9dc;
+  --muted-foreground: #4a4854;
+  --accent: #fff1a8;
+  --accent-foreground: #111014;
+  --destructive: #d42a3c;
+  --destructive-foreground: #ffffff;
+  --success: #1f9d55;
+  --success-foreground: #ffffff;
+  --warning: #c27c00;
+  --warning-foreground: #111014;
+  --info: #0f8fa0;
+  --info-foreground: #ffffff;
+  --neutral: #4a4854;
+  --neutral-foreground: #ffffff;
+  --border: #cfc6b3;
+  --input: #8c8577;
+  --ring: #13b5c4;
+
+  --chart-1: #13b5c4;
+  --chart-2: #cf2c9f;
+  --chart-3: #e0b800;
+  --chart-4: #6b4fd8;
+  --chart-5: #f06a2a;
+
+  --sidebar: #f1ebdd;
+  --sidebar-foreground: #111014;
+  --sidebar-primary: #f2d21b;
+  --sidebar-primary-foreground: #111014;
+  --sidebar-accent: #f2d21b;
+  --sidebar-accent-foreground: #111014;
+  --sidebar-border: #111014;
+  --sidebar-ring: #13b5c4;
+
+  --skeleton-base: #ebe4d4;
+  --skeleton-highlight: #f6f1e6;
+
+  --radius: 0.6rem;
+}
+.dark [data-theme-preset='kt-comic'] {
+  --ink: #000000;
+  --neon-cyan: var(--neon-cyan-glow);
+  --neon-magenta: var(--neon-magenta-glow);
+  --neon-yellow: var(--neon-yellow-glow);
+  --neon-outline: #e9e7f7;
+  --neon-shadow: #000000;
+
+  --background: #0b0b12;
+  --foreground: #f4f3ff;
+  --card: #14131f;
+  --card-foreground: #f4f3ff;
+  --popover: #17162a;
+  --popover-foreground: #f4f3ff;
+  --primary: #ffe600;
+  --primary-foreground: #000000;
+  --secondary: #0f3a40;
+  --secondary-foreground: #e9fdff;
+  --muted: #1b1a28;
+  --muted-foreground: #b4b2c8;
+  --accent: #2a1633;
+  --accent-foreground: #ffffff;
+  --destructive: #ff4d6a;
+  --destructive-foreground: #000000;
+  --success: #39ff88;
+  --success-foreground: #000000;
+  --warning: #ffb020;
+  --warning-foreground: #000000;
+  --info: #00f0ff;
+  --info-foreground: #000000;
+  --neutral: #b4b2c8;
+  --neutral-foreground: #000000;
+  --border: #34324a;
+  --input: #57546f;
+  --ring: #00f0ff;
+
+  --chart-1: #00f0ff;
+  --chart-2: #ff2bd6;
+  --chart-3: #ffe600;
+  --chart-4: #39ff88;
+  --chart-5: #ff8a3d;
+
+  --sidebar: #0f0e18;
+  --sidebar-foreground: #e9e7f7;
+  --sidebar-primary: #ffe600;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #ffe600;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #2a2840;
+  --sidebar-ring: #00f0ff;
+
+  --skeleton-base: #1d1c2b;
+  --skeleton-highlight: #2a2940;
+}
+
+/* Semantic tokens: the avatar user menu is the reference look for every
+ * popup (bordered panel + cyan offset shadow, yellow highlighted item with
+ * a 2px ink frame). Values only — ../ui-bridge.css applies them. */
+[data-theme-preset='kt-comic'] {
+  --kt-line: 2.5px;
+  --font-ui: var(--font-system);
+  --font-display: 'KT Console Display', var(--font-system);
+  --font-mono:
+    'KTHome Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --surface-popup-border-width: var(--kt-line);
+  --surface-popup-border: var(--neon-outline);
+  --surface-popup-radius: 0.6rem;
+  --surface-popup-shadow: 5px 5px 0 var(--neon-cyan);
+
+  --item-border-width: 2px;
+  --item-font-weight: 600;
+  --item-highlight-bg: var(--neon-yellow);
+  --item-highlight-fg: #000;
+  --item-highlight-border: #000;
+  --item-highlight-shadow: 2px 2px 0 #000;
+  --item-separator-size: 2px;
+  --item-separator: var(--neon-outline);
+
+  --control-border-width: 2px;
+  --control-border: var(--input);
+  --control-focus-border: var(--neon-cyan);
+  --control-focus-shadow: 3px 3px 0 var(--neon-cyan);
+
+  --card-border-width: var(--kt-line);
+  --card-border: var(--neon-outline);
+  --card-shadow: 5px 5px 0 var(--neon-shadow);
+  --dialog-border-width: 3px;
+  --dialog-border: var(--neon-outline);
+  --dialog-shadow: 9px 9px 0 var(--neon-magenta);
+
+  --tabs-list-border-width: 2px;
+  --tabs-list-border: var(--neon-outline);
+  --tabs-active-bg: var(--neon-yellow);
+  --tabs-active-fg: #000;
+  --tabs-active-border-width: 2px;
+  --tabs-active-border: #000;
+  --tabs-active-shadow: 2px 2px 0 #000;
+
+  --table-head-bg: color-mix(in srgb, var(--neon-cyan) 8%, var(--card));
+  --table-head-fg: var(--foreground);
+  --table-head-weight: 700;
+  --table-row-hover: color-mix(in srgb, var(--neon-yellow) 12%, transparent);
+  --table-frame-border: var(--neon-outline);
+  --table-frame-width: 2px;
+
+  --toast-font: var(--font-ui);
+  --toast-title-font: var(--font-display);
+  --toast-title-tracking: 0.02em;
+  --toast-border: 1.5px solid var(--neon-outline);
+  --toast-close-border: 1.5px solid var(--neon-outline);
+  --toast-radius: 0.5rem;
+  --toast-shadow: 3px 3px 0
+    color-mix(in srgb, var(--neon-magenta) 55%, transparent);
+}
+.dark [data-theme-preset='kt-comic'] {
+  --toast-border: 1.5px solid
+    color-mix(in srgb, var(--neon-cyan) 55%, transparent);
+  --toast-shadow: 0 0 14px color-mix(in srgb, var(--neon-cyan) 22%, transparent);
+  --card-shadow: 5px 5px 0 color-mix(in srgb, var(--neon-cyan) 55%, #000);
+}

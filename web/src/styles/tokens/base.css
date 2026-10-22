@@ -1,0 +1,126 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/*
+ * Semantic theme tokens — defaults.
+ *
+ * Every preset is "values only": it overrides these custom properties and
+ * never targets components directly. ../ui-bridge.css maps the tokens onto
+ * the shadcn slots. The defaults mirror stock shadcn so the Default preset
+ * renders exactly like upstream new-api.
+ *
+ * Declared on <body data-theme-preset> as well as :root so references such
+ * as var(--popover) resolve against the active preset's palette.
+ */
+:root,
+[data-theme-preset] {
+  /* Fixed neon palette (mode independent; used by the KT pages and mocks). */
+  --neon-cyan-ink: #13b5c4;
+  --neon-magenta-ink: #cf2c9f;
+  --neon-yellow-ink: #f2d21b;
+  --neon-cyan-glow: #00f0ff;
+  --neon-magenta-glow: #ff2bd6;
+  --neon-yellow-glow: #ffe600;
+  --neon-green-glow: #39ff88;
+  --ink: #111014;
+  --paper: #f7f3ea;
+  --paper-card: #fffdf6;
+  --night: #0b0b12;
+
+  /* Mode-aware neon accents (presets may remap). */
+  --neon-cyan: var(--neon-cyan-ink);
+  --neon-magenta: var(--neon-magenta-ink);
+  --neon-yellow: var(--neon-yellow-ink);
+  --neon-outline: var(--foreground);
+  --neon-shadow: var(--ink);
+
+  /* Typography roles. */
+  --font-ui: var(--font-body, var(--font-sans));
+  --font-display: var(--font-ui);
+  --font-system:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Source Han Sans SC', sans-serif;
+
+  /* Popups: dropdown, select, combobox, popover, context menu, menubar,
+   * hover card. */
+  --surface-popup-bg: var(--popover);
+  --surface-popup-fg: var(--popover-foreground);
+  --surface-popup-border-width: 0px;
+  --surface-popup-border: transparent;
+  --surface-popup-radius: var(--radius-lg, 0.625rem);
+  --surface-popup-shadow:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent),
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* Items inside popups. */
+  --item-border-width: 0px;
+  --item-font-weight: inherit;
+  --item-highlight-bg: var(--accent);
+  --item-highlight-fg: var(--accent-foreground);
+  --item-highlight-border: transparent;
+  --item-highlight-shadow: none;
+  --item-selected-bg: transparent;
+  --item-selected-fg: inherit;
+  --item-separator-size: 1px;
+  --item-separator: var(--border);
+  --item-label-fg: var(--muted-foreground);
+
+  /* Form controls: input, textarea, select trigger, input group. */
+  --control-border-width: 1px;
+  --control-border: var(--input);
+  --control-focus-border: var(--ring);
+  --control-focus-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--ring) 50%, transparent);
+
+  /* Cards, dialogs, sheets. */
+  --card-border-width: 0px;
+  --card-border: transparent;
+  --card-shadow: 0 0 0 1px
+    color-mix(in oklab, var(--foreground) 10%, transparent);
+  --dialog-border-width: 0px;
+  --dialog-border: transparent;
+  --dialog-shadow: 0 0 0 1px
+    color-mix(in oklab, var(--foreground) 10%, transparent);
+
+  /* Tabs. */
+  --tabs-list-border-width: 0px;
+  --tabs-list-border: transparent;
+  --tabs-active-bg: var(--background);
+  --tabs-active-fg: var(--foreground);
+  --tabs-active-border-width: 0px;
+  --tabs-active-border: transparent;
+  --tabs-active-shadow: none;
+
+  /* Toasts (sonner). */
+  --toast-font: inherit;
+  --toast-title-font: inherit;
+  --toast-title-tracking: normal;
+  --toast-border: 1px solid var(--border);
+  --toast-close-border: 1px solid var(--border);
+  --toast-radius: var(--radius-lg, 0.625rem);
+  --toast-shadow: 0 6px 20px -8px rgb(0 0 0 / 0.18);
+
+  /* Tables. */
+  --table-head-bg: transparent;
+  --table-head-fg: var(--foreground);
+  --table-head-weight: 500;
+  --table-row-hover: color-mix(in oklab, var(--muted) 50%, transparent);
+  --table-frame-border: var(--border);
+  --table-frame-width: 1px;
+}
