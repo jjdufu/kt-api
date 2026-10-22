@@ -175,12 +175,6 @@ For commercial licensing, please contact support@quantumnous.com
   padding: 6.5rem 0 4.5rem;
   border-bottom: 4px solid var(--hc-panel-border);
 }
-[data-home] .hc-hero-skyline {
-  z-index: 0;
-  left: 0;
-  right: 30%;
-  width: 70%;
-}
 [data-home] .hc-hero-inner {
   position: relative;
   z-index: 1;
@@ -394,10 +388,6 @@ For commercial licensing, please contact support@quantumnous.com
 
 /* ---------- burst ---------- */
 
-[data-home] .hc-hero-zap {
-  margin-left: 0.25rem;
-  animation: hc-pulse 2.4s ease-in-out infinite;
-}
 @keyframes hc-pulse {
   0%,
   100% {
@@ -979,13 +969,6 @@ For commercial licensing, please contact support@quantumnous.com
 [data-home] .hc-cta .hc-backdrop {
   z-index: 0;
 }
-[data-home] .hc-cta-pow {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.5rem;
-  width: 6.5rem;
-  transform: rotate(10deg);
-}
 [data-home] .hc-cta-title {
   position: relative;
   text-wrap: balance;
@@ -1020,11 +1003,6 @@ For commercial licensing, please contact support@quantumnous.com
     max-width: 40rem;
     margin: 0 auto;
     width: 100%;
-  }
-  [data-home] .hc-hero-skyline {
-    width: 100%;
-    right: 0;
-    height: 30%;
   }
 }
 @media (max-width: 767px) {
@@ -1081,11 +1059,6 @@ For commercial licensing, please contact support@quantumnous.com
     padding: 0 1.3rem;
     font-size: 1.15rem;
   }
-  [data-home] .hc-cta-pow {
-    width: 4.5rem;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
 }
 @media (max-width: 400px) {
   [data-home] .hc-container,
@@ -1100,7 +1073,6 @@ For commercial licensing, please contact support@quantumnous.com
 @media (prefers-reduced-motion: reduce) {
   [data-home] .hc-speedlines,
   [data-home] .hc-panel-lines,
-  [data-home] .hc-hero-zap,
   [data-home] .hc-neon-value,
   [data-home] .hc-film-track,
   [data-home] .hc-t-caret {
