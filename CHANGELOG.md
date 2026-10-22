@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.18](https://github.com/jjdufu/kt-api/compare/v0.0.17...v0.0.18) (2026-10-22)
+
+
+### Features
+
+* **theme:** 语义 token 层与 ui-bridge，统一下拉菜单样式 ([a5506a9](https://github.com/jjdufu/kt-api/commit/a5506a9a317387573cabd25d22d3588ace9a2cb3))
+
 ## [0.0.17](https://github.com/jjdufu/kt-api/compare/v0.0.16...v0.0.17) (2026-10-22)
 
 
