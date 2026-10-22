@@ -393,18 +393,7 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* ---------- burst ---------- */
-[data-home] .hc-burst {
-  width: 7.5rem;
-  height: auto;
-  overflow: visible;
-  filter: drop-shadow(4px 4px 0 var(--hc-shadow));
-}
-[data-home] .hc-burst-text {
-  font-family: var(--hc-font-display);
-  font-size: 30px;
-  fill: #000;
-  letter-spacing: 1px;
-}
+
 [data-home] .hc-hero-zap {
   margin-left: 0.25rem;
   animation: hc-pulse 2.4s ease-in-out infinite;
@@ -664,18 +653,6 @@ For commercial licensing, please contact support@quantumnous.com
   background: var(--hc-tone);
   border: 2px solid #000;
 }
-[data-home] .hc-card-sfx {
-  position: absolute;
-  top: 0.9rem;
-  right: 1rem;
-  font-family: var(--hc-font-display);
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  color: var(--hc-tone);
-  -webkit-text-stroke: 2px var(--hc-ink);
-  paint-order: stroke fill;
-  transform: rotate(8deg);
-  letter-spacing: 0.04em;
-}
 [data-home] .hc-card-icon {
   margin: 1.4rem 0 1rem;
   display: inline-flex;
@@ -712,9 +689,6 @@ For commercial licensing, please contact support@quantumnous.com
 }
 [data-home] .hc-wall-cell-1 .hc-card-desc {
   font-size: 1.1rem;
-}
-[data-home] .hc-wall-cell-1 .hc-card-sfx {
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
 }
 
 /* ---------- comic strip ---------- */
@@ -771,17 +745,6 @@ For commercial licensing, please contact support@quantumnous.com
   color: transparent;
   -webkit-text-stroke: 2px var(--hc-cyan);
   opacity: 0.8;
-}
-[data-home] .hc-strip-sfx {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-family: var(--hc-font-display);
-  font-size: 1.7rem;
-  color: var(--hc-yellow);
-  -webkit-text-stroke: 2px #000;
-  paint-order: stroke fill;
-  transform: rotate(-8deg);
 }
 [data-home] .hc-strip-art {
   position: relative;
@@ -1117,9 +1080,6 @@ For commercial licensing, please contact support@quantumnous.com
     min-height: 3rem;
     padding: 0 1.3rem;
     font-size: 1.15rem;
-  }
-  [data-home] .hc-burst {
-    width: 5.5rem;
   }
   [data-home] .hc-cta-pow {
     width: 4.5rem;

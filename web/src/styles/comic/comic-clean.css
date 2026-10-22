@@ -32,7 +32,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 /* ---------- tokens from the active theme ---------- */
 body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth]) {
+  :is([data-docs], [data-auth]) {
   --hc-bg: var(--background);
   --hc-paper: var(--card);
   --hc-ink: var(--foreground);
@@ -60,13 +60,13 @@ body:not([data-theme-preset='kt-comic'])
 
 /* ---------- global flattening ---------- */
 body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth])
+  :is([data-docs], [data-auth])
   *,
 body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth])
+  :is([data-docs], [data-auth])
   *::before,
 body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth])
+  :is([data-docs], [data-auth])
   *::after {
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
@@ -74,7 +74,7 @@ body:not([data-theme-preset='kt-comic'])
   filter: none !important;
 }
 body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth])
+  :is([data-docs], [data-auth])
   :not(
     code,
     pre,
@@ -90,40 +90,12 @@ body:not([data-theme-preset='kt-comic'])
 }
 
 /* Purely decorative layers. */
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-speedlines,
-    [data-home] .hc-halftone,
-    [data-home] .hc-skyline,
-    [data-home] .hc-hero-skyline,
-    [data-home] .hc-burst,
-    [data-home] .hc-hero-zap,
-    [data-home] .hc-card-sfx,
-    [data-home] .hc-strip-sfx,
-    [data-home] .hc-cta-pow,
-    [data-home] .hc-panel-lines,
-    [data-home] .hc-hero-girl,
-    [data-home] .ab-hello,
-    [data-home] .ab-skyline
-  ) {
-  display: none !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-glitch::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-glitch::after,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-hero-stage::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-card::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-strip-panel::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-film::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-film::after,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-bubble::after,
+
 body:not([data-theme-preset='kt-comic']) [data-docs] .dc-hero::after,
 body:not([data-theme-preset='kt-comic']) [data-docs] .dc-h2::before,
 body:not([data-theme-preset='kt-comic']) [data-auth] .ka-panel::before {
   content: none !important;
   display: none !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-backdrop {
-  background-image: none !important;
 }
 /* Default docs: faint dot matrix + a soft primary glow at the top. */
 body:not([data-theme-preset='kt-comic']) [data-docs] .dc-page {
@@ -143,170 +115,23 @@ body:not([data-theme-preset='kt-comic']) [data-docs] .dc-page {
 }
 
 /* Undo tilts and comic motion (the marquee keeps scrolling). */
+
 body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-kicker,
-    [data-home] .hc-hero-bubble,
-    [data-home] .hc-panel-frame,
-    [data-home] .hc-panel-bubble,
-    [data-home] .hc-strip-art,
-    [data-home] .hc-film,
-    [data-home] .hc-card,
-    [data-home] .hc-card:hover,
-    [data-home] .ab-entry-icon,
-    [data-docs] .dc-kicker,
-    [data-docs] .dc-num
-  ) {
-  transform: none !important;
-}
-body:not([data-theme-preset='kt-comic'])
-  :is([data-home], [data-docs], [data-auth])
+  :is([data-docs], [data-auth])
   :is(.hc-neon-value, .hc-t-caret) {
   animation: none !important;
 }
 
 /* ---------- surfaces: thin theme borders, soft shadow ---------- */
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-bubble,
-    [data-home] .hc-card,
-    [data-home] .hc-strip-panel,
-    [data-home] .hc-strip-art,
-    [data-home] .hc-frame,
-    [data-home] .hc-neon-sign,
-    [data-home] .hc-cta,
-    [data-home] .hc-card-icon,
-    [data-home] .ab-entry,
-    [data-home] .ab-pillar,
-    [data-home] .ab-entry-icon,
-    [data-docs] .dc-hero,
-    [data-docs] .dc-toc,
-    [data-docs] .dc-endpoint,
-    [data-docs] .dc-note,
-    [data-docs] .dc-code > *,
-    [data-docs] [data-slot='table-container'],
-    [data-auth] .ka-panel
-  ) {
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius-xl, 0.75rem);
-  background: var(--card);
-  color: var(--card-foreground);
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 8%, transparent) !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-card-icon,
-body:not([data-theme-preset='kt-comic']) [data-home] .ab-entry-icon {
-  color: var(--primary);
-  background: var(--muted);
-}
-body:not([data-theme-preset='kt-comic'])
-  :is([data-home] .hc-card-icon, [data-home] .ab-entry-icon)
-  svg {
-  color: var(--primary);
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-card:hover,
-body:not([data-theme-preset='kt-comic']) [data-home] .ab-entry:hover {
-  border-color: color-mix(
-    in oklch,
-    var(--primary) 45%,
-    var(--border)
-  ) !important;
-}
 
 /* The hero terminal stays a dark code block; only its neon frame goes. */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-terminal {
-  border: 1px solid var(--border) !important;
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 10%, transparent) !important;
-  background: oklch(0.2 0.01 250) !important;
-}
 
 /* Small labels (kickers, numbers, methods) become theme badges. */
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-kicker,
-    [data-home] .hc-card-no,
-    [data-docs] .dc-kicker,
-    [data-docs] .dc-num,
-    [data-docs] .dc-method
-  ) {
-  border: 1px solid color-mix(in oklch, var(--primary) 35%, transparent) !important;
-  border-radius: 999px;
-  background: color-mix(
-    in oklch,
-    var(--primary) 12%,
-    var(--background)
-  ) !important;
-  color: var(--primary) !important;
-  box-shadow: none !important;
-}
 
 /* ---------- typography ---------- */
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-headline,
-    [data-home] .hc-title,
-    [data-home] .hc-cta-title,
-    [data-home] .ab-headline,
-    [data-docs] .dc-h1,
-    [data-docs] .dc-h2,
-    [data-auth] .ka-panel h2
-  ) {
-  color: var(--foreground) !important;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-glitch {
-  color: inherit !important;
-}
-body:not([data-theme-preset='kt-comic'])
-  :is([data-home] .hc-headline, [data-home] .hc-glitch, [data-docs] .dc-h1) {
-  font-style: normal !important;
-  transform: none !important;
-}
-body:not([data-theme-preset='kt-comic'])
-  [data-home]
-  .hc-headline
-  .hc-glitch:nth-child(2) {
-  color: var(--primary) !important;
-}
 
 /* ---------- buttons ---------- */
-body:not([data-theme-preset='kt-comic'])
-  :is([data-home] .hc-btn, [data-auth] .ka-panel button[type='submit']) {
-  border: 1px solid transparent !important;
-  border-radius: var(--radius-lg, 0.5rem);
-  box-shadow: none !important;
-  transform: none !important;
-  font-size: 1.05rem;
-  font-weight: 600;
-  min-height: 2.75rem;
-}
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-btn-primary,
-    [data-auth] .ka-panel button[type='submit']
-  ) {
-  background: var(--primary) !important;
-  color: var(--primary-foreground) !important;
-}
-body:not([data-theme-preset='kt-comic'])
-  :is(
-    [data-home] .hc-btn-primary,
-    [data-auth] .ka-panel button[type='submit']
-  ):hover {
-  background: color-mix(
-    in oklch,
-    var(--primary) 88%,
-    var(--foreground)
-  ) !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-btn-outline {
-  background: var(--background) !important;
-  color: var(--foreground) !important;
-  border-color: var(--border) !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-btn-outline:hover {
-  background: var(--accent) !important;
-}
+
 body:not([data-theme-preset='kt-comic'])
   [data-auth]
   .ka-panel
@@ -319,67 +144,13 @@ body:not([data-theme-preset='kt-comic']) [data-auth] .ka-panel a {
 }
 
 /* ---------- hero: simple card instead of the illustrated panel ---------- */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-hero-stage {
-  min-height: 0;
-  padding: 1rem 0;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-panel-frame {
-  padding: 0;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl, 0.75rem);
-  overflow: hidden;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-panel {
-  min-height: 0;
-  padding: 1.5rem;
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklch, var(--primary) 10%, var(--card)),
-    var(--card)
-  );
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-panel-bubble {
-  position: static;
-  margin-top: 1rem;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-bubble {
-  font-size: 1.05rem;
-}
 
 /* ---------- night section & neon stats ---------- */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night {
-  background: var(--muted) !important;
-  color: var(--foreground);
-}
-body:not([data-theme-preset='kt-comic'])
-  [data-home]
-  :is(.hc-neon-value, .hc-neon-label) {
-  color: var(--foreground) !important;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-neon-value {
-  color: var(--primary) !important;
-}
 
 /* ---------- marquee: plain logo strip ---------- */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-film {
-  border: 0 !important;
-  border-block: 1px solid var(--border) !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding-block: 0.75rem;
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-frame {
-  background: var(--card);
-}
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-frame-label {
-  color: var(--muted-foreground);
-}
 
 /* ---------- CTA, docs tables ---------- */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-cta {
-  background: color-mix(in oklch, var(--primary) 8%, var(--card)) !important;
-}
+
 body:not([data-theme-preset='kt-comic'])
   [data-docs]
   [data-slot='table-header'] {
@@ -393,22 +164,6 @@ body:not([data-theme-preset='kt-comic']) [data-docs] .dc-toc-link[data-active] {
 }
 
 /* Header tweaks on the home layout (sign-in button). */
-body:not([data-theme-preset='kt-comic'])
-  [data-home]
-  header
-  nav
-  a[href='/sign-in'] {
-  border: 1px solid var(--border) !important;
-  box-shadow: none !important;
-  background: var(--primary) !important;
-  color: var(--primary-foreground) !important;
-  font-family: var(--font-body) !important;
-}
 
 /* Divider lines from site-layout.css are hairlines outside KT Comic. */
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-hero::after,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::before,
-body:not([data-theme-preset='kt-comic']) [data-home] .hc-section-night::after {
-  border-width: 1px;
-  border-color: var(--border);
-}
+
