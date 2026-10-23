@@ -33,9 +33,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Container,
+  HeroBackdrop,
+  Kicker,
+} from '@/features/marketing/primitives'
 import { cn } from '@/lib/utils'
 
 import '@/styles/comic/comic-base.css'
+import '@/styles/comic/page-backdrop.css'
 
 import { useApiBaseUrl } from '../hooks/use-api-base-url'
 
@@ -182,7 +188,7 @@ export function DocsPageLayout(props: {
     <div data-docs=''>
       <PublicLayout showMainContainer={false}>
         <div className='dc-page bg-background text-foreground'>
-          <div className='mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 md:px-6'>
+          <Container className='flex max-w-7xl gap-8 py-8'>
             <aside className='hidden w-60 shrink-0 md:block'>
               <div className='sticky top-24'>
                 <DocsToc sections={sections} activeId={activeId} />
@@ -190,9 +196,8 @@ export function DocsPageLayout(props: {
             </aside>
             <main className='min-w-0 flex-1 space-y-12 pb-24'>
               <header className='dc-hero space-y-3'>
-                <span className='dc-kicker' aria-hidden='true'>
-                  API DOCS
-                </span>
+                <HeroBackdrop />
+                <Kicker className='w-fit'>API DOCS</Kicker>
                 <h1 className='dc-h1 text-3xl font-semibold tracking-tight'>
                   {props.title}
                 </h1>
@@ -203,7 +208,7 @@ export function DocsPageLayout(props: {
               </header>
               {props.children}
             </main>
-          </div>
+          </Container>
         </div>
       </PublicLayout>
     </div>

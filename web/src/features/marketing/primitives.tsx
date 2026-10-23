@@ -26,12 +26,16 @@ import { cn } from '@/lib/utils'
 import { HeroFx } from './comic-decorations'
 
 /**
- * Shared building blocks for the marketing pages (home, about, docs).
+ * Shared building blocks for the marketing pages.
+ *
+ * Home and about are composed from these primitives; the docs page uses
+ * Container, Kicker and HeroBackdrop for its outer shell only and keeps its
+ * own reference pieces (TOC, tables, endpoint cards, code samples; `dc-*`).
  *
  * One component set serves both presets. The KT Comic look lives in CSS
- * (`hc-*` classes scoped to `[data-home]`); every other preset gets the
- * quiet enterprise layout. Pages never branch on the preset for these
- * primitives — only for composition-level decoration.
+ * (`hc-*` classes scoped to `[data-home]` / `[data-docs]`); every other
+ * preset gets the quiet enterprise layout. Pages never branch on the preset
+ * for these primitives — only for composition-level decoration.
  */
 export type MarketingTone = 'comic' | 'plain'
 

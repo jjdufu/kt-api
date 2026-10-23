@@ -88,27 +88,19 @@ body:not([data-theme-preset='kt-comic'])
 
 /* Purely decorative layers. */
 
-body:not([data-theme-preset='kt-comic']) [data-docs] .dc-hero::after,
 body:not([data-theme-preset='kt-comic']) [data-docs] .dc-h2::before,
 body:not([data-theme-preset='kt-comic']) [data-auth] .ka-panel::before {
   content: none !important;
   display: none !important;
 }
-/* Default docs: faint dot matrix + a soft primary glow at the top. */
+
+/* Default docs: faint dot matrix (the hero glow is <HeroBackdrop/>). */
 body:not([data-theme-preset='kt-comic']) [data-docs] .dc-page {
-  background-image:
-    radial-gradient(
-      60rem 22rem at 50% -6rem,
-      color-mix(in oklch, var(--primary) 10%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      color-mix(in oklch, var(--foreground) 9%, transparent) 1px,
-      transparent 1.3px
-    ) !important;
-  background-size:
-    auto,
-    22px 22px !important;
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--foreground) 9%, transparent) 1px,
+    transparent 1.3px
+  ) !important;
+  background-size: 22px 22px !important;
 }
 
 /* Undo tilts and comic motion (the marquee keeps scrolling). */
