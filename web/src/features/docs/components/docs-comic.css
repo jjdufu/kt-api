@@ -46,44 +46,11 @@ For commercial licensing, please contact support@quantumnous.com
   border: 3px solid var(--hc-panel-border);
   box-shadow: 6px 6px 0 var(--hc-magenta);
   overflow: hidden;
+  isolation: isolate;
 }
-[data-docs] .dc-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--hc-cyan) 7%, transparent) 0 1px,
-      transparent 1px 4px
-    ),
-    radial-gradient(
-      30rem 14rem at 92% 0%,
-      color-mix(in srgb, var(--hc-magenta) 16%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      26rem 12rem at 0% 100%,
-      color-mix(in srgb, var(--hc-cyan) 14%, transparent),
-      transparent 70%
-    );
-  pointer-events: none;
-}
-[data-docs] .dc-hero > * {
+[data-docs] .dc-hero > :not([aria-hidden='true']) {
   position: relative;
   z-index: 1;
-}
-[data-docs] .dc-kicker {
-  display: inline-block;
-  font-family: var(--hc-font-accent);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  padding: 0.25rem 0.7rem;
-  color: #000;
-  background: var(--hc-yellow);
-  border: 3px solid #000;
-  transform: rotate(-2deg);
-  box-shadow: 4px 4px 0 var(--hc-cyan);
 }
 [data-docs] .dc-h1 {
   font-family: var(--hc-font-cjk);
@@ -126,9 +93,9 @@ For commercial licensing, please contact support@quantumnous.com
   background: color-mix(in srgb, var(--hc-cyan) 12%, transparent);
 }
 [data-docs] .dc-toc-link[data-active] {
-  color: #000;
+  color: var(--ink);
   background: var(--hc-yellow);
-  border-color: #000;
+  border-color: var(--ink);
   box-shadow: 3px 3px 0 var(--hc-magenta);
   font-weight: 600;
 }
@@ -150,7 +117,7 @@ For commercial licensing, please contact support@quantumnous.com
   width: 0.9rem;
   height: 0.9rem;
   background: var(--hc-yellow);
-  border: 3px solid #000;
+  border: 3px solid var(--ink);
   transform: rotate(45deg);
 }
 [data-docs] .dc-h3 {
@@ -172,9 +139,9 @@ For commercial licensing, please contact support@quantumnous.com
   padding: 0 0.4rem;
   font-family: var(--hc-font-accent);
   font-size: 0.95rem;
-  color: #000;
+  color: var(--ink);
   background: var(--hc-cyan);
-  border: 3px solid #000;
+  border: 3px solid var(--ink);
   transform: rotate(-4deg);
 }
 [data-docs] .dc-h4 {
@@ -191,15 +158,15 @@ For commercial licensing, please contact support@quantumnous.com
   box-shadow: 7px 7px 0 var(--hc-shadow);
 }
 .dark [data-docs] .dc-endpoint {
-  box-shadow: 7px 7px 0 color-mix(in srgb, var(--hc-cyan) 70%, #000);
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--hc-cyan) 70%, var(--ink));
 }
 [data-docs] .dc-method {
   font-family: var(--hc-font-accent);
   font-size: 0.75rem;
-  border: 2px solid #000;
+  border: 2px solid var(--ink);
   border-radius: 0.3rem;
-  color: #000;
-  box-shadow: 2px 2px 0 #000;
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 [data-docs] .dc-method[data-method='POST'] {
   background: var(--hc-yellow);
@@ -209,7 +176,7 @@ For commercial licensing, please contact support@quantumnous.com
 }
 [data-docs] .dc-method[data-method='DELETE'] {
   background: var(--hc-magenta);
-  color: #fff;
+  color: var(--paper-card);
 }
 [data-docs] .dc-path {
   font-family: var(--hc-font-mono);
@@ -263,7 +230,7 @@ For commercial licensing, please contact support@quantumnous.com
   box-shadow: 4px 4px 0 var(--hc-shadow);
 }
 .dark [data-docs] .dc-note {
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--hc-magenta) 60%, #000);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--hc-magenta) 60%, var(--ink));
 }
 
 @media (max-width: 767px) {

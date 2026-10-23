@@ -189,7 +189,14 @@ For commercial licensing, please contact support@quantumnous.com
   --toast-title-font: var(--font-display);
   --toast-title-tracking: 0.02em;
   --toast-border: 1.5px solid var(--neon-outline);
-  --toast-close-border: 1.5px solid var(--neon-outline);
+  --toast-close-border: 2px solid var(--neon-outline);
+  --toast-close-size: 1.4rem;
+  --toast-close-radius: 0.2rem;
+  --toast-close-bg: var(--neon-yellow);
+  --toast-close-fg: var(--ink);
+  --toast-close-shadow: 2px 2px 0 var(--ink);
+  --toast-close-hover-bg: var(--neon-cyan);
+  --toast-close-hover-fg: var(--ink);
   --toast-radius: 0.5rem;
   --toast-shadow: 3px 3px 0
     color-mix(in srgb, var(--neon-magenta) 55%, transparent);

@@ -31,6 +31,20 @@ For commercial licensing, please contact support@quantumnous.com
   --site-inset: max(var(--site-gutter), calc((100% - var(--site-max)) / 2));
 }
 
+/* Docs share the marketing Container (hc-container) with a wider column
+ * for the TOC sidebar. */
+[data-docs] {
+  --site-max: 80rem;
+  --site-gutter: clamp(1rem, 3vw, 1.5rem);
+  --site-width: calc(var(--site-max) + 2 * var(--site-gutter));
+}
+[data-docs] .hc-container {
+  width: 100%;
+  margin-inline: auto;
+  max-width: var(--site-width);
+  padding-inline: var(--site-gutter);
+}
+
 [data-home] .hc-container,
 [data-home] .hc-hero-inner {
   max-width: var(--site-width) !important;

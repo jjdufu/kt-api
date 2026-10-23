@@ -62,7 +62,7 @@ For commercial licensing, please contact support@quantumnous.com
     padding-top: 2.5rem;
   }
 }
-[data-home] .hc-hero-fx {
+:is([data-home], [data-docs]) .hc-hero-fx {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -72,7 +72,7 @@ For commercial licensing, please contact support@quantumnous.com
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
   mask-image: linear-gradient(to bottom, #000 60%, transparent);
 }
-[data-home] .hc-hero-glow {
+:is([data-home], [data-docs]) .hc-hero-glow {
   position: absolute;
   inset: 0;
   background:
@@ -87,7 +87,7 @@ For commercial licensing, please contact support@quantumnous.com
       transparent 70%
     );
 }
-.dark [data-home] .hc-hero-glow {
+.dark :is([data-home], [data-docs]) .hc-hero-glow {
   background:
     radial-gradient(
       40rem 24rem at 78% 30%,
@@ -100,7 +100,7 @@ For commercial licensing, please contact support@quantumnous.com
       transparent 70%
     );
 }
-[data-home] .hc-hero-fx .hc-hero-fx-skyline {
+:is([data-home], [data-docs]) .hc-hero-fx .hc-hero-fx-skyline {
   left: 0;
   right: 0;
   bottom: 0;
@@ -108,10 +108,10 @@ For commercial licensing, please contact support@quantumnous.com
   height: 46%;
   opacity: 0.14;
 }
-.dark [data-home] .hc-hero-fx .hc-hero-fx-skyline {
+.dark :is([data-home], [data-docs]) .hc-hero-fx .hc-hero-fx-skyline {
   opacity: 0.32;
 }
-[data-home] .hc-scanlines {
+:is([data-home], [data-docs]) .hc-scanlines {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
@@ -120,7 +120,7 @@ For commercial licensing, please contact support@quantumnous.com
     transparent 1px 4px
   );
 }
-.dark [data-home] .hc-scanlines {
+.dark :is([data-home], [data-docs]) .hc-scanlines {
   background: repeating-linear-gradient(
     to bottom,
     rgba(0, 240, 255, 0.045) 0 1px,
