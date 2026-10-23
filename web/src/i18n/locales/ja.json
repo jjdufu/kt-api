@@ -2856,6 +2856,7 @@
     "Follow the guided steps to prepare your workspace before the first login.": "初回ログイン前に、ガイド付きの手順に従ってワークスペースを準備してください。",
     "Follow user group": "ユーザーに従う",
     "Font": "フォント",
+    "This theme uses its own dedicated font": "このテーマは専用フォントを使用します",
     "Footer": "フッター",
     "Footer text displayed at the bottom of pages": "ページ下部に表示されるフッターテキスト",
     "footer.defaultCopyright": "すべての権利を留保します。",

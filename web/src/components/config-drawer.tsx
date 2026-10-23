@@ -345,6 +345,8 @@ function FontConfig() {
   const autoFont = resolveThemeFont('default', customization.preset)
   const autoFontFamily =
     autoFont === 'serif' ? 'var(--font-serif)' : 'sans-serif'
+  // kt: the KT Comic preset always renders its own UI font.
+  const fontLocked = customization.preset === 'kt-comic'
   return (
     <div>
       <SectionTitle
@@ -355,8 +357,12 @@ function FontConfig() {
       <Radio
         value={customization.font}
         onValueChange={(v) => setFont(v as ThemeFont)}
-        className='grid w-full grid-cols-3 gap-4'
+        className={cn(
+          'grid w-full grid-cols-3 gap-4',
+          fontLocked && 'pointer-events-none opacity-50'
+        )}
         aria-label={t('Select body font')}
+        disabled={fontLocked}
       >
         {FONT_OPTIONS.map((option) => (
           <Item
@@ -394,6 +400,11 @@ function FontConfig() {
           </Item>
         ))}
       </Radio>
+      {fontLocked && (
+        <p className='text-muted-foreground mt-2 text-xs'>
+          {t('This theme uses its own dedicated font')}
+        </p>
+      )}
     </div>
   )
 }

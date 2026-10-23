@@ -217,7 +217,7 @@ For commercial licensing, please contact support@quantumnous.com
     :is(.border, .border-0, [data-slot='table-container'])
       [data-slot='table-container']
   ) {
-  border-radius: 0.5rem;
+  border-radius: calc(var(--radius) * 5 / 6);
 }
 :is([data-theme-preset]:not([data-theme-preset='default']))
   [data-slot='table-header'] {

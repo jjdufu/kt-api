@@ -77,6 +77,12 @@ For commercial licensing, please contact support@quantumnous.com
   --skeleton-base: #ebe4d4;
   --skeleton-highlight: #f6f1e6;
 
+}
+
+/* Preset default radius only while 圆角 is 自动; an explicit
+ * data-theme-radius (theme-presets.css) wins. Everything below derives
+ * from --radius so the setting scales the whole comic console. */
+[data-theme-preset='kt-comic']:not([data-theme-radius]) {
   --radius: 0.6rem;
 }
 .dark [data-theme-preset='kt-comic'] {
@@ -146,7 +152,7 @@ For commercial licensing, please contact support@quantumnous.com
 
   --surface-popup-border-width: var(--kt-line);
   --surface-popup-border: var(--neon-outline);
-  --surface-popup-radius: 0.6rem;
+  --surface-popup-radius: var(--radius);
   --surface-popup-shadow: 5px 5px 0 var(--neon-cyan);
 
   --item-border-width: 2px;
@@ -191,13 +197,13 @@ For commercial licensing, please contact support@quantumnous.com
   --toast-border: 1.5px solid var(--neon-outline);
   --toast-close-border: 2px solid var(--neon-outline);
   --toast-close-size: 1.4rem;
-  --toast-close-radius: 0.2rem;
+  --toast-close-radius: calc(var(--radius) / 3);
   --toast-close-bg: var(--neon-yellow);
   --toast-close-fg: var(--ink);
   --toast-close-shadow: 2px 2px 0 var(--ink);
   --toast-close-hover-bg: var(--neon-cyan);
   --toast-close-hover-fg: var(--ink);
-  --toast-radius: 0.5rem;
+  --toast-radius: calc(var(--radius) * 5 / 6);
   --toast-shadow: 3px 3px 0
     color-mix(in srgb, var(--neon-magenta) 55%, transparent);
 }
