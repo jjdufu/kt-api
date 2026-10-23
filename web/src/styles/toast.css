@@ -50,11 +50,15 @@ For commercial licensing, please contact support@quantumnous.com
   left: auto !important;
   right: 0 !important;
   transform: translate(35%, -35%) !important;
-  background: var(--popover) !important;
-  color: var(--muted-foreground) !important;
+  width: var(--toast-close-size) !important;
+  height: var(--toast-close-size) !important;
+  border-radius: var(--toast-close-radius) !important;
+  background: var(--toast-close-bg) !important;
+  color: var(--toast-close-fg) !important;
   border: var(--toast-close-border) !important;
+  box-shadow: var(--toast-close-shadow) !important;
 }
 [data-sonner-toast] [data-close-button]:hover {
-  color: var(--foreground) !important;
-  background: var(--accent) !important;
+  color: var(--toast-close-hover-fg) !important;
+  background: var(--toast-close-hover-bg) !important;
 }
