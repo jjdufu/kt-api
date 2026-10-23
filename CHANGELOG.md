@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.19](https://github.com/jjdufu/kt-api/compare/v0.0.18...v0.0.19) (2026-10-23)
+
+
+### Features
+
+* 文档页外壳复用 marketing 组件 + Toast 关闭按钮 token 化 ([f67631f](https://github.com/jjdufu/kt-api/commit/f67631fba6b4062704a894e933b40a1663f186b9))
+
 ## [0.0.18](https://github.com/jjdufu/kt-api/compare/v0.0.17...v0.0.18) (2026-10-22)
 
 
