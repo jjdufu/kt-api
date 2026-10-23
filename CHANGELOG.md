@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.20](https://github.com/jjdufu/kt-api/compare/v0.0.19...v0.0.20) (2026-10-23)
+
+
+### Features
+
+* **theme:** 开天漫画主题下禁用字体选项并提示 ([9190210](https://github.com/jjdufu/kt-api/commit/9190210dedd44f7033a806cb78d2855cbc404920))
+
+
+### Bug Fixes
+
+* **theme:** 开天漫画主题下圆角/密度设置生效，字体选项置灰 ([063bd52](https://github.com/jjdufu/kt-api/commit/063bd52815b1acfd53f8ff187636471f7f6990ea))
+* **theme:** 开天漫画主题下圆角与密度设置生效 ([808d707](https://github.com/jjdufu/kt-api/commit/808d707063f1d318239dbf14eae71da5984c2da6))
+
 ## [0.0.19](https://github.com/jjdufu/kt-api/compare/v0.0.18...v0.0.19) (2026-10-23)
 
 
