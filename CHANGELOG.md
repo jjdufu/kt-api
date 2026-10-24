@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.21](https://github.com/jjdufu/kt-api/compare/v0.0.20...v0.0.21) (2026-10-24)
+
+
+### Bug Fixes
+
+* **logging:** 访问日志中隐藏查询参数里的凭据 ([#7972](https://github.com/jjdufu/kt-api/issues/7972)) ([63bd564](https://github.com/jjdufu/kt-api/commit/63bd564c3a55a7432fb170c887fc015eefa5032b))
+* **web:** 切换编辑抽屉记录时不再残留上一条的表单值 ([#7989](https://github.com/jjdufu/kt-api/issues/7989)) ([c54c049](https://github.com/jjdufu/kt-api/commit/c54c049ecdb4c08bbdf3fcf8a79c5ec259c8d221))
+* 同步上游 new-api 两个修复（访问日志脱敏、编辑抽屉串值） ([7c4164f](https://github.com/jjdufu/kt-api/commit/7c4164f248403dad3e029ece215956d2864d0706))
+
 ## [0.0.20](https://github.com/jjdufu/kt-api/compare/v0.0.19...v0.0.20) (2026-10-23)
 
 
