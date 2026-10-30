@@ -6188,7 +6188,6 @@
     "Task Plugins": "Plugin tác vụ",
     "Task pricing": "Giá tác vụ",
     "Task pricing must be converted manually using the task usage schema.": "Cần chuyển đổi giá tác vụ thủ công theo lược đồ mức sử dụng tác vụ.",
-    "Task pricing not configured": "Chưa cấu hình giá tác vụ",
     "Task status": "Trạng thái tác vụ",
     "Task timed out": "Tác vụ hết thời gian",
     "Task timed out (a task left by the old system is not refunded; contact the administrator)": "Tác vụ hết thời gian (tác vụ còn sót từ hệ thống cũ không được hoàn tiền; hãy liên hệ quản trị viên)",
@@ -7380,6 +7379,15 @@
     "Zhipu GLM": "Zhipu GLM",
     "Zhipu V4": "Zhipu V4",
     "Zoom": "Zoom",
-    "开天大模型": "KTAPI"
+    "开天大模型": "KTAPI",
+    "And {{count}} more models": "Và {{count}} mô hình khác",
+    "No price set": "Chưa đặt giá",
+    "Plugin enabled": "Đã bật plugin",
+    "Price needs attention": "Giá cần xử lý",
+    "Price status": "Trạng thái giá",
+    "Prices of these models need attention:": "Giá của các mô hình sau cần xử lý:",
+    "The plugin no longer offers this model": "Plugin không còn cung cấp mô hình này",
+    "The price uses usage the plugin no longer provides": "Giá dùng mức sử dụng mà plugin không còn cung cấp",
+    "{{name}}: {{reason}}": "{{name}}: {{reason}}"
   }
 }

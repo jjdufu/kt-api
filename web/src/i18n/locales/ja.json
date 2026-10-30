@@ -6188,7 +6188,6 @@
     "Task Plugins": "タスクプラグイン",
     "Task pricing": "タスク料金",
     "Task pricing must be converted manually using the task usage schema.": "タスク料金はタスクの使用量スキーマに基づいて手動で変換してください。",
-    "Task pricing not configured": "タスク料金が未設定",
     "Task status": "タスクステータス",
     "Task timed out": "タスクがタイムアウトしました",
     "Task timed out (a task left by the old system is not refunded; contact the administrator)": "タスクがタイムアウトしました（旧システムのタスクは返金されません。管理者に連絡してください）",
@@ -7380,6 +7379,15 @@
     "Zhipu GLM": "Zhipu GLM",
     "Zhipu V4": "Zhipu V 4",
     "Zoom": "ズーム",
-    "开天大模型": "開天大模型"
+    "开天大模型": "開天大模型",
+    "And {{count}} more models": "ほか {{count}} 個のモデル",
+    "No price set": "価格が未設定です",
+    "Plugin enabled": "プラグインを有効にしました",
+    "Price needs attention": "価格の対応が必要",
+    "Price status": "価格の状態",
+    "Prices of these models need attention:": "次のモデルの価格を確認してください：",
+    "The plugin no longer offers this model": "プラグインはこのモデルを提供しなくなりました",
+    "The price uses usage the plugin no longer provides": "価格が、プラグインで提供されなくなった使用量を使っています",
+    "{{name}}: {{reason}}": "{{name}}：{{reason}}"
   }
 }

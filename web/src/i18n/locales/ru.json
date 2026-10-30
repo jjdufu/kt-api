@@ -6188,7 +6188,6 @@
     "Task Plugins": "Плагины задач",
     "Task pricing": "Тарификация задач",
     "Task pricing must be converted manually using the task usage schema.": "Тарифы задач необходимо преобразовать вручную по схеме использования задачи.",
-    "Task pricing not configured": "Тарификация задач не настроена",
     "Task status": "Статус задачи",
     "Task timed out": "Истекло время выполнения задачи",
     "Task timed out (a task left by the old system is not refunded; contact the administrator)": "Истекло время выполнения задачи (задачи старой системы не возмещаются; обратитесь к администратору)",
@@ -7380,6 +7379,15 @@
     "Zhipu GLM": "Zhipu GLM",
     "Zhipu V4": "Zhipu V4",
     "Zoom": "Zoom",
-    "开天大模型": "KTAPI"
+    "开天大模型": "KTAPI",
+    "And {{count}} more models": "И ещё моделей: {{count}}",
+    "No price set": "Цена не задана",
+    "Plugin enabled": "Плагин включён",
+    "Price needs attention": "Цена требует внимания",
+    "Price status": "Статус цены",
+    "Prices of these models need attention:": "Цены этих моделей требуют внимания:",
+    "The plugin no longer offers this model": "Плагин больше не предоставляет эту модель",
+    "The price uses usage the plugin no longer provides": "Цена использует данные об использовании, которые плагин больше не передаёт",
+    "{{name}}: {{reason}}": "{{name}}: {{reason}}"
   }
 }

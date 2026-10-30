@@ -6188,7 +6188,6 @@
     "Task Plugins": "Task Plugins",
     "Task pricing": "Task pricing",
     "Task pricing must be converted manually using the task usage schema.": "Task pricing must be converted manually using the task usage schema.",
-    "Task pricing not configured": "Task pricing not configured",
     "Task status": "Task status",
     "Task timed out": "Task timed out",
     "Task timed out (a task left by the old system is not refunded; contact the administrator)": "Task timed out (a task left by the old system is not refunded; contact the administrator)",
@@ -7380,6 +7379,15 @@
     "Zhipu GLM": "Zhipu GLM",
     "Zhipu V4": "Zhipu V4",
     "Zoom": "Zoom",
-    "开天大模型": "KTAPI"
+    "开天大模型": "KTAPI",
+    "And {{count}} more models": "And {{count}} more models",
+    "No price set": "No price set",
+    "Plugin enabled": "Plugin enabled",
+    "Price needs attention": "Price needs attention",
+    "Price status": "Price status",
+    "Prices of these models need attention:": "Prices of these models need attention:",
+    "The plugin no longer offers this model": "The plugin no longer offers this model",
+    "The price uses usage the plugin no longer provides": "The price uses usage the plugin no longer provides",
+    "{{name}}: {{reason}}": "{{name}}: {{reason}}"
   }
 }

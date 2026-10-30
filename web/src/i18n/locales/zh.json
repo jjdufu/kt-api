@@ -6188,7 +6188,6 @@
     "Task Plugins": "任务插件",
     "Task pricing": "任务定价",
     "Task pricing must be converted manually using the task usage schema.": "任务定价需根据任务用量定义手动转换。",
-    "Task pricing not configured": "尚未配置任务定价",
     "Task status": "任务状态",
     "Task timed out": "任务超时",
     "Task timed out (a task left by the old system is not refunded; contact the administrator)": "任务超时（旧系统遗留任务，不进行退款，请联系管理员）",
@@ -7380,6 +7379,15 @@
     "Zhipu GLM": "智谱GLM",
     "Zhipu V4": "智谱 V4",
     "Zoom": "缩放",
-    "开天大模型": "开天大模型"
+    "开天大模型": "开天大模型",
+    "And {{count}} more models": "另外还有 {{count}} 个模型",
+    "No price set": "还没设置价格",
+    "Plugin enabled": "插件已启用",
+    "Price needs attention": "价格待处理",
+    "Price status": "价格状态",
+    "Prices of these models need attention:": "以下模型的价格需要处理：",
+    "The plugin no longer offers this model": "插件已不再提供这个模型",
+    "The price uses usage the plugin no longer provides": "价格用到了插件不再提供的用量",
+    "{{name}}: {{reason}}": "{{name}}：{{reason}}"
   }
 }
