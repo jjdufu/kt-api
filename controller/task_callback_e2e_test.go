@@ -20,6 +20,7 @@ import (
 	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/middleware"
 	"github.com/QuantumNous/new-api/model"
+	pluginruntime "github.com/QuantumNous/new-api/pkg/jsplugin"
 	"github.com/QuantumNous/new-api/relay"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
 	"github.com/QuantumNous/new-api/service"
@@ -230,9 +231,9 @@ func setupCallbackE2E(t *testing.T) *callbackE2E {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 	}
-	env.engine.POST("/api/v3/contents/generations/tasks", authenticate, middleware.PinSeedanceVideoAlias(),
-		middleware.PrepareTaskPluginRoute(), middleware.SeedanceVideoTaskOptions(), distribute, env.submit)
-	env.engine.GET("/api/v3/contents/generations/tasks/:task_id", authenticate, middleware.PinSeedanceVideoAlias(),
+	env.engine.POST("/api/v3/contents/generations/tasks", authenticate, pinDoubaoNativeRoute(http.MethodPost, "/api/v3/contents/generations/tasks"),
+		middleware.PrepareTaskPluginRoute(), middleware.SeedanceVideoTaskOptionsForPluginRoute(), distribute, env.submit)
+	env.engine.GET("/api/v3/contents/generations/tasks/:s5", authenticate, pinDoubaoNativeRoute(http.MethodGet, "/api/v3/contents/generations/tasks/:task_id"),
 		middleware.PrepareTaskPluginRoute())
 	env.engine.POST("/api/task-callback/upstream/:token", HandleTaskUpstreamCallback)
 	return env
@@ -623,4 +624,21 @@ func TestTaskCallbackEndToEnd(t *testing.T) {
 		assert.Equal(t, logs, gotLogs)
 		assert.Equal(t, http.StatusNotFound, env.do(http.MethodPost, "/api/task-callback/upstream/forged", `{}`).Code)
 	})
+}
+
+// pinDoubaoNativeRoute pins a Doubao plugin route the way the production
+// plugin router does: the declared binding plus every candidate sharing the
+// path.
+func pinDoubaoNativeRoute(method, path string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		generation := pluginruntime.DefaultRegistry.Generation()
+		bindings := generation.LookupDeclaredRoutes(method, path)
+		if len(bindings) == 0 {
+			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		c.Set(pluginruntime.ContextKeyPinnedPlugin, pluginruntime.PinnedPlugin{Generation: generation, Plugin: bindings[0].Plugin})
+		c.Set(pluginruntime.ContextKeyPinnedRoute, pluginruntime.PinnedRoute{Generation: generation, Plugin: bindings[0].Plugin, Route: bindings[0].Route, Candidates: bindings})
+		c.Next()
+	}
 }
