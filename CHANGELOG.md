@@ -1,5 +1,59 @@
 # Changelog
 
+## [0.0.22](https://github.com/jjdufu/kt-api/compare/v0.0.21...v0.0.22) (2026-11-04)
+
+
+### Features
+
+* **channel:** 创建渠道时返回新 ID 及其与输入的对应关系 ([#8164](https://github.com/jjdufu/kt-api/issues/8164)) ([6960f9b](https://github.com/jjdufu/kt-api/commit/6960f9b1685b0c3b1ddc155a31a8d9109fcfbfbb))
+* **gemini:** 新增 Argon 字段与推理参数映射 ([#8177](https://github.com/jjdufu/kt-api/issues/8177)) ([254f218](https://github.com/jjdufu/kt-api/commit/254f21866499c871abc7b67826fa2d4db6fac085))
+* **plugins:** Gemini Omni 按 Vertex 返回的 token 计费 ([#8153](https://github.com/jjdufu/kt-api/issues/8153)) ([fe112e4](https://github.com/jjdufu/kt-api/commit/fe112e4c62ecdb2193704c394afbaf9749dee933))
+* **plugins:** Vertex AI 渠道支持用 Gemini Omni 生成视频 ([#8142](https://github.com/jjdufu/kt-api/issues/8142)) ([eff4e1a](https://github.com/jjdufu/kt-api/commit/eff4e1a2c1de4e3b4b4ebe1c64ffe9887557f10a))
+* **plugins:** 任务插件挂在厂商官方路径上并按厂商格式应答 ([#8117](https://github.com/jjdufu/kt-api/issues/8117)) ([ee3fe8a](https://github.com/jjdufu/kt-api/commit/ee3fe8a3702c307430f0a7db7b9884eff5ff16b4))
+* **plugins:** 提示插件无法计费的任务模型 ([6ff33c4](https://github.com/jjdufu/kt-api/commit/6ff33c41f744e989368ab271367bb4a0867d6c8f))
+* **relay:** 新增可选的 HTTP/2 健康探测 ([#8059](https://github.com/jjdufu/kt-api/issues/8059)) ([424d9d2](https://github.com/jjdufu/kt-api/commit/424d9d2a3bc9bd3557ab8673c19a89b40276fd34))
+* **vertex:** 新增按渠道切换 v1beta1 端点的开关 ([#8179](https://github.com/jjdufu/kt-api/issues/8179)) ([0ab877d](https://github.com/jjdufu/kt-api/commit/0ab877d7864795575881d8cf15cadbbf73f00759))
+* 模型性能统计纳入立即成功的任务 ([#8067](https://github.com/jjdufu/kt-api/issues/8067)) ([9dc7184](https://github.com/jjdufu/kt-api/commit/9dc7184d2da248efe25ca3085731e5c5ce4cc146))
+
+
+### Bug Fixes
+
+* **aws:** Bedrock Invoke 请求保留安全防护字段 ([#8071](https://github.com/jjdufu/kt-api/issues/8071)) ([82a10ba](https://github.com/jjdufu/kt-api/commit/82a10bafd1fdc826bc27c2a5619f8191920378c7))
+* **billing:** 计费 prompt_tokens_details 中上报的 cache_creation_input_tokens ([#7909](https://github.com/jjdufu/kt-api/issues/7909)) ([e0f1699](https://github.com/jjdufu/kt-api/commit/e0f1699e4d2de108d76cad6e87f2f637c5f493d0))
+* **cloudflare:** 保留 embedding 响应数据 ([#8041](https://github.com/jjdufu/kt-api/issues/8041)) ([ad13c5b](https://github.com/jjdufu/kt-api/commit/ad13c5b99324298d4f1c884b89bb07dece38f5af))
+* **deps:** 升级 DOMPurify 到 3.4.17 ([#8116](https://github.com/jjdufu/kt-api/issues/8116)) ([eb5f457](https://github.com/jjdufu/kt-api/commit/eb5f4579a244791eb46d79f8d2c46acf393e81c0))
+* **gemini:** chat 格式转换时保留顶层 imageConfig ([71aaec6](https://github.com/jjdufu/kt-api/commit/71aaec6ff74e19b4e4e8755b0b8fb44aa9737553))
+* **gemini:** embedding 按上游 usageMetadata 计费 ([#8182](https://github.com/jjdufu/kt-api/issues/8182)) ([773e900](https://github.com/jjdufu/kt-api/commit/773e90055222b0cae1c9690d371cb76c21958f82))
+* **logger:** 日志轮转后 gin 访问日志与 panic 恢复日志仍写入当前日志文件 ([#8098](https://github.com/jjdufu/kt-api/issues/8098)) ([222d261](https://github.com/jjdufu/kt-api/commit/222d26178c29e71b0ec4d01098b12ba100327bed))
+* **plugins:** 加载自行声明 /{key} 地址的插件 ([#8119](https://github.com/jjdufu/kt-api/issues/8119)) ([7d7e9f2](https://github.com/jjdufu/kt-api/commit/7d7e9f2faa18480af25dd6ccd9bfa6a15da9641a))
+* **plugins:** 可灵 4.0 时长限制在范围内并映射所有视频尺寸 ([#8118](https://github.com/jjdufu/kt-api/issues/8118)) ([33cb91f](https://github.com/jjdufu/kt-api/commit/33cb91fec1a83eaaf8e3209124f265f419e0c8c8))
+* **plugins:** 可灵 4.0 现金计费优先使用可灵返回的 list_price ([#8125](https://github.com/jjdufu/kt-api/issues/8125)) ([e969c7f](https://github.com/jjdufu/kt-api/commit/e969c7f3fba7adee68a66686df34140cb6a47e82))
+* **plugins:** 预扣或任务写入失败时仍对已转发的流计费 ([#8121](https://github.com/jjdufu/kt-api/issues/8121)) ([a14d8f9](https://github.com/jjdufu/kt-api/commit/a14d8f9964d748eb2486e8778696bc8db93234a9))
+* **pricing:** 正确归类按请求动态计费的模型 ([#8010](https://github.com/jjdufu/kt-api/issues/8010)) ([97dc471](https://github.com/jjdufu/kt-api/commit/97dc4717627e5e6aca0cf05e5a119985888ff0ca))
+* **profile:** 个人资料页遵循全局侧边栏显示设置 ([#7429](https://github.com/jjdufu/kt-api/issues/7429)) ([92b05f0](https://github.com/jjdufu/kt-api/commit/92b05f0950eb8bf2fbff094ab294aa37f53b93ea))
+* **relay:** gpt-6.1-sol 与 gpt-6.1-terra 也应用 GPT-6 的 chat 参数规则 ([#8064](https://github.com/jjdufu/kt-api/issues/8064)) ([c1450bc](https://github.com/jjdufu/kt-api/commit/c1450bc5110abf2cb8004b334881c120bce7320d))
+* **relaykit:** Claude 响应中保留工具参数里的数字 ([#7996](https://github.com/jjdufu/kt-api/issues/7996)) ([bc0a7c6](https://github.com/jjdufu/kt-api/commit/bc0a7c6dcd8c2acd7ca16c45c329c57cb6fa4c6a))
+* **relaykit:** 保留与工具调用同时返回的 Gemini 文本 ([#7998](https://github.com/jjdufu/kt-api/issues/7998)) ([d3a307c](https://github.com/jjdufu/kt-api/commit/d3a307c5728c4be67f185d24caf97a3162f7dc92))
+* **relaykit:** 修复 stop 既非字符串也非字符串数组时的协议转换问题 ([#7935](https://github.com/jjdufu/kt-api/issues/7935)) ([b5473d1](https://github.com/jjdufu/kt-api/commit/b5473d15eda4a340a9fad69abef5cfdd406df0c2))
+* **relay:** 仅在遇到精确的裸 [DONE] 标记时结束流 ([#8074](https://github.com/jjdufu/kt-api/issues/8074)) ([24f3689](https://github.com/jjdufu/kt-api/commit/24f368973af1c16c7f0fefeaeb1efdc7a769fae0))
+* **relay:** 允许 Azure 渠道开启 Responses WebSocket ([#8047](https://github.com/jjdufu/kt-api/issues/8047)) ([#8075](https://github.com/jjdufu/kt-api/issues/8075)) ([573c02a](https://github.com/jjdufu/kt-api/commit/573c02aa897ca5698a3a71b766c9c7e06285ccc8))
+* **security:** 修复日志脱敏处理 URL 尾随标点的平方级开销 ([6677e01](https://github.com/jjdufu/kt-api/commit/6677e0109adfccc2055a88b19ed55904107715fe))
+* **security:** 升级 @visactor/vchart 与 @visactor/react-vchart 到 2.1.7 ([4a98878](https://github.com/jjdufu/kt-api/commit/4a988782c5439101c2518cc22e84757ce26bfda3))
+* **security:** 限制 zstd 解压窗口与请求体大小 ([700d94f](https://github.com/jjdufu/kt-api/commit/700d94fe0599e1261e37f172abc5d170533218a2))
+* **task:** 任务超时前最多等待 72 小时 ([a4873cb](https://github.com/jjdufu/kt-api/commit/a4873cbfc099c8124f187d1adec4a5ba220b4370))
+* **twofa:** 锁定到期后重新开始失败计数 ([#8172](https://github.com/jjdufu/kt-api/issues/8172)) ([cdfe6c5](https://github.com/jjdufu/kt-api/commit/cdfe6c546a7f61d10e1eb9f8fcc30ccb1be442b2))
+* **xai:** 流式用量转换时保留 token 明细 ([#6420](https://github.com/jjdufu/kt-api/issues/6420)) ([4670297](https://github.com/jjdufu/kt-api/commit/4670297f75ca9be6019ac6a0bbe7467f712828dd))
+* 上下文取消后仍统计已完成的非流式转发 ([#7844](https://github.com/jjdufu/kt-api/issues/7844)) ([60e8d1c](https://github.com/jjdufu/kt-api/commit/60e8d1c8c7a2f5a55f38e1ad79a3729204b7d495))
+* 亲和渠道回退从最高优先级开始 ([#8078](https://github.com/jjdufu/kt-api/issues/8078)) ([b6df924](https://github.com/jjdufu/kt-api/commit/b6df9244f7238b2dc0a16fd3119dae23c0c023e1))
+* 先保存 Turnstile 密钥再允许启用 ([#7960](https://github.com/jjdufu/kt-api/issues/7960)) ([0190632](https://github.com/jjdufu/kt-api/commit/0190632950fcc77aac1b2617c61c1e97a9025dc9))
+* 退出登录时卸载已登录布局，停止无凭证的重复请求 ([#8110](https://github.com/jjdufu/kt-api/issues/8110)) ([f389819](https://github.com/jjdufu/kt-api/commit/f38981943c0291c8ad73448bb1a10ac39225b909))
+
+
+### Performance Improvements
+
+* **relay:** 参数覆盖中的正则不再每次请求都重新编译 ([#8061](https://github.com/jjdufu/kt-api/issues/8061)) ([14a2c9f](https://github.com/jjdufu/kt-api/commit/14a2c9ffec3c20929781f55fd627467e8cece9b1))
+* 用 moego 读取和编辑请求 JSON 与 base64 ([#8148](https://github.com/jjdufu/kt-api/issues/8148)) ([d97a7e3](https://github.com/jjdufu/kt-api/commit/d97a7e37b99f35c22206f9cc74e1a5398596bbb8))
+
 ## [0.0.21](https://github.com/jjdufu/kt-api/compare/v0.0.20...v0.0.21) (2026-10-24)
 
 
