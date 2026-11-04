@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/QuantumNous/new-api/common"
+	pluginruntime "github.com/QuantumNous/new-api/pkg/jsplugin"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/setting/system_setting"
 
@@ -91,4 +92,27 @@ func seedanceIntegerField(raw json.RawMessage) (int64, bool) {
 		return 0, false
 	}
 	return value, true
+}
+
+// seedanceCreateTaskRouteSuffix is Ark's create path; the Doubao plugin
+// serves it at /api/v3/... and the gateway's /doubao/api/v3/... copy.
+const seedanceCreateTaskRouteSuffix = "/api/v3/contents/generations/tasks"
+
+// SeedanceVideoTaskOptionsForPluginRoute applies SeedanceVideoTaskOptions to
+// the Doubao plugin's native Seedance create route and passes every other
+// plugin route through. It runs after PrepareTaskPluginRoute, which resolved
+// the owning plugin.
+func SeedanceVideoTaskOptionsForPluginRoute() gin.HandlerFunc {
+	options := SeedanceVideoTaskOptions()
+	return func(c *gin.Context) {
+		if c.Request.Method == http.MethodPost && c.GetString("task_plugin_key") == "doubao" {
+			if value, ok := c.Get(pluginruntime.ContextKeyPinnedRoute); ok {
+				if pinned, ok := value.(pluginruntime.PinnedRoute); ok && strings.HasSuffix(pinned.Route.Path, seedanceCreateTaskRouteSuffix) {
+					options(c)
+					return
+				}
+			}
+		}
+		c.Next()
+	}
 }

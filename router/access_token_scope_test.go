@@ -71,9 +71,7 @@ var accessTokenExemptRoutes = []string{
 	"GET /api/usage/token/",
 	"GET /api/log/token",
 
-	// Seedance vendor-compatible relay aliases (TokenAuth, not dashboard PAT).
-	"POST /api/v3/contents/generations/tasks",
-	"GET /api/v3/contents/generations/tasks/:task_id",
+	// Seedance asset relay routes (TokenAuth, not dashboard PAT).
 	"POST /api/assets/",
 	"POST /api/assets",
 }

@@ -35,13 +35,14 @@ func seedanceStatusGET(t *testing.T, userID int, taskID string) *httptest.Respon
 	gin.SetMode(gin.TestMode)
 	generation := pluginruntime.DefaultRegistry.Generation()
 	require.NotNil(t, generation)
-	binding, found := generation.LookupDeclaredRoute(http.MethodGet, "/doubao/api/v3/contents/generations/tasks/:task_id")
-	require.True(t, found)
+	bindings := generation.LookupDeclaredRoutes(http.MethodGet, "/api/v3/contents/generations/tasks/:task_id")
+	require.NotEmpty(t, bindings)
+	binding := bindings[0]
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
 	c.Request = httptest.NewRequest(http.MethodGet, service.SeedanceTaskStatusPath(taskID), nil)
-	c.Params = gin.Params{{Key: "task_id", Value: taskID}}
-	c.Set(pluginruntime.ContextKeyPinnedRoute, pluginruntime.PinnedRoute{Generation: generation, Plugin: binding.Plugin, Route: binding.Route})
+	c.Params = gin.Params{{Key: "s5", Value: taskID}}
+	c.Set(pluginruntime.ContextKeyPinnedRoute, pluginruntime.PinnedRoute{Generation: generation, Plugin: binding.Plugin, Route: binding.Route, Candidates: bindings})
 	common.SetContextKey(c, constant.ContextKeyUserId, userID)
 	middleware.PrepareTaskPluginRoute()(c)
 	require.True(t, c.IsAborted())

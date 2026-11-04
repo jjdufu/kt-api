@@ -2,11 +2,13 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
 	"runtime/debug"
 	"strings"
+	"time"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/gin-gonic/gin"
@@ -32,6 +34,9 @@ func PanicRecover() gin.HandlerFunc {
 				c.Abort()
 				return
 			}
+			// Gin-style marker through the rotation-aware writer, so the
+			// current log file always records the recovery.
+			_, _ = fmt.Fprintf(common.ErrorLogWriter, "[Recovery] %s panic recovered: %v\n", time.Now().Format("2006/01/02 - 15:04:05"), err)
 			common.SysError(common.LogText(panicLogFormat,
 				c.GetString(common.RequestIdKey), c.Request.Method, c.Request.URL.Path, err, debug.Stack()))
 			if c.Writer.Written() {
