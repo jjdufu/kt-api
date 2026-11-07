@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.23](https://github.com/jjdufu/kt-api/compare/v0.0.22...v0.0.23) (2026-11-07)
+
+
+### Features
+
+* 为 gpt-image-2.6 转发图像复杂度和标记参数 ([3dd6d88](https://github.com/jjdufu/kt-api/commit/3dd6d88bbdc43141564aeb1b8dca36d229a2acf8))
+
+
+### Bug Fixes
+
+* **auth:** 校验并修复 Redis 鉴权缓存完整性 ([a450257](https://github.com/jjdufu/kt-api/commit/a450257fc1d332b611f8fca4536dcb7908dc7333))
+* **cache:** 修复用户和令牌鉴权缓存的 Redis 跨槽错误 ([755b351](https://github.com/jjdufu/kt-api/commit/755b351aaa851ae082855a65feae1153a159c139))
+* **plugins:** 将上传插件同时挂载到顶层 /v1 等路径 ([4fbba52](https://github.com/jjdufu/kt-api/commit/4fbba52530b8eff86569e81f1014038b17539a40))
+* **pricing:** 保存前逐项核对模型价格变更 ([8dea25a](https://github.com/jjdufu/kt-api/commit/8dea25a48cc9dea21f5e78eace96342d3604f173))
+* **pricing:** 引导用户排查模型定价问题 ([4812ed5](https://github.com/jjdufu/kt-api/commit/4812ed5646e394d7b8ee2940728f91c4d9bff5fe))
+* **theme:** 统一未保存价格状态的语义配色并遵循主题设置 ([5ed72b7](https://github.com/jjdufu/kt-api/commit/5ed72b73a5ac0215104e4edd2308c88ea4ffd02f))
+* **vertex:** 按有效期缓存服务账号访问令牌 ([98cae58](https://github.com/jjdufu/kt-api/commit/98cae587606a3752fe3bd8d0d5cd89bbd2b592a0))
+* 同步上游九项改进并适配开天主题与定价确认 ([b492165](https://github.com/jjdufu/kt-api/commit/b49216541b482ef583737ad520a649cdf0b69fa6))
+* 明确会话缓存操作语义并支持按规则清理 ([c4868cc](https://github.com/jjdufu/kt-api/commit/c4868cc69737f25bc477d535774ece4e984a1fe4))
+
 ## [0.0.22](https://github.com/jjdufu/kt-api/compare/v0.0.21...v0.0.22) (2026-11-04)
 
 
