@@ -19,9 +19,9 @@ For commercial licensing, please contact support@quantumnous.com
 import { Undo2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { ChangeBadge } from '@/components/change-badge'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { StaticDataTable } from '@/components/data-table'
-import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 import { combineBillingExpr } from '@/features/pricing/lib/billing-expr'
 
@@ -46,16 +46,10 @@ const CHANGE_LABELS = {
   deleted: 'Pending deletion',
 } as const
 
-// One readable pill for every kind, in the amber of the unsaved-changes pill.
+// Share semantic warning colors with the page-title unsaved-changes indicator.
 export function PriceChangeBadge(props: { kind: PriceChangeKind }) {
   const { t } = useTranslation()
-  return (
-    <StatusBadge
-      label={t(CHANGE_LABELS[props.kind])}
-      copyable={false}
-      className='shrink-0 bg-amber-500/10 px-2 text-amber-800 ring-1 ring-amber-500/25 ring-inset dark:text-amber-200'
-    />
-  )
+  return <ChangeBadge label={t(CHANGE_LABELS[props.kind])} />
 }
 
 const SYNC_FIELDS = [
@@ -220,7 +214,7 @@ function PriceValues(props: {
                 <dd className='leading-5 font-medium break-all tabular-nums'>
                   {compared &&
                   compared.get(priceLineKey(group, line)) !== line.value ? (
-                    <mark className='rounded-sm bg-amber-500/25 px-0.5 text-inherit'>
+                    <mark className='bg-warning/25 rounded-sm px-0.5 text-inherit'>
                       {line.value}
                     </mark>
                   ) : (
@@ -261,7 +255,7 @@ export function PriceChangeCard(props: { row: ModelRow; onUndo: () => void }) {
         <div className='flex items-center gap-2 text-sm font-medium'>
           <span
             aria-hidden='true'
-            className='size-1.5 rounded-full bg-amber-500'
+            className='bg-warning size-1.5 rounded-full'
           />
           {t('Unsaved price changes')}
         </div>
