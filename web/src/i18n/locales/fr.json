@@ -7432,6 +7432,8 @@
     "Prices of these models need attention:": "Les prix de ces modèles sont à vérifier :",
     "The plugin no longer offers this model": "Le plugin ne propose plus ce modèle",
     "The price uses usage the plugin no longer provides": "Le prix utilise un usage que le plugin ne fournit plus",
-    "{{name}}: {{reason}}": "{{name}} : {{reason}}"
+    "{{name}}: {{reason}}": "{{name}} : {{reason}}",
+    "By clicking sign in, you agree to our": "En cliquant sur se connecter, vous acceptez nos",
+    "By creating an account, you agree to our": "En créant un compte, vous acceptez nos"
   }
 }

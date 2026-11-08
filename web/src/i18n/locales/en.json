@@ -7432,6 +7432,8 @@
     "Prices of these models need attention:": "Prices of these models need attention:",
     "The plugin no longer offers this model": "The plugin no longer offers this model",
     "The price uses usage the plugin no longer provides": "The price uses usage the plugin no longer provides",
-    "{{name}}: {{reason}}": "{{name}}: {{reason}}"
+    "{{name}}: {{reason}}": "{{name}}: {{reason}}",
+    "By clicking sign in, you agree to our": "By clicking sign in, you agree to our",
+    "By creating an account, you agree to our": "By creating an account, you agree to our"
   }
 }
