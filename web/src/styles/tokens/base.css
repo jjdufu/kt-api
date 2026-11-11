@@ -55,6 +55,11 @@ For commercial licensing, please contact support@quantumnous.com
   --neon-outline: var(--foreground);
   --neon-shadow: var(--ink);
 
+  /* Inline text links (legal links, "Sign in" etc.). Defaults to primary so
+   * the Default preset stays identical to upstream; presets whose primary is
+   * a fill colour (e.g. KT Comic yellow) remap it to a readable ink. */
+  --link: var(--primary);
+
   /* Typography roles. */
   --font-ui: var(--font-body, var(--font-sans));
   --font-display: var(--font-ui);

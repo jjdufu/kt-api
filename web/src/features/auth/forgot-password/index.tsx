@@ -40,7 +40,7 @@ export function ForgotPassword() {
             {t("Don't have an account?")}{' '}
             <Link
               to='/sign-up'
-              className='hover:text-primary font-medium underline underline-offset-4'
+              className='hover:text-link font-medium underline underline-offset-4'
             >
               {t('Sign up')}
             </Link>

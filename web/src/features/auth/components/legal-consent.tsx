@@ -73,7 +73,7 @@ export function LegalConsent({
               href='/user-agreement'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-primary hover:underline'
+              className='text-link whitespace-nowrap underline-offset-4 hover:underline'
             >
               {t('User Agreement')}
             </a>
@@ -84,7 +84,7 @@ export function LegalConsent({
               href='/privacy-policy'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-primary hover:underline'
+              className='text-link whitespace-nowrap underline-offset-4 hover:underline'
             >
               {t('Privacy Policy')}
             </a>
