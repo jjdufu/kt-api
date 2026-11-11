@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.24](https://github.com/jjdufu/kt-api/compare/v0.0.23...v0.0.24) (2026-11-11)
+
+
+### Features
+
+* **channels:** 高级自定义渠道增加 DeepSeek 搜索与抓取路径选项 ([#8250](https://github.com/jjdufu/kt-api/issues/8250)) ([bace2ab](https://github.com/jjdufu/kt-api/commit/bace2ab76c135e421a1539f9a2ae1b7932c33828))
+* **deepseek:** 补全 Responses 工具历史缺失的 reasoning ([#8162](https://github.com/jjdufu/kt-api/issues/8162)) ([267cb25](https://github.com/jjdufu/kt-api/commit/267cb256cbd755dba5eb9d43aa32279a4ff93d6f))
+* **plugins:** 新增 gemini omni 1.2 flash 并把所有输入图片发送给 Vertex ([#8228](https://github.com/jjdufu/kt-api/issues/8228)) ([37c62f3](https://github.com/jjdufu/kt-api/commit/37c62f31c7717c22b6be338e49c82936829a0777))
+* 支持用 HOST 环境变量设置监听地址 ([#8269](https://github.com/jjdufu/kt-api/issues/8269)) ([5793286](https://github.com/jjdufu/kt-api/commit/5793286e05d9b91f0b6247f5bd70b83fca0581c8))
+
+
+### Bug Fixes
+
+* **channel:** 所有 key 失效后重新启用某个 key 时恢复多 key 渠道 ([57a0eb8](https://github.com/jjdufu/kt-api/commit/57a0eb887b91e5c0b1938a2211c6684ac391fc8b))
+* **channel:** 请求失败时保留手动禁用的渠道状态 ([e5604c3](https://github.com/jjdufu/kt-api/commit/e5604c3b341633a3734e1db6db2eecb2c674bd4b))
+* **deepseek:** Chat Completions 中把 developer 角色映射为 system ([#8287](https://github.com/jjdufu/kt-api/issues/8287)) ([4951179](https://github.com/jjdufu/kt-api/commit/4951179fc142a593e22b077173b41b7b8908b97e))
+* **oauth:** 创建 OAuth 用户时保存邀请人 ([#8247](https://github.com/jjdufu/kt-api/issues/8247)) ([cd9a341](https://github.com/jjdufu/kt-api/commit/cd9a3410d1d4034496408f6d23147ef712b61858))
+* **sqlite:** SQLITE_PATH 为普通路径时保留默认 SQLite 参数 ([b29d339](https://github.com/jjdufu/kt-api/commit/b29d33931f36299fd635682d15b72877067532a8))
+* **theme:** 认证页内联链接改用主题 link 色并避免专名断行 ([a080a77](https://github.com/jjdufu/kt-api/commit/a080a77fa9daa535a69edfaaace4894f5243e94b))
+* **web:** 登录与注册页的法律条款文案支持翻译 ([#8254](https://github.com/jjdufu/kt-api/issues/8254)) ([2fe9917](https://github.com/jjdufu/kt-api/commit/2fe991770146f30c396d454ac6bf69d8447631cb))
+
 ## [0.0.23](https://github.com/jjdufu/kt-api/compare/v0.0.22...v0.0.23) (2026-11-07)
 
 
