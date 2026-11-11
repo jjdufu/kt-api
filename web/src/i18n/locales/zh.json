@@ -7432,6 +7432,8 @@
     "Prices of these models need attention:": "以下模型的价格需要处理：",
     "The plugin no longer offers this model": "插件已不再提供这个模型",
     "The price uses usage the plugin no longer provides": "价格用到了插件不再提供的用量",
-    "{{name}}: {{reason}}": "{{name}}：{{reason}}"
+    "{{name}}: {{reason}}": "{{name}}：{{reason}}",
+    "By clicking sign in, you agree to our": "点击登录即表示您同意我们的",
+    "By creating an account, you agree to our": "创建账户即表示您同意我们的"
   }
 }

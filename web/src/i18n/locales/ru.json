@@ -7432,6 +7432,8 @@
     "Prices of these models need attention:": "Цены этих моделей требуют внимания:",
     "The plugin no longer offers this model": "Плагин больше не предоставляет эту модель",
     "The price uses usage the plugin no longer provides": "Цена использует данные об использовании, которые плагин больше не передаёт",
-    "{{name}}: {{reason}}": "{{name}}: {{reason}}"
+    "{{name}}: {{reason}}": "{{name}}: {{reason}}",
+    "By clicking sign in, you agree to our": "Нажимая «Войти», вы соглашаетесь с нашими",
+    "By creating an account, you agree to our": "Создавая аккаунт, вы соглашаетесь с нашими"
   }
 }

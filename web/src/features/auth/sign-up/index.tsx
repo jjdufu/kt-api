@@ -40,7 +40,7 @@ export function SignUp() {
             {t('Already have an account?')}{' '}
             <Link
               to='/sign-in'
-              className='hover:text-primary font-medium underline underline-offset-4'
+              className='hover:text-link font-medium underline underline-offset-4'
             >
               {t('Sign in')}
             </Link>

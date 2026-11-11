@@ -38,7 +38,7 @@ export function Otp() {
             {t('Session expired?')}{' '}
             <Link
               to='/sign-in'
-              className='hover:text-primary font-medium underline underline-offset-4'
+              className='hover:text-link font-medium underline underline-offset-4'
             >
               {t('Re-login')}
             </Link>

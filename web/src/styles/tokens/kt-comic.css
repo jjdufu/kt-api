@@ -58,6 +58,8 @@ For commercial licensing, please contact support@quantumnous.com
   --border: #cfc6b3;
   --input: #8c8577;
   --ring: #13b5c4;
+  /* Yellow primary is a fill colour; links use deep cyan ink (≈6:1 on paper). */
+  --link: #0b6b75;
 
   --chart-1: #13b5c4;
   --chart-2: #cf2c9f;
@@ -120,6 +122,7 @@ For commercial licensing, please contact support@quantumnous.com
   --border: #34324a;
   --input: #57546f;
   --ring: #00f0ff;
+  --link: var(--primary);
 
   --chart-1: #00f0ff;
   --chart-2: #ff2bd6;
