@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.25](https://github.com/jjdufu/kt-api/compare/v0.0.24...v0.0.25) (2026-11-12)
+
+
+### Features
+
+* **payment:** 易支付支持 RSA 签名方式 ([#8291](https://github.com/jjdufu/kt-api/issues/8291)) ([fd414d7](https://github.com/jjdufu/kt-api/commit/fd414d77ab9a51d41ae28b358a4123ab1417e2ea))
+
+
+### Bug Fixes
+
+* **channels:** 切换渠道时重置模型重定向同步状态 ([#8304](https://github.com/jjdufu/kt-api/issues/8304)) ([bb2420f](https://github.com/jjdufu/kt-api/commit/bb2420fa02a8be2ead38a5921dc97ac155dc81ae))
+
 ## [0.0.24](https://github.com/jjdufu/kt-api/compare/v0.0.23...v0.0.24) (2026-11-11)
 
 
