@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"
@@ -138,7 +139,8 @@ func TestUpdateAllChannelsBalanceKeepsDoubaoVideoChannelOnQueryError(t *testing.
 	defer okServer.Close()
 	working := newDoubaoVideoBalanceChannel(t, okServer.URL, "")
 
-	require.NoError(t, updateAllChannelsBalance())
+	_, err := updateAllChannelsBalance(context.Background(), func(int, int) {})
+	require.NoError(t, err)
 
 	stored, err := model.GetChannelById(failing.Id, true)
 	require.NoError(t, err)
