@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.0.26](https://github.com/jjdufu/kt-api/compare/v0.0.25...v0.0.26) (2026-11-18)
+
+
+### Features
+
+* **plugins:** 新增厂商插件、请求处理插件与社区插件市场 ([#8271](https://github.com/jjdufu/kt-api/issues/8271)) ([a84ae9a](https://github.com/jjdufu/kt-api/commit/a84ae9a6c5d2f9e2e5059fb35d931c6ec20de5ee))
+* **plugins:** 请求处理插件可声明作用范围，管理员确认一次即自动覆盖 ([#8335](https://github.com/jjdufu/kt-api/issues/8335)) ([02fd6ff](https://github.com/jjdufu/kt-api/commit/02fd6fffb4d0fcfe572250299ad4353942fdd373))
+* 新增 doubao-seedream-5-5-261028 模型 ([#8324](https://github.com/jjdufu/kt-api/issues/8324)) ([2f19b4e](https://github.com/jjdufu/kt-api/commit/2f19b4e39ad70c682557446c7078ce36976edb9c))
+
+
+### Bug Fixes
+
+* **channel:** 批量修改标签时在事务内读取渠道 ([f140285](https://github.com/jjdufu/kt-api/commit/f1402857d45cac0606b5c8f7899f88bd5c33e763))
+* **i18n:** 合规锁定提示中写明「超级管理员」 ([#6955](https://github.com/jjdufu/kt-api/issues/6955)) ([c4f0d81](https://github.com/jjdufu/kt-api/commit/c4f0d81edc710b52af784a84de4e85a4eaa0acf7))
+* **plugins:** 请求处理插件的各个作用范围分别匹配 ([#8341](https://github.com/jjdufu/kt-api/issues/8341)) ([5eae599](https://github.com/jjdufu/kt-api/commit/5eae5990894d9256ed471cdcd8a48436dbe8c2dc))
+* **relaykit:** Gemini 转 Chat 响应时按原样拼接文本片段 ([#8136](https://github.com/jjdufu/kt-api/issues/8136)) ([82ac57c](https://github.com/jjdufu/kt-api/commit/82ac57c2991daf5d7daceabf1ca1da0445e0f993))
+* **relaykit:** 按模型映射 Gemini 4 的思考等级 ([#8367](https://github.com/jjdufu/kt-api/issues/8367)) ([5fff714](https://github.com/jjdufu/kt-api/commit/5fff714c9db7d61b0fc948d8c06a4e21d896aa2c)), closes [#8364](https://github.com/jjdufu/kt-api/issues/8364)
+* **relay:** 请求本身引发的错误不再导致渠道被禁用 ([#8345](https://github.com/jjdufu/kt-api/issues/8345)) ([fe1d07a](https://github.com/jjdufu/kt-api/commit/fe1d07add5472c3991c5d49b0d75b7984c18535d))
+* **web:** 渠道插件设置保持在抽屉内 ([#8323](https://github.com/jjdufu/kt-api/issues/8323)) ([9bc3db5](https://github.com/jjdufu/kt-api/commit/9bc3db54e0497eec2294576a6156dad7431d147a))
+* **web:** 特殊分组倍率规则默认折叠 ([7c101dd](https://github.com/jjdufu/kt-api/commit/7c101dd1f8f75daf3b790e23306d2266b36bbf43))
+* **web:** 统一缓存计费类别与时长标签 ([4046342](https://github.com/jjdufu/kt-api/commit/40463425d6a9362edd5f5d544058eaac72ce6b4c))
+* **web:** 让 TanStack 路由开发工具与路由核心版本对齐 ([#8320](https://github.com/jjdufu/kt-api/issues/8320)) ([68f1595](https://github.com/jjdufu/kt-api/commit/68f1595abcc4a0e37d7191dd079bad4fdd08a309))
+* **web:** 风险确认框在输入法组字结束和失焦时同步确认文本 ([5c6be3d](https://github.com/jjdufu/kt-api/commit/5c6be3d8cc597fdab9191d4551a3ac1689e5bf85))
+* 升级 moego 到 v0.1.0-alpha.3，修复无 AVX 的 x86-64 CPU 上的 SIGILL 崩溃 ([#8322](https://github.com/jjdufu/kt-api/issues/8322)) ([e93a87b](https://github.com/jjdufu/kt-api/commit/e93a87bd2bad131a63219a058e41f66663eb044d)), closes [#8314](https://github.com/jjdufu/kt-api/issues/8314)
+
+
+### Performance Improvements
+
+* **password:** 改进密码校验与反馈 ([#6928](https://github.com/jjdufu/kt-api/issues/6928)) ([dff6500](https://github.com/jjdufu/kt-api/commit/dff6500eef8ef87788f5a2514164dc7a6060fdc9))
+* 升级 MoeForge moejs/moego，请求体按需流式读取 ([#8311](https://github.com/jjdufu/kt-api/issues/8311)) ([af2a2de](https://github.com/jjdufu/kt-api/commit/af2a2de34997fb9b61bf92cbbece8151d8ad0b15))
+
 ## [0.0.25](https://github.com/jjdufu/kt-api/compare/v0.0.24...v0.0.25) (2026-11-12)
 
 
