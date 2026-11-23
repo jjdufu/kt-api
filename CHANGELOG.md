@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.0.27](https://github.com/jjdufu/kt-api/compare/v0.0.26...v0.0.27) (2026-11-23)
+
+
+### Features
+
+* **kling:** 将尺寸映射到 kling-4.0 的 4:3 和 3:4 宽高比 ([#8348](https://github.com/jjdufu/kt-api/issues/8348)) ([bd85297](https://github.com/jjdufu/kt-api/commit/bd852979b5e6cb703b1868912bf058b23f51ab20))
+
+
+### Bug Fixes
+
+* **auth:** 已删除用户的 API 密钥改为返回 401 ([#8381](https://github.com/jjdufu/kt-api/issues/8381)) ([48957d5](https://github.com/jjdufu/kt-api/commit/48957d58a2145803d6febaeeeb63956a1b7e7776))
+* **deepseek:** 正确报告支持的 endpoint 元数据 ([#8296](https://github.com/jjdufu/kt-api/issues/8296)) ([4815879](https://github.com/jjdufu/kt-api/commit/48158790d638284fcc740f1cce091cd00eff9715))
+* **payment:** 校验易支付 RSA 回调中的商户号 ([#8422](https://github.com/jjdufu/kt-api/issues/8422)) ([b8c0a35](https://github.com/jjdufu/kt-api/commit/b8c0a354a5e8d55e4a9ae3a1a28ae5b502e0c86d))
+* **pricing:** 修复模型广场显示私有分组的问题 ([1565223](https://github.com/jjdufu/kt-api/commit/15652234d0cafead8cd40bfa6fbbe7acb6dc1158))
+* **relaykit:** 按系列前缀匹配 Gemini 4 的思考等级 ([#8412](https://github.com/jjdufu/kt-api/issues/8412)) ([c4ad5c6](https://github.com/jjdufu/kt-api/commit/c4ad5c60f18979890df4cc1a0d332e52d445347a))
+* **relay:** 将 GPT-6 的对话参数规则应用到 gpt-6.2-astra 和 gpt-6.2-sol ([#8375](https://github.com/jjdufu/kt-api/issues/8375)) ([ee2997b](https://github.com/jjdufu/kt-api/commit/ee2997bb837a90443ffcf1f7fbeeafd8fbcd0e2c))
+* **task:** 从 JSON 组装纯文本的 multipart 请求 ([#8198](https://github.com/jjdufu/kt-api/issues/8198)) ([05306d8](https://github.com/jjdufu/kt-api/commit/05306d8b94d9637c2c100b48aa715797592b9d7a))
+* **task:** 修复图片任务插件参数覆盖并补充百炼回归测试 ([#8027](https://github.com/jjdufu/kt-api/issues/8027)) ([7bd4547](https://github.com/jjdufu/kt-api/commit/7bd4547dc8adac74d174e29253b7cef4128e1f87))
+* **task:** 修复私有渠道的任务媒体下载 ([#8199](https://github.com/jjdufu/kt-api/issues/8199)) ([4df3e38](https://github.com/jjdufu/kt-api/commit/4df3e3844c1e71ed5d5f547a20a8d28146408bfb))
+* **task:** 进度已满但尚未终态的任务继续轮询 ([#8201](https://github.com/jjdufu/kt-api/issues/8201)) ([4b6f9c4](https://github.com/jjdufu/kt-api/commit/4b6f9c477eeab864102ba3f7b9edfde4b7bfa929))
+
+
+### Performance Improvements
+
+* **relay:** 使用 moego WebP 并行压缩图片 ([eff1ac5](https://github.com/jjdufu/kt-api/commit/eff1ac5bf348bb1a504decdc0e3cdd3026db2da6))
+
 ## [0.0.26](https://github.com/jjdufu/kt-api/compare/v0.0.25...v0.0.26) (2026-11-18)
 
 
